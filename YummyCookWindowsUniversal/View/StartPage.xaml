@@ -1,0 +1,46 @@
+﻿<common:BindablePage
+    x:Class="YummyCookWindowsUniversal.StartPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:YummyCookWindowsUniversal"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:common="using:YummyCookWindowsUniversal"
+    Margin="0,-30,0,0">
+    <common:BindablePage.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <EntranceNavigationTransitionInfo/>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </common:BindablePage.Transitions>
+
+    <Grid Background="#FF262626" >
+        <Image Source="ms-appx:///Assets/Image/StartBackImg.jpg" Stretch="UniformToFill"/>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-100,0,0">
+            <Grid>
+                <TextBlock FontSize="53.333" Text="YummyCook" Foreground="#FF737373" FontFamily="Microsoft YaHei UI Light" FontWeight="Light" TextAlignment="Center" Margin="1,1,-1,-1"/>
+                <TextBlock FontSize="53.333" Text="YummyCook" Foreground="White" FontFamily="Microsoft YaHei UI Light" FontWeight="Light" TextAlignment="Center"/>
+            </Grid>
+
+            <TextBlock FontSize="26.667" Text="轻松做出美味的食物" Foreground="White" FontFamily="Microsoft YaHei UI Light" FontWeight="Light" TextAlignment="Center"/>
+
+            <Button Margin="0,100,0,0" Command="{Binding NavigateToLoginCommand}" HorizontalContentAlignment="Stretch" Padding="0" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" Background="{x:Null}" Style="{StaticResource BtnStyle}" >
+                <Border Padding="0"  Height="50" Background="{StaticResource CookTheme}" CornerRadius="2">
+                    <TextBlock Text="登录" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="20" FontFamily="Microsoft YaHei UI" FontWeight="Light"/>
+                </Border>
+            </Button>
+            <Button Command="{Binding NavigateToRegisterCommand}"  HorizontalContentAlignment="Stretch" Padding="0" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" Background="{x:Null}" Style="{StaticResource BtnStyle}" >
+                <Border Padding="0" Margin="0,10,0,0" Height="50" CornerRadius="2" BorderThickness="2" Background="{StaticResource CookThemeLight}">
+                    <TextBlock Text="注册" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="20" FontWeight="Light"/>
+                </Border>
+            </Button>
+            <Button Command="{Binding NavigateToRegisterCommand}"  HorizontalContentAlignment="Stretch" Padding="0" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" Background="{x:Null}" Style="{StaticResource BtnStyle}" >
+                <Border Padding="0" Margin="0,10,0,0" Height="50" CornerRadius="2" BorderThickness="2" Background="White">
+                    <TextBlock Text="随便看看" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource CookTheme}" FontSize="20" FontWeight="Light"/>
+                </Border>
+            </Button>
+        </StackPanel>
+    </Grid>
+</common:BindablePage>
