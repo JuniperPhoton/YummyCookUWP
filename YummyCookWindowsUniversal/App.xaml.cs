@@ -54,7 +54,6 @@ namespace YummyCookWindowsUniversal
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
-
             ConfigHelper.ConfigAppSetting();
 
             Frame rootFrame = Window.Current.Content as Frame;
@@ -125,6 +124,12 @@ namespace YummyCookWindowsUniversal
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
+        }
+
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            
+            base.OnActivated(args);
         }
     }
 }

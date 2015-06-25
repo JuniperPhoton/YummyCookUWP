@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace YummyCookWindowsUniversal.Model
 {
-    public class RequestError
+    public class ResponseData
     {
-        public string Code { get; set; }
+        public int Code { get; set; }
         public string ErrorMessage { get; set; }
+        public bool IsSuccess { get; set; }
 
-        public RequestError(string code, string error)
+        public ResponseData(bool isSuccess,int code, string error)
         {
+            IsSuccess = isSuccess;
             Code = code;
             ErrorMessage = error;
         }

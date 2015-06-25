@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using YummyCookWindowsUniversal.ViewModel;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -20,11 +21,19 @@ namespace YummyCookWindowsUniversal
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class UserInfoPage : Page
+    public sealed partial class UserInfoPage : BindablePage
     {
+        private UserInfoViewModel UserInfoVM
+        {
+            get
+            {
+                return (DataContext as UserInfoViewModel);
+            }
+        }
         public UserInfoPage()
         {
             this.InitializeComponent();
+            
         }
     }
 }

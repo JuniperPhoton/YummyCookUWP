@@ -1,13 +1,15 @@
 ﻿<common:BindablePage
-    
     x:Class="YummyCookWindowsUniversal.LoginPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:YummyCookWindowsUniversal.View"
+    xmlns:local="using:YummyCookWindowsUniversal"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:common="using:YummyCookWindowsUniversal"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    DataContext="{Binding UserInfoVM,Source={StaticResource Locator}}"
+    Margin="0,-30,0,0">
+   
     <common:BindablePage.Resources>
         <Style x:Key="TextBoxStyle1" TargetType="TextBox">
             <Setter Property="MinWidth" Value="{ThemeResource TextControlThemeMinWidth}"/>
@@ -303,32 +305,56 @@
             </Setter>
         </Style>
     </common:BindablePage.Resources>
-    <common:BindablePage.Transitions>
+    <!--<common:BindablePage.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
-                <EntranceNavigationTransitionInfo/>
+                <DrillInNavigationTransitionInfo/>
             </NavigationThemeTransition>
         </TransitionCollection>
-    </common:BindablePage.Transitions>
+    </common:BindablePage.Transitions>-->
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="2*"/>
 
         </Grid.RowDefinitions>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.Setters>
+                        <Setter Target="sp.MinWidth" Value="300" />
+                        <Setter Target="TitleTB.FontSize" Value="40"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState>
+                    <VisualState.Setters>
+                        <Setter Target="sp.MinWidth" Value="500" />
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
         <Grid>
             <Image Source="ms-appx:///Assets/Image/IMG_8577b.jpg" Stretch="UniformToFill"/>
-            <TextBlock Text="{Binding Title}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="53.333" Margin="0,0,0,20" FontWeight="Bold"/>
+            <TextBlock x:Name="TitleTB" Text="{x:Bind UserInfoVM.Title}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="53.333" Margin="0,0,0,20" FontWeight="Bold"/>
         </Grid>
         <Grid Grid.Row="1">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,20,0,0" MinWidth="500">
-                <TextBox PlaceholderText="UserName" Margin="10,10,10,0" BorderBrush="{StaticResource CookThemeGrayLight}" Style="{StaticResource TextBoxStyle1}"/>
-                <PasswordBox PlaceholderText="Password" Margin="10,10,10,0" BorderBrush="{StaticResource CookThemeGrayLight}" Style="{StaticResource PasswordBoxStyle1}" />
-                <PasswordBox Visibility="{Binding ShowConfirmVisibility}" PlaceholderText="Confirm Password" Margin="10,10,10,0" BorderBrush="{StaticResource CookThemeGrayLight}" Style="{StaticResource PasswordBoxStyle1}" />
+            
+            <StackPanel x:Name="sp" Orientation="Vertical" HorizontalAlignment="Center" Margin="0,20,0,0" MinWidth="300">
+                <TextBox Text="{x:Bind UserInfoVM.UserName,Mode=TwoWay}" PlaceholderText="用户名" Margin="10,10,10,0" BorderBrush="{StaticResource CookThemeGrayLight}" Style="{StaticResource TextBoxStyle1}" MinWidth="300"/>
+                <PasswordBox Password="{x:Bind UserInfoVM.Password,Mode=TwoWay}" PlaceholderText="密码" Margin="10,10,10,0" BorderBrush="{StaticResource CookThemeGrayLight}" Style="{StaticResource PasswordBoxStyle1}" MinWidth="300" />
+                <PasswordBox Password="{x:Bind UserInfoVM.ConfirmPassword,Mode=TwoWay}" Visibility="{x:Bind UserInfoVM.ShowConfirmVisibility}" PlaceholderText="确认密码" Margin="10,10,10,0" BorderBrush="{StaticResource CookThemeGrayLight}" Style="{StaticResource PasswordBoxStyle1}" MinWidth="300" />
 
-                <Button Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Style="{StaticResource BtnStyle}" Margin="10,10,10,0" HorizontalAlignment="Stretch" Height="57" Background="{x:Null}">
-                    <Border Padding="0" Height="50" Background="{StaticResource CookTheme}" CornerRadius="2">
-                        <TextBlock Text="{Binding LoginBtnContent}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="20" FontFamily="Microsoft YaHei UI" FontWeight="Light"/>
+                <Button  Command="{x:Bind UserInfoVM.NextCommand}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Style="{StaticResource BtnStyle}" Margin="10,10,10,0" HorizontalAlignment="Stretch" Height="57" Background="{x:Null}">
+                    <Border Padding="0" Height="40" Background="{StaticResource CookTheme}" CornerRadius="2">
+                        <TextBlock Text="{x:Bind UserInfoVM.LoginBtnContent}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Microsoft YaHei UI" FontWeight="Light"/>
                     </Border>
                 </Button>
             </StackPanel>

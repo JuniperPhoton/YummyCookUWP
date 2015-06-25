@@ -95,6 +95,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helper\ConfigHelper.cs" />
+    <Compile Include="Helper\JsonMaker.cs" />
     <Compile Include="Helper\RequestHelper.cs" />
     <Compile Include="Interface\INavigable.cs" />
     <Compile Include="Model\NavigationData.cs" />
@@ -108,7 +109,7 @@
     </Compile>
     <Compile Include="Model\Ingredient.cs" />
     <Compile Include="Model\Recipe.cs" />
-    <Compile Include="Model\RequestError.cs" />
+    <Compile Include="Model\ResponseData.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\StartPage.xaml.cs">
@@ -126,12 +127,14 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="ApplicationInsights.config" />
+    <Content Include="Assets\Font\FREESCPT.TTF" />
     <None Include="packages.config" />
     <None Include="YummyCookWindowsUniversal_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Image\IMG_8577b.jpg" />
     <Content Include="Assets\Image\StartBackImg.jpg" />
+    <Content Include="Assets\test.jpg" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />

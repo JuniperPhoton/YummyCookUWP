@@ -24,10 +24,17 @@ namespace YummyCookWindowsUniversal
     /// </summary>
     public sealed partial class LoginPage : BindablePage
     {
+        private UserInfoViewModel UserInfoVM
+        {
+            get
+            {
+                return (DataContext as UserInfoViewModel);
+            }
+        }
         public LoginPage()
         {
             this.InitializeComponent();
-            this.DataContext = new UserInfoViewModel();
+            
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

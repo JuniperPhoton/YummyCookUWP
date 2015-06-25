@@ -1,18 +1,29 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Views;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
+using Windows.Storage;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using YummyCookWindowsUniversal.Helper;
 using YummyCookWindowsUniversal.Interface;
 using YummyCookWindowsUniversal.Model;
+using System.Runtime.InteropServices.WindowsRuntime;
+
+
 
 namespace YummyCookWindowsUniversal.ViewModel
 {
     public class UserInfoViewModel:ViewModelBase, INavigable
     {
+        private bool isToLogin = false;
+
         private string _title;
         public string Title
         {
@@ -29,6 +40,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                 }
             }
         }
+
         private Visibility _showConfirmVisibility;
         public Visibility ShowConfirmVisibility
         {
@@ -63,50 +75,127 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
-        public string CurrentPageKey
+        private string _userName;
+        public string UserName
         {
             get
             {
-                throw new NotImplementedException();
+                return _userName;
+            }
+            set
+            {
+                if(_userName!=value)
+                {
+                    _userName = value;
+                    RaisePropertyChanged(() => UserName);
+                }
             }
         }
 
-        public void GoBack()
+        private string _password;
+        public string Password
         {
-            throw new NotImplementedException();
+            get
+            {
+                return _password;
+            }
+            set
+            {
+                if(_password!=value)
+                {
+                    _password = value;
+                    RaisePropertyChanged(() => Password);
+                }
+            }
         }
 
-        public void NavigateTo(string pageKey)
+        private string _confrimPassword;
+        public string ConfirmPassword
         {
-            throw new NotImplementedException();
+            get
+            {
+                return _confrimPassword;
+            }
+            set
+            {
+                if(_confrimPassword!=value)
+                {
+                    _confrimPassword = value;
+                    RaisePropertyChanged(() => ConfirmPassword);
+                }
+            }
         }
 
-        public void NavigateTo(string pageKey, object parameter)
+        private RelayCommand _nextCommand;
+        public RelayCommand NextCommand
         {
-            throw new NotImplementedException();
+            get
+            {
+                if(_nextCommand!=null)
+                {
+                    return _nextCommand;
+                }
+                return _nextCommand=new RelayCommand(()=>
+                {
+                    if(isToLogin)
+                    {
+                        Login();
+
+                    }
+                    else
+                    {
+                        Register();
+                    }
+                });
+            }
+        }
+
+        public UserInfoViewModel()
+        {
+            UserName = "";
+            Password = "";
+            ConfirmPassword = "";
+            
+        }
+
+        private async void Login()
+        {
+            
+        }
+
+        private void Register()
+        {
+            var rootFrame = Window.Current.Content as Frame;
+            if(rootFrame!=null)
+            {
+                rootFrame.Navigate(typeof(UserInfoPage));
+            }
         }
 
         public void Activate(object param)
         {
             var data = param as NavigationData;
+            if (data == null) return;
             string isLogin = (string)data.paramsData["ToLogin"];
             if(isLogin=="true")
             {
-                Title = "LOGIN";
+                isToLogin = true;
+                Title = "登录";
                 ShowConfirmVisibility = Visibility.Collapsed;
-                LoginBtnContent = "LOGIN";
+                LoginBtnContent = "登录";
             }
             else
             {
-                Title = "REGISTER";
+                isToLogin = false;
+                Title = "注册";
                 ShowConfirmVisibility = Visibility.Visible;
-                LoginBtnContent = "REGISTER";
+                LoginBtnContent = "注册";
             }
         }
 
         public void Deactivate(object param)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

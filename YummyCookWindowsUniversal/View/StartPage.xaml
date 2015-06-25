@@ -8,37 +8,159 @@
     mc:Ignorable="d"
     xmlns:common="using:YummyCookWindowsUniversal"
     Margin="0,-30,0,0">
-    <common:BindablePage.Transitions>
+    <common:BindablePage.Resources>
+        <Storyboard x:Name="StartStory">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="grid">
+                <EasingDoubleKeyFrame KeyTime="0" Value="-30"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="SubTitleTB">
+                <EasingDoubleKeyFrame KeyTime="0" Value="-30"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="button">
+                <EasingDoubleKeyFrame KeyTime="0" Value="-30"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="button1">
+                <EasingDoubleKeyFrame KeyTime="0" Value="-30"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="button2">
+                <EasingDoubleKeyFrame KeyTime="0" Value="-30"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="grid">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="SubTitleTB">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="button">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="1">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="button1">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="button2">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="1">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <CircleEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </common:BindablePage.Resources>
+    <!--<common:BindablePage.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
-                <EntranceNavigationTransitionInfo/>
+                <DrillInNavigationTransitionInfo/>
             </NavigationThemeTransition>
         </TransitionCollection>
-    </common:BindablePage.Transitions>
+    </common:BindablePage.Transitions>-->
 
     <Grid Background="#FF262626" >
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.Setters>
+                        <Setter Target="sp.MinWidth" Value="300" />
+                        <Setter Target="AppNameTB.FontSize" Value="60"/>
+                        <Setter Target="SubTitleTB.FontSize" Value="20"/>
+                        <Setter Target="MainSP.MinWidth" Value="300"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState>
+                    <VisualState.Setters>
+                        <Setter Target="sp.MinWidth" Value="500" />
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Image Source="ms-appx:///Assets/Image/StartBackImg.jpg" Stretch="UniformToFill"/>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-100,0,0">
-            <Grid>
-                <TextBlock FontSize="53.333" Text="YummyCook" Foreground="#FF737373" FontFamily="Microsoft YaHei UI Light" FontWeight="Light" TextAlignment="Center" Margin="1,1,-1,-1"/>
-                <TextBlock FontSize="53.333" Text="YummyCook" Foreground="White" FontFamily="Microsoft YaHei UI Light" FontWeight="Light" TextAlignment="Center"/>
+        <StackPanel x:Name="MainSP" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" MinWidth="250">
+            <Grid x:Name="grid" RenderTransformOrigin="0.5,0.5" Opacity="0">
+                <Grid.RenderTransform>
+                    <CompositeTransform TranslateY="-30"/>
+                </Grid.RenderTransform>
+                <TextBlock x:Name="AppNameTB" FontSize="72" Text="YummyCook" Foreground="White" FontFamily="ms-appx:/Assets/Font/FREESCPT.TTF#Freestyle Script" FontWeight="Light" TextAlignment="Center"/>
             </Grid>
 
-            <TextBlock FontSize="26.667" Text="轻松做出美味的食物" Foreground="White" FontFamily="Microsoft YaHei UI Light" FontWeight="Light" TextAlignment="Center"/>
+            <TextBlock x:Name="SubTitleTB" FontSize="24" Text="轻松做出美味的食物" Foreground="White" FontFamily="Microsoft YaHei UI Light" FontWeight="Light" TextAlignment="Center" RenderTransformOrigin="0.5,0.5" Opacity="0">
+                <TextBlock.RenderTransform>
+                    <CompositeTransform TranslateY="-30"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
 
-            <Button Margin="0,100,0,0" Command="{Binding NavigateToLoginCommand}" HorizontalContentAlignment="Stretch" Padding="0" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" Background="{x:Null}" Style="{StaticResource BtnStyle}" >
-                <Border Padding="0"  Height="50" Background="{StaticResource CookTheme}" CornerRadius="2">
-                    <TextBlock Text="登录" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="20" FontFamily="Microsoft YaHei UI" FontWeight="Light"/>
+            <Button x:Name="button" Margin="0,40,0,0" Command="{x:Bind StartVM.NavigateToLoginCommand}" HorizontalContentAlignment="Stretch" Padding="0" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" Background="{x:Null}" Style="{StaticResource BtnStyle}" RenderTransformOrigin="0.5,0.5" Opacity="0" >
+                <Button.RenderTransform>
+                    <CompositeTransform TranslateY="-30"/>
+                </Button.RenderTransform>
+                <Border x:Name="LoginBtnBorder" Padding="0"  Height="40" Background="{StaticResource CookTheme}" CornerRadius="2">
+                    <TextBlock Text="登录" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Microsoft YaHei UI" FontWeight="Light"/>
                 </Border>
             </Button>
-            <Button Command="{Binding NavigateToRegisterCommand}"  HorizontalContentAlignment="Stretch" Padding="0" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" Background="{x:Null}" Style="{StaticResource BtnStyle}" >
-                <Border Padding="0" Margin="0,10,0,0" Height="50" CornerRadius="2" BorderThickness="2" Background="{StaticResource CookThemeLight}">
-                    <TextBlock Text="注册" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="20" FontWeight="Light"/>
+            <Button x:Name="button1" Command="{x:Bind StartVM.NavigateToRegisterCommand}"  HorizontalContentAlignment="Stretch" Padding="0" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" Background="{x:Null}" Style="{StaticResource BtnStyle}" RenderTransformOrigin="0.5,0.5" Opacity="0" >
+                <Button.RenderTransform>
+                    <CompositeTransform TranslateY="-30"/>
+                </Button.RenderTransform>
+                <Border x:Name="RegisterBtnBorder"  Padding="0" Margin="0" Height="40" CornerRadius="2" BorderThickness="2" Background="{StaticResource CookThemeLight}">
+                    <TextBlock Text="注册" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Light"/>
                 </Border>
             </Button>
-            <Button Command="{Binding NavigateToRegisterCommand}"  HorizontalContentAlignment="Stretch" Padding="0" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" Background="{x:Null}" Style="{StaticResource BtnStyle}" >
-                <Border Padding="0" Margin="0,10,0,0" Height="50" CornerRadius="2" BorderThickness="2" Background="White">
-                    <TextBlock Text="随便看看" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource CookTheme}" FontSize="20" FontWeight="Light"/>
+            <Button x:Name="button2" Command="{Binding NavigateToRegisterCommand}"  HorizontalContentAlignment="Stretch" Padding="0" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" Background="{x:Null}" Style="{StaticResource BtnStyle}" RenderTransformOrigin="0.5,0.5" Opacity="0" >
+                <Button.RenderTransform>
+                    <CompositeTransform TranslateY="-30"/>
+                </Button.RenderTransform>
+                <Border x:Name="AroundBtnBorder"  Padding="0" Margin="0" Height="40" CornerRadius="2" BorderThickness="2" Background="White">
+                    <TextBlock Text="随便看看" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource CookTheme}" FontSize="16" FontWeight="Light"/>
                 </Border>
             </Button>
         </StackPanel>

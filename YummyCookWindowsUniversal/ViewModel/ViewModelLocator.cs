@@ -43,6 +43,7 @@ namespace YummyCookWindowsUniversal.ViewModel
             ////}
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<UserInfoViewModel>();
         }
 
         public MainViewModel MainVM
@@ -52,7 +53,15 @@ namespace YummyCookWindowsUniversal.ViewModel
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
-        
+
+        public UserInfoViewModel UserInfoVM
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<UserInfoViewModel>();
+            }
+        }
+
         public static void Cleanup()
         {
             // TODO Clear the ViewModels

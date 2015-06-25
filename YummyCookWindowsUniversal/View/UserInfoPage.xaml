@@ -1,19 +1,47 @@
-﻿<Page
+﻿<local:BindablePage
     x:Class="YummyCookWindowsUniversal.UserInfoPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:YummyCookWindowsUniversal.View"
+    xmlns:local="using:YummyCookWindowsUniversal"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    DataContext="{Binding UserInfoVM,Source={StaticResource Locator}}"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Page.Transitions>
-        <TransitionCollection>
-            <NavigationThemeTransition>
-                <EntranceNavigationTransitionInfo/>
-            </NavigationThemeTransition>
-        </TransitionCollection>
-    </Page.Transitions>
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    <local:BindablePage.BottomAppBar>
+        <CommandBar RequestedTheme="Dark" Background="{StaticResource CookTheme}">
+            <AppBarButton Label="完成" Icon="Accept"/>
+        </CommandBar>
+    </local:BindablePage.BottomAppBar>
+    <Grid Background="White">
+        <StackPanel Margin="12,20,12,0" MinWidth="320" HorizontalAlignment="Center">
+            <TextBlock Text="完善资料" HorizontalAlignment="Center" FontSize="33.333" Foreground="{StaticResource CookThemeBlackDark}"/>
+            <TextBlock Text="性别" Foreground="{StaticResource CookTheme}" FontWeight="Bold" Margin="0,20,0,0"/>
+            <ComboBox SelectedIndex="0"  HorizontalAlignment="Stretch" Margin="0,10,0,0">
+                <ComboBoxItem Content="男"/>
+                <ComboBoxItem Content="女"/>
+            </ComboBox>
+            <TextBlock Text="邮箱" Foreground="{StaticResource CookTheme}" FontWeight="Bold" Margin="0,20,0,0"/>
+            <TextBox Margin="0,10,0,0" />
+            <TextBlock Text="城市" Foreground="{StaticResource CookTheme}" FontWeight="Bold" Margin="0,20,0,0"/>
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ComboBox HorizontalAlignment="Stretch">
+                    <ComboBoxItem/>
+                    <ComboBoxItem/>
+                </ComboBox>
+                <ComboBox HorizontalAlignment="Stretch" Grid.Column="1">
+                    <ComboBoxItem/>
+                    <ComboBoxItem/>
+                </ComboBox>
+            </Grid>
+            <Button HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Padding="0" Style="{StaticResource BtnStyle}" Margin="0,30,0,0" HorizontalAlignment="Stretch" Background="{x:Null}">
+                <Border Height="40" BorderBrush="{StaticResource CookTheme}" BorderThickness="2" CornerRadius="2" Background="White">
+                    <TextBlock Text="以后再算" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource CookTheme}"/>
+                </Border>
+            </Button>
+        </StackPanel>
     </Grid>
-</Page>
+</local:BindablePage>

@@ -24,18 +24,27 @@ namespace YummyCookWindowsUniversal
     
     public sealed partial class StartPage : BindablePage
     {
+        private StartViewModel StartVM;
         public StartPage()
         {
             this.InitializeComponent();
-            StartViewModel startVM = new StartViewModel();
-            this.DataContext = startVM;
+            StartVM = new StartViewModel();
+            this.DataContext = StartVM;
 
-            if(ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-            {
-                StatusBar.GetForCurrentView().BackgroundOpacity = 100;
-                //StatusBar.GetForCurrentView().BackgroundColor = ((SolidColorBrush)App.Current.Resources["CookThemeDark"]).Color;
-            }
-            
+           
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(0.5);
+            timer.Tick += ((st, et) =>
+              {
+                  StartStory.Begin();
+                  timer.Stop();
+              });
+            timer.Start();
         }
     }
 }
