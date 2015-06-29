@@ -143,7 +143,7 @@
                 <Button.RenderTransform>
                     <CompositeTransform TranslateY="-30"/>
                 </Button.RenderTransform>
-                <Border x:Name="LoginBtnBorder" Padding="0"  Height="40" Background="{StaticResource CookTheme}" CornerRadius="2">
+                <Border x:Name="LoginBtnBorder" Padding="0"  Height="40" Background="{StaticResource CookTheme}" CornerRadius="2" BorderThickness="2">
                     <TextBlock Text="登录" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Microsoft YaHei UI" FontWeight="Light"/>
                 </Border>
             </Button>

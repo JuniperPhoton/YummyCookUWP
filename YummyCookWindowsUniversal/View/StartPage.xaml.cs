@@ -37,6 +37,7 @@ namespace YummyCookWindowsUniversal
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+            Frame.BackStack.Clear();
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(0.5);
             timer.Tick += ((st, et) =>

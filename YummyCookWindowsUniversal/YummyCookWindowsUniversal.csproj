@@ -94,11 +94,22 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomTriggers\ControlSizeTrigger.cs" />
+    <Compile Include="CustomTriggers\DeviceFamilyTrigger.cs" />
+    <Compile Include="CustomTriggers\InputTypeTrigger.cs" />
+    <Compile Include="Helper\ApiInformationHelper.cs" />
     <Compile Include="Helper\ConfigHelper.cs" />
     <Compile Include="Helper\JsonMaker.cs" />
     <Compile Include="Helper\RequestHelper.cs" />
     <Compile Include="Interface\INavigable.cs" />
+    <Compile Include="Model\City.cs" />
     <Compile Include="Model\NavigationData.cs" />
+    <Compile Include="Model\Province.cs" />
+    <Compile Include="Model\RegionList.cs" />
+    <Compile Include="Model\Step.cs" />
+    <Compile Include="UserControl\ToastUC.xaml.cs">
+      <DependentUpon>ToastUC.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\UserInfoViewModel.cs" />
     <Compile Include="Base\BindablePage.cs" />
     <Compile Include="View\LoginPage.xaml.cs">
@@ -127,13 +138,34 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="ApplicationInsights.config" />
+    <Content Include="Assets\City.txt" />
     <Content Include="Assets\Font\FREESCPT.TTF" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="YummyCookWindowsUniversal_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Icon\Account.png" />
+    <Content Include="Assets\Image\1.jpg" />
+    <Content Include="Assets\Image\Food_Sample %280%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %281%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %2810%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %2811%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %2812%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %2813%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %2814%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %2815%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %282%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %283%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %284%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %285%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %286%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %287%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %288%29.jpg" />
+    <Content Include="Assets\Image\Food_Sample %289%29.jpg" />
     <Content Include="Assets\Image\IMG_8577b.jpg" />
     <Content Include="Assets\Image\StartBackImg.jpg" />
+    <Content Include="Assets\Province.txt" />
     <Content Include="Assets\test.jpg" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\Logo.scale-100.png" />
@@ -147,6 +179,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="UserControl\ToastUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -203,8 +239,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\Icon\" />
-    <Folder Include="UserControl\" />
     <Folder Include="Util\" />
   </ItemGroup>
   <ItemGroup>

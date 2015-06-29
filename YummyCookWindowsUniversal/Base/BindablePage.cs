@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Windows.Foundation.Metadata;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
@@ -20,6 +21,7 @@ namespace YummyCookWindowsUniversal
         {
             TransitionCollection collection = new TransitionCollection();
             NavigationThemeTransition theme = new NavigationThemeTransition();
+            
             var info = new ContinuumNavigationTransitionInfo();
             theme.DefaultNavigationTransitionInfo = info;
             collection.Add(theme);
@@ -27,11 +29,10 @@ namespace YummyCookWindowsUniversal
 
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
-                //StatusBar.GetForCurrentView().HideAsync();
+                var task=StatusBar.GetForCurrentView().HideAsync();
                 StatusBar.GetForCurrentView().BackgroundOpacity = 0.001;
                 StatusBar.GetForCurrentView().BackgroundColor = ((SolidColorBrush)App.Current.Resources["CookThemeDark"]).Color;
             }
-
             this.IsTextScaleFactorEnabled = false;
         }
 
@@ -44,21 +45,17 @@ namespace YummyCookWindowsUniversal
             {
                 NavigationViewModel.Activate(e.Parameter);
             }
-            if (Frame.CanGoBack)
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-            else
-                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
-
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-            //var NavigationViewModel = (INavigable)this.DataContext;
-            //if (NavigationViewModel != null)
-            //{
-            //    //NavigationViewModel.Deactivate(e.Parameter);
-            //}
+            var NavigationViewModel = (INavigable)this.DataContext;
+            if (NavigationViewModel != null)
+            {
+                NavigationViewModel.Deactivate(null);
+            }
         }
 
     }

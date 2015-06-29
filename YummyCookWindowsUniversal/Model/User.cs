@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace YummyCookWindowsUniversal.Model
 {
@@ -27,8 +28,8 @@ namespace YummyCookWindowsUniversal.Model
             }
         }
 
-        private ImageSource _avatar;
-        public ImageSource Avatar
+        private BitmapImage _avatar;
+        public BitmapImage Avatar
         {
             get
             {

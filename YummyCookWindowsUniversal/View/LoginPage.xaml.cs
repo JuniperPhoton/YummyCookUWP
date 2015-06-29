@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -34,7 +35,11 @@ namespace YummyCookWindowsUniversal
         public LoginPage()
         {
             this.InitializeComponent();
-            
+            Messenger.Default.Register<GenericMessage<string>>(this,"toast", act =>
+             {
+                 var msg = act.Content;
+                 ToastControl.ShowMessage(msg);
+             });
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

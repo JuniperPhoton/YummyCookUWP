@@ -351,14 +351,18 @@
                 <TextBox Text="{x:Bind UserInfoVM.UserName,Mode=TwoWay}" PlaceholderText="用户名" Margin="10,10,10,0" BorderBrush="{StaticResource CookThemeGrayLight}" Style="{StaticResource TextBoxStyle1}" MinWidth="300"/>
                 <PasswordBox Password="{x:Bind UserInfoVM.Password,Mode=TwoWay}" PlaceholderText="密码" Margin="10,10,10,0" BorderBrush="{StaticResource CookThemeGrayLight}" Style="{StaticResource PasswordBoxStyle1}" MinWidth="300" />
                 <PasswordBox Password="{x:Bind UserInfoVM.ConfirmPassword,Mode=TwoWay}" Visibility="{x:Bind UserInfoVM.ShowConfirmVisibility}" PlaceholderText="确认密码" Margin="10,10,10,0" BorderBrush="{StaticResource CookThemeGrayLight}" Style="{StaticResource PasswordBoxStyle1}" MinWidth="300" />
-
                 <Button  Command="{x:Bind UserInfoVM.NextCommand}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Style="{StaticResource BtnStyle}" Margin="10,10,10,0" HorizontalAlignment="Stretch" Height="57" Background="{x:Null}">
                     <Border Padding="0" Height="40" Background="{StaticResource CookTheme}" CornerRadius="2">
                         <TextBlock Text="{x:Bind UserInfoVM.LoginBtnContent}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16" FontFamily="Microsoft YaHei UI" FontWeight="Light"/>
                     </Border>
                 </Button>
+                <StackPanel Visibility="{x:Bind UserInfoVM.ShowLoadingVisibility,Mode=OneWay}" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <ProgressRing MinWidth="30" MinHeight="30" Foreground="{StaticResource CookTheme}" IsActive="True"/>
+                    <TextBlock Text="加载中..." HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
             </StackPanel>
 
         </Grid>
+        <local:ToastUC x:Name="ToastControl" Grid.RowSpan="3"/>
     </Grid>
 </common:BindablePage>

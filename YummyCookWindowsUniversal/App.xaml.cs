@@ -93,7 +93,7 @@ namespace YummyCookWindowsUniversal
                 if (rootFrame.CanGoBack)
                     rootFrame.GoBack();
             };
-            if (ApiInformation.IsTypePresent("Windows.Phone.UI.Input.HardwareButtons"))
+            if (ApiInformationHelper.CheckHardwareButton())
             {
                 // 如果设备有后退按钮，那么同样处理下。
                 Windows.Phone.UI.Input.HardwareButtons.BackPressed += (s, ee) =>
