@@ -6,9 +6,9 @@
              RequestedTheme="Light">
     <Application.Resources>
         <vm:ViewModelLocator x:Key="Locator" xmlns:vm="using:YummyCookWindowsUniversal.ViewModel" />
-        <SolidColorBrush x:Key="CookTheme">#FFFF5722</SolidColorBrush>
-        <SolidColorBrush x:Key="CookThemeDark">#FFD64315</SolidColorBrush>
-        <SolidColorBrush x:Key="CookThemeLight">#FFFF815A</SolidColorBrush>
+        <SolidColorBrush x:Key="CookTheme">#FFFF4D4D</SolidColorBrush>
+        <SolidColorBrush x:Key="CookThemeDark">#FFDA4A4A</SolidColorBrush>
+        <SolidColorBrush x:Key="CookThemeLight">#FFFF6B6B</SolidColorBrush>
         <SolidColorBrush x:Key="CookThemeGrayLight">#FFEDEDED</SolidColorBrush>
         <SolidColorBrush x:Key="CookThemeBlackDark">#FF262626</SolidColorBrush>
         <Style x:Key="RadioButtonStyle1" TargetType="RadioButton">

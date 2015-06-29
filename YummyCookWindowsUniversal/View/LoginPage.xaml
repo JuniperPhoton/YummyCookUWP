@@ -342,7 +342,7 @@
         </VisualStateManager.VisualStateGroups>
 
         <Grid>
-            <Image Source="ms-appx:///Assets/Image/IMG_8577b.jpg" Stretch="UniformToFill"/>
+            <Image Source="ms-appx:///Assets/Image/Food_Sample (15).jpg" Stretch="UniformToFill"/>
             <TextBlock x:Name="TitleTB" Text="{x:Bind UserInfoVM.Title}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="53.333" Margin="0,0,0,20" FontWeight="Bold"/>
         </Grid>
         <Grid Grid.Row="1">

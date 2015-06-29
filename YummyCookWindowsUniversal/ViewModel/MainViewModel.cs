@@ -11,6 +11,9 @@ using Windows.UI.Xaml;
 using JP.Utils.Data;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Popups;
+using YummyCookWindowsUniversal.View;
+using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Views;
 
 namespace YummyCookWindowsUniversal.ViewModel
 {
@@ -54,6 +57,23 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
+        private RelayCommand<Recipe> _gotoDetailCommand;
+        public RelayCommand<Recipe> GotoDetailCommand
+        {
+            get
+            {
+                if (_gotoDetailCommand != null) return _gotoDetailCommand;
+                return _gotoDetailCommand = new RelayCommand<Recipe>((recipe) =>
+                  {
+                      NavigationServiceEX service = new NavigationServiceEX();
+                      service.Configure("DetailedPage", typeof(RecipeDetailPage));
+                      service.NavigateTo("DetailedPage");
+
+                      Messenger.Default.Send<GenericMessage<Recipe>>(new GenericMessage<Recipe>(recipe), "recipe");
+                  });
+            }
+        }
+
         private RelayCommand _refreshCommand;
         public RelayCommand RefreshCommand
         {
@@ -64,7 +84,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                   {
                       start = 0;
                       number = 20;
-                      RecipeList.Clear();
+                      RecipeList = new ObservableCollection<Recipe>();
                       GetRecipes();
                   });
             }
@@ -126,17 +146,27 @@ namespace YummyCookWindowsUniversal.ViewModel
 
         public async void GetRecipes()
         {
-            ShowLoadingVisibility = Visibility.Visible;
-            var list = await RequestHelper.GetAllRecipes(start.ToString(), number.ToString());
-            start += number;
-            this.RecipeList = list;
-            ShowLoadingVisibility = Visibility.Collapsed;
+            try
+            {
+                ShowLoadingVisibility = Visibility.Visible;
+                var list = await RequestHelper.GetAllRecipes(start.ToString(), number.ToString());
+                start += number;
+                this.RecipeList = list;
+                ShowLoadingVisibility = Visibility.Collapsed;
 
+            }
+            catch(Exception e)
+            {
+                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(e.Message), "toast");
+            }
         }
 
         public void Activate(object param)
         {
-            GetRecipes();
+            if (RecipeList.Count == 0)
+            {
+                GetRecipes();
+            }
         }
 
         public void Deactivate(object param)

@@ -33,6 +33,8 @@ namespace YummyCookWindowsUniversal
         /// </summary>
         public static Microsoft.ApplicationInsights.TelemetryClient TelemetryClient;
 
+        public static Frame ContentFrame = null;
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().

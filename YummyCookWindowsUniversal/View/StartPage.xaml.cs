@@ -17,7 +17,6 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using YummyCookWindowsUniversal.ViewModel;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace YummyCookWindowsUniversal
 {
@@ -30,8 +29,6 @@ namespace YummyCookWindowsUniversal
             this.InitializeComponent();
             StartVM = new StartViewModel();
             this.DataContext = StartVM;
-
-           
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

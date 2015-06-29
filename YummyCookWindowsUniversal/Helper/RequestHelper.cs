@@ -1,4 +1,5 @@
-﻿using JP.Utils.Data;
+﻿using GalaSoft.MvvmLight.Messaging;
+using JP.Utils.Data;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -228,7 +229,7 @@ namespace YummyCookWindowsUniversal.Helper
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Add(AppID.First());
                 client.DefaultRequestHeaders.Add(AppKey.First());
-                var message = await client.GetAsync(new Uri(RequestHelper.GetRecipeUrl+"skip="+start+"&limit="+number));
+                var message = await client.GetAsync(new Uri(RequestHelper.GetRecipeUrl+"skip="+start+"&limit="+number+ "&order=-updatedAt"));
                 if (message.IsSuccessStatusCode)
                 {
                     JsonObject job = JsonObject.Parse(await message.Content.ReadAsStringAsync());
@@ -241,13 +242,13 @@ namespace YummyCookWindowsUniversal.Helper
                         {
                             try
                             {
-                                var checklist = item.GetObject()["checklist"].GetString();
-                                var content = item.GetObject()["content"].GetString();
-                                var username = item.GetObject()["username"].GetString();
-                                var id = item.GetObject()["objectId"].GetString();
-                                var title = item.GetObject()["title"].GetString();
+                                var checklist = JsonParser.GetStringFromJsonObj(item.GetObject()["checklist"]);
+                                var content = JsonParser.GetStringFromJsonObj(item.GetObject()["content"]);
+                                var username = JsonParser.GetStringFromJsonObj(item.GetObject()["username"]);
+                                var id = JsonParser.GetStringFromJsonObj(item.GetObject()["objectId"]);
+                                var title = JsonParser.GetStringFromJsonObj(item.GetObject()["title"]);
+
                                 var recipe = new Recipe();
-                                recipe.Content = content;
                                 recipe.CookUser = new User();
                                 recipe.CookUser.UserName = username;
                                 recipe.CookUser.Avatar = new BitmapImage();
@@ -260,11 +261,43 @@ namespace YummyCookWindowsUniversal.Helper
                                 recipe.RecipeID = id;
                                 recipe.Title = title;
                                 recipe.TitleImage = new BitmapImage(new System.Uri("ms-appx:///Assets/Image/Food_Sample (" + i % 15 + ").jpg"));
+
+                                recipe.IngredientList = new ObservableCollection<Ingredient>();
+                                if(!string.IsNullOrEmpty(checklist))
+                                {
+                                    var regredientArray = JsonArray.Parse(checklist);
+                                    foreach (var ingredient in regredientArray)
+                                    {
+                                        var obj = ingredient.GetObject();
+                                        var newIngredient = new Ingredient();
+                                        newIngredient.IngredientName = JsonParser.GetStringFromJsonObj(obj["name"]);
+                                        newIngredient.Quality = JsonParser.GetStringFromJsonObj(obj["quality"]);
+                                        newIngredient.IsMain = JsonParser.GetBooleanFromJsonObj(obj["is_main"],true);
+                                        recipe.IngredientList.Add(newIngredient);
+                                    }
+                                }
+                                
+
+                                recipe.StepsList = new ObservableCollection<Step>();
+                                if(!string.IsNullOrEmpty(content))
+                                {
+                                    var stepArray = JsonArray.Parse(content);
+                                    foreach (var step in stepArray)
+                                    {
+                                        var obj = step.GetObject();
+                                        var newStep = new Step();
+                                        newStep.ImageUrl=JsonParser.GetStringFromJsonObj(obj["image_url"]);
+                                        newStep.StepContent = JsonParser.GetStringFromJsonObj(obj["content"]);
+                                        recipe.StepsList.Add(newStep);
+                                    }
+                                }
+
                                 listToReturn.Add(recipe);
                                 i++;
                             }
                             catch (Exception e)
                             {
+                                Messenger.Default.Send(new GenericMessage<string>(e.Message), "toast");
                                 return null;
                             }
                         }

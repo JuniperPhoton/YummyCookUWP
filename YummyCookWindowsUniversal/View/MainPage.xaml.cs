@@ -1,4 +1,6 @@
-﻿using JP.Utils.Data;
+﻿using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Views;
+using JP.Utils.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,12 +20,13 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using YummyCookWindowsUniversal.Helper;
+using YummyCookWindowsUniversal.Model;
 using YummyCookWindowsUniversal.ViewModel;
 
 namespace YummyCookWindowsUniversal
 {
 
-    public sealed partial class MainPage : BindablePage
+    public sealed partial class MainPage : BindablePage,IFrame
     {
         private MainViewModel MainVM
         {
@@ -35,7 +38,14 @@ namespace YummyCookWindowsUniversal
         public MainPage()
         {
             this.InitializeComponent();
+
+            Messenger.Default.Register<GenericMessage<string>>(this, "toast", act =>
+            {
+                var msg = act.Content;
+                ToastControl.ShowMessage(msg);
+            });
         }
+
 
         private void HamburgerClick(object sender,RoutedEventArgs e)
         {
@@ -66,12 +76,20 @@ namespace YummyCookWindowsUniversal
                 //StatusBar.GetForCurrentView().BackgroundColor = ((SolidColorBrush)App.Current.Resources["CookThemeDark"]).Color;
                 //StatusBar.GetForCurrentView().ForegroundColor = Colors.White;
             }
+
+            App.ContentFrame = this.ContentFrame;
         }
 
         private void root_sv_PaneClosed(SplitView sender, object args)
         {
             MaskOutStory.Begin();
             HamOutStory.Begin();
+        }
+
+        public Frame GetFrame()
+        {
+            if (ContentFrame.Visibility == Visibility.Visible) return ContentFrame;
+            else return Frame;
         }
     }
 }

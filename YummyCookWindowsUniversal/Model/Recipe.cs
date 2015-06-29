@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -80,19 +81,36 @@ namespace YummyCookWindowsUniversal.Model
             }
         }
 
-        private string _content;
-        public string Content
+        private ObservableCollection<Ingredient> _ingredientList;
+        public ObservableCollection<Ingredient> IngredientList
         {
             get
             {
-                return _content;
+                return _ingredientList;
             }
             set
             {
-                if (_content != value)
+                if(_ingredientList!=value)
                 {
-                    _content = value;
-                    RaisePropertyChanged(() => Content);
+                    _ingredientList = value;
+                    RaisePropertyChanged(() => IngredientList);
+                }
+            }
+        }
+
+        private ObservableCollection<Step> _stepsList;
+        public ObservableCollection<Step> StepsList
+        {
+            get
+            {
+                return _stepsList;
+            }
+            set
+            {
+                if (_stepsList != value)
+                {
+                    _stepsList = value;
+                    RaisePropertyChanged(() => StepsList);
                 }
             }
         }
@@ -100,6 +118,8 @@ namespace YummyCookWindowsUniversal.Model
         public Recipe()
         {
             TitleImage = new BitmapImage();
+            IngredientList = new ObservableCollection<Ingredient>();
+            StepsList = new ObservableCollection<Step>();
         }
 
     }

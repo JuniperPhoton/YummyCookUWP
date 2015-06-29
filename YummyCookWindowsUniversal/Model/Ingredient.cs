@@ -27,8 +27,8 @@ namespace YummyCookWindowsUniversal.Model
             }
         }
 
-        private int _quality;
-        public int Quality
+        private string _quality;
+        public string Quality
         {
             get
             {
@@ -44,8 +44,8 @@ namespace YummyCookWindowsUniversal.Model
             }
         }
 
-        private bool _isChecked;
-        public bool IsChecked
+        private System.Nullable<bool> _isChecked;
+        public System.Nullable<bool> IsChecked
         {
             get
             {
@@ -61,11 +61,35 @@ namespace YummyCookWindowsUniversal.Model
             }
         }
 
-        public Ingredient(string name,int quality,bool ischeck=false)
+        private bool _isMain;
+        public bool IsMain
+        {
+            get
+            {
+                return _isMain;
+            }
+            set
+            {
+                if(_isMain!=value)
+                {
+                    _isMain = value;
+                    RaisePropertyChanged(() => IsMain);
+                }
+            }
+        }
+
+        public Ingredient()
+        {
+            IsChecked = false;
+            IsMain = true;
+        }
+
+        public Ingredient(string name,string quality,bool ischeck=false,bool ismain=true)
         {
             this.IngredientName = name;
             this.Quality = quality;
             this.IsChecked = ischeck;
+            this.IsMain = ismain;
         }
 
         /// <summary>
@@ -77,7 +101,8 @@ namespace YummyCookWindowsUniversal.Model
         {
             var name=JsonMaker.MakeJsonObj("name", item.IngredientName);
             var quality = JsonMaker.MakeJsonObj("quality", item.Quality);
-            var json = JsonMaker.MakeJsonString(new List<string> { name, quality });
+            var main = JsonMaker.MakeJsonObj("is_main", item.IsMain);
+            var json = JsonMaker.MakeJsonString(new List<string> { name, quality,main});
             return json;
         }
     }
