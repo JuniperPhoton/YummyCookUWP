@@ -11,8 +11,8 @@
     <AssemblyName>YummyCookWindowsUniversal</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10069.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10069.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.10158.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10158.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
@@ -94,6 +94,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converter\IsMainConverter.cs" />
+    <Compile Include="Converter\UnitConverter.cs" />
     <Compile Include="CustomTriggers\ControlSizeTrigger.cs" />
     <Compile Include="CustomTriggers\DeviceFamilyTrigger.cs" />
     <Compile Include="CustomTriggers\InputTypeTrigger.cs" />
@@ -116,6 +118,7 @@
     <Compile Include="Util\ListViewCommandEx.cs" />
     <Compile Include="Util\NavigationService.cs" />
     <Compile Include="ViewModel\DetailedRecipeViewModel.cs" />
+    <Compile Include="ViewModel\NewRecipeViewModel.cs" />
     <Compile Include="ViewModel\UserInfoViewModel.cs" />
     <Compile Include="Base\BindablePage.cs" />
     <Compile Include="View\LoginPage.xaml.cs">
@@ -129,6 +132,9 @@
     <Compile Include="Model\ResponseData.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\NewRecipePage.xaml.cs">
+      <DependentUpon>NewRecipePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\RecipeDetailPage.xaml.cs">
       <DependentUpon>RecipeDetailPage.xaml</DependentUpon>
     </Compile>
@@ -149,7 +155,6 @@
     <None Include="ApplicationInsights.config" />
     <Content Include="Assets\City.txt" />
     <Content Include="Assets\Font\FREESCPT.TTF" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="YummyCookWindowsUniversal_TemporaryKey.pfx" />
   </ItemGroup>
@@ -187,6 +192,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="ResourceDictionary\RestDic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
     <Page Include="UserControl\ToastUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -198,6 +208,10 @@
     <Page Include="View\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\NewRecipePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\RecipeDetailPage.xaml">
       <SubType>Designer</SubType>

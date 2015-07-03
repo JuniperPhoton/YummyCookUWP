@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using YummyCookWindowsUniversal.ViewModel;
 
 namespace YummyCookWindowsUniversal.Model
 {
@@ -95,6 +96,25 @@ namespace YummyCookWindowsUniversal.Model
             }
         }
 
+        private string _regionName;
+        public string RegionName
+        {
+            get
+            {
+                return _regionName;
+            }
+            set
+            {
+                if (_regionName != value)
+                {
+                    _regionName = value;
+                    RaisePropertyChanged(() => RegionName);
+                }
+            }
+        }
+
+        
+
         private List<string> _friendsList;
         public List<string> FriendsList
         {
@@ -133,6 +153,48 @@ namespace YummyCookWindowsUniversal.Model
         {
             FriendsList = new List<string>();
             FavorsList = new List<string>();
+            RegionName = "";
+        }
+
+        public async Task LoadRegionInfo()
+        {
+            try
+            {
+                var locator = App.Current.Resources["Locator"] as ViewModelLocator;
+                if (locator.UserInfoVM.RegionsList.ProvinceList.Count == 0)
+                {
+                    await locator.UserInfoVM.InitialProvinceAsync();
+                }
+                var provinceName = locator.UserInfoVM.RegionsList.ProvinceList.ToList().Find((s) =>
+                {
+                    if (s.ProvinceID == this.ProvinceID)
+                    {
+                        return true;
+                    }
+                    else return false;
+                }).ProvinceName;
+
+                await locator.UserInfoVM.RegionsList.LoadCityList(this.ProvinceID);
+                var cityName = locator.UserInfoVM.RegionsList.CityList.ToList().Find((c) =>
+                {
+                    if (c.CityID == this.CityID)
+                    {
+                        return true;
+                    }
+                    else return false;
+                }).CityName;
+
+                if (cityName == provinceName)
+                {
+                    this.RegionName = cityName;
+                }
+                else this.RegionName = provinceName + " " + cityName;
+            }
+            catch(Exception e)
+            {
+
+            }
+            
         }
 
     }

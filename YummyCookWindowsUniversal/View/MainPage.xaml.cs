@@ -44,21 +44,6 @@ namespace YummyCookWindowsUniversal
                 var msg = act.Content;
                 ToastControl.ShowMessage(msg);
             });
-        }
-
-
-        private void HamburgerClick(object sender,RoutedEventArgs e)
-        {
-            root_sv.IsPaneOpen = !root_sv.IsPaneOpen;
-            MaskInStory.Begin();
-            HamInStory.Begin();
-        }
-
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            
-            base.OnNavigatedTo(e);
-            Frame.BackStack.Clear();
 
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
             titleBar.BackgroundColor = (App.Current.Resources["CookThemeDark"] as SolidColorBrush).Color;
@@ -76,6 +61,20 @@ namespace YummyCookWindowsUniversal
                 //StatusBar.GetForCurrentView().BackgroundColor = ((SolidColorBrush)App.Current.Resources["CookThemeDark"]).Color;
                 //StatusBar.GetForCurrentView().ForegroundColor = Colors.White;
             }
+        }
+
+
+        private void HamburgerClick(object sender,RoutedEventArgs e)
+        {
+            root_sv.IsPaneOpen = !root_sv.IsPaneOpen;
+            MaskInStory.Begin();
+            HamInStory.Begin();
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            Frame.BackStack.Clear();
 
             App.ContentFrame = this.ContentFrame;
         }

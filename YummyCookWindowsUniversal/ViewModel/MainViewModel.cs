@@ -14,6 +14,7 @@ using Windows.UI.Popups;
 using YummyCookWindowsUniversal.View;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Views;
+using System.Threading.Tasks;
 
 namespace YummyCookWindowsUniversal.ViewModel
 {
@@ -57,6 +58,38 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
+        private User _currentUser;
+        public User CurrentUser
+        {
+            get
+            {
+                return _currentUser;
+            }
+            set
+            {
+                if (_currentUser != value)
+                {
+                    _currentUser = value;
+                    RaisePropertyChanged(() => CurrentUser);
+                }
+
+            }
+        }
+
+        private RelayCommand _modifyInfoCommand;
+        public RelayCommand ModifyInfoCommand
+        {
+            get
+            {
+                if (_modifyInfoCommand != null) return _modifyInfoCommand;
+                return _modifyInfoCommand = new RelayCommand(() =>
+                  {
+                      var rootFrame = Window.Current.Content as Frame;
+                      rootFrame.Navigate(typeof(UserInfoPage),CurrentUser);
+                  });
+            }
+        }
+
         private RelayCommand<Recipe> _gotoDetailCommand;
         public RelayCommand<Recipe> GotoDetailCommand
         {
@@ -71,6 +104,20 @@ namespace YummyCookWindowsUniversal.ViewModel
 
                       Messenger.Default.Send<GenericMessage<Recipe>>(new GenericMessage<Recipe>(recipe), "recipe");
                   });
+            }
+        }
+
+        private RelayCommand _addNewCommand;
+        public RelayCommand AddNewCommand
+        {
+            get
+            {
+                if (_addNewCommand != null) return _addNewCommand;
+                return _addNewCommand=new RelayCommand(()=>
+                {
+                    var rootFrame = Window.Current.Content as Frame;
+                    rootFrame.Navigate(typeof(NewRecipePage));
+                });
             }
         }
 
@@ -120,6 +167,12 @@ namespace YummyCookWindowsUniversal.ViewModel
         {
             RecipeList = new ObservableCollection<Recipe>();
             ShowLoadingVisibility = Visibility.Collapsed;
+
+            Messenger.Default.Register<GenericMessage<string>>(this, "update_user", async act =>
+              {
+                  await GetCurrentUser();
+              });
+
         }
 
         public async void InitialSampleData()
@@ -144,12 +197,12 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
-        public async void GetRecipes()
+        public async Task GetRecipes()
         {
             try
             {
                 ShowLoadingVisibility = Visibility.Visible;
-                var list = await RequestHelper.GetAllRecipes(start.ToString(), number.ToString());
+                var list = await RequestHelper.GetAllRecipesAsync(start.ToString(), number.ToString());
                 start += number;
                 this.RecipeList = list;
                 ShowLoadingVisibility = Visibility.Collapsed;
@@ -161,11 +214,23 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
+        public async Task GetCurrentUser()
+        {
+            var user = await RequestHelper.GetUserInfoAsync(LocalSettingHelper.GetValue("username"));
+            if(user!=null)
+            {
+                this.CurrentUser = user;
+                await this.CurrentUser.LoadRegionInfo();
+            }
+        }
+
         public void Activate(object param)
         {
+            if (RecipeList == null) RecipeList = new ObservableCollection<Recipe>();
             if (RecipeList.Count == 0)
             {
                 GetRecipes();
+                GetCurrentUser();
             }
         }
 

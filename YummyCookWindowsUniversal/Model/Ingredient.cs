@@ -10,6 +10,23 @@ namespace YummyCookWindowsUniversal.Model
 {
     public class Ingredient : ViewModelBase
     {
+        private string _id;
+        public string ID
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    _id = value;
+                    RaisePropertyChanged(() => ID);
+                }
+            }
+        }
+
         private string _ingredientName;
         public string IngredientName
         {
@@ -43,6 +60,58 @@ namespace YummyCookWindowsUniversal.Model
                 }
             }
         }
+
+        //private string _unit;
+        //public string Unit
+        //{
+        //    get
+        //    {
+        //        return _unit;
+        //    }
+        //    set
+        //    {
+        //        if (_unit != value)
+        //        {
+        //            _unit = value;
+        //            RaisePropertyChanged(() => Unit);
+        //        }
+        //    }
+        //}
+
+        private int _selectedUnit;
+        public int SelectedUnit
+        {
+            get
+            {
+                return _selectedUnit;
+            }
+            set
+            {
+                if (_selectedUnit != value)
+                {
+                    _selectedUnit = value;
+                    RaisePropertyChanged(() => SelectedUnit);
+                }
+            }
+        }
+
+        private int _selectedIsMain;
+        public int SelectedIsMain
+        {
+            get
+            {
+                return _selectedIsMain;
+            }
+            set
+            {
+                if (_selectedIsMain != value)
+                {
+                    _selectedIsMain = value;
+                    RaisePropertyChanged(() => SelectedIsMain);
+                }
+            }
+        }
+
 
         private System.Nullable<bool> _isChecked;
         public System.Nullable<bool> IsChecked
@@ -82,12 +151,17 @@ namespace YummyCookWindowsUniversal.Model
         {
             IsChecked = false;
             IsMain = true;
+            IngredientName = "";
+            Quality = "";
+            ID = "";
+            SelectedIsMain = 0;
+            SelectedUnit = 0;
         }
 
-        public Ingredient(string name,string quality,bool ischeck=false,bool ismain=true)
+        public Ingredient(string name,string quality,string unit,bool ischeck=false,bool ismain=true)
         {
             this.IngredientName = name;
-            this.Quality = quality;
+            this.Quality = quality+unit;
             this.IsChecked = ischeck;
             this.IsMain = ismain;
         }

@@ -9,11 +9,11 @@ namespace YummyCookWindowsUniversal.Helper
 {
     public class JsonParser
     {
-        public static string GetStringFromJsonObj(IJsonValue obj)
+        public static string GetStringFromJsonObj(IJsonValue obj,string propertyName)
         {
             try
             {
-                return obj.GetString();
+                return obj.GetObject()[propertyName].GetString();
             }
             catch(Exception)
             {
@@ -21,11 +21,11 @@ namespace YummyCookWindowsUniversal.Helper
             }
         }
 
-        public static bool GetBooleanFromJsonObj(IJsonValue obj, bool defaultValue = false)
+        public static bool GetBooleanFromJsonObj(IJsonValue obj, string propertyName,bool defaultValue = false)
         {
             try
             {
-                return obj.GetBoolean();
+                return obj.GetObject()[propertyName].GetBoolean();
             }
             catch (Exception)
             {

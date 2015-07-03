@@ -8,6 +8,13 @@
     xmlns:attach="using:YummyCookWindowsUniversal.Attached"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <local:BindablePage.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <DrillInNavigationTransitionInfo/>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </local:BindablePage.Transitions>
     <local:BindablePage.Resources>
         <CollectionViewSource x:Name="IngredientCVS" 
                               Source="{x:Bind DetailVM.CheckListGrouped,Mode=OneWay}"  
@@ -210,10 +217,30 @@
             <StackPanel>
                 <Grid Height="300" Background="{StaticResource CookThemeGrayLight}">
                     <Image Source="{x:Bind DetailVM.CurrentRecipe.TitleImage}" Stretch="UniformToFill"/>
-                    <TextBlock Text="{x:Bind DetailVM.CurrentRecipe.Title,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="33.333" Margin="0,0,0,20" Foreground="White" FontWeight="Bold"/>
+                    <Border Background="Black" Opacity="0.3" />
+                    <StackPanel VerticalAlignment="Bottom">
+                        <TextBlock Text="{x:Bind DetailVM.CurrentRecipe.Title,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="33.333" Margin="0,0,0,10" Foreground="White" FontWeight="Bold"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Margin="0" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="{x:Null}">
+                                <Grid MinWidth="120" Height="40" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Ellipse Width="25" Height="25" Margin="10,0,0,0">
+                                        <Ellipse.Fill>
+                                            <ImageBrush Stretch="Fill" ImageSource="ms-appx:///Assets/Image/1.jpg"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <TextBlock Text="{x:Bind DetailVM.CurrentRecipe.CookUser.UserName,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="White" Grid.Column="1"/>
+                                </Grid>
+                            </Button>
+                            <TextBlock Text="{x:Bind DetailVM.CurrentRecipe.CookUser.RegionName,Mode=OneWay}" Foreground="White" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        </StackPanel>
+
+                    </StackPanel>
                 </Grid>
                 <TextBlock Text="材料清单" Margin="20,10,0,0" FontSize="20" FontWeight="Bold" Foreground="{StaticResource CookThemeDark}"/>
-
                 <GridView 
                     Margin="20,10,20,0" 
                     HorizontalAlignment="Left" 
@@ -272,7 +299,6 @@
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                    
                 </ListView>
             </StackPanel>
         </ScrollViewer>

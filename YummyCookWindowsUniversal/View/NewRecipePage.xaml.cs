@@ -13,36 +13,40 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using YummyCookWindowsUniversal.Interface;
 using YummyCookWindowsUniversal.ViewModel;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace YummyCookWindowsUniversal
-{ 
+namespace YummyCookWindowsUniversal.View
+{
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class UserInfoPage : BindablePage
+    public sealed partial class NewRecipePage : BindablePage
     {
-        private UserInfoViewModel UserInfoVM
+        public NewRecipeViewModel NewRecipeVM
         {
             get
             {
-                return (DataContext as UserInfoViewModel);
+                return DataContext as NewRecipeViewModel;
             }
         }
-        public UserInfoPage()
+        public NewRecipePage()
         {
             this.InitializeComponent();
+
             Messenger.Default.Register<GenericMessage<string>>(this, "toast", act =>
-              {
-                  ToastControl.ShowMessage(act.Content);
-              });
+            {
+                var msg = act.Content;
+                ToastControl.ShowMessage(msg);
+            });
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            base.OnNavigatedTo(e);
+            NewRecipeVM.Cleanup();
+            base.OnNavigatedFrom(e);
         }
+
     }
 }

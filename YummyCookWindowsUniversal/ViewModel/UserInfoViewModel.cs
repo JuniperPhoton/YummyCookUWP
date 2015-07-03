@@ -21,6 +21,7 @@ using Windows.Storage.Pickers;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using JP.Utils.Data;
+using JP.Utils.Image;
 
 namespace YummyCookWindowsUniversal.ViewModel
 {
@@ -97,6 +98,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                 }
             }
         }
+
 
         private string _userName;
         public string UserName
@@ -212,7 +214,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                 if (_selectedProvinceID != value)
                 {
                     _selectedProvinceID = value;
-                    LoadCity(value+1);
+                    UpdateCityList(value+1);
                     RaisePropertyChanged(() => SelectedProvinceID);
                 }
             }
@@ -248,12 +250,12 @@ namespace YummyCookWindowsUniversal.ViewModel
                 {
                     if(isToLogin)
                     {
-                        await Login();
+                        await LoginAsync();
 
                     }
                     else
                     {
-                        await Register();
+                        await RegisterAsync();
                     }
                 });
             }
@@ -267,7 +269,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                 if (_updateCommand != null) return _updateCommand;
                 return _updateCommand = new RelayCommand(async() =>
                 {
-                   await UpdateContent();
+                   await CommitUpdateContentAsync();
                 });
             }
         }
@@ -316,9 +318,11 @@ namespace YummyCookWindowsUniversal.ViewModel
             ShowLoadingVisibility = Visibility.Collapsed;
             RegionsList = new RegionList();
             SelectedGender = 0;
+            
+            InitialProvinceAsync();
         }
 
-        private async Task Login()
+        private async Task LoginAsync()
         {
             if (!ValidInput())
             {
@@ -343,7 +347,7 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
-        private async Task Register()
+        private async Task RegisterAsync()
         {
             if(!ValidInput())
             {
@@ -373,7 +377,11 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
-        private async Task UpdateContent()
+        /// <summary>
+        /// 提交更新内容
+        /// </summary>
+        /// <returns></returns>
+        private async Task CommitUpdateContentAsync()
         {
             ShowLoadingVisibility = Visibility.Visible;
 
@@ -381,30 +389,72 @@ namespace YummyCookWindowsUniversal.ViewModel
 
             if(tempFile!=null)
             {
-                var fileStream = await tempFile.OpenStreamForReadAsync();
+                var fileAfterCompressed =await ImageHandleHelper.CompressImageAsync(tempFile, 200);
+                var fileStream = await fileAfterCompressed.OpenStreamForReadAsync();
                 resultUrl = await RequestHelper.UploadAvatar(LocalSettingHelper.GetValue("userid"), fileStream);
+                if (resultUrl == null)
+                {
+                    Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>("上传头像失败，请再次尝试"), "toast");
+                    ShowLoadingVisibility = Visibility.Collapsed;
+                    return;
+                }
             }
-
+            var city_id = RegionsList.CityList.ElementAt(SelectedCityID).CityID;
             var param= new Dictionary<string, string>();
             param.Add("gender", SelectedGender.ToString());
-            param.Add("city_id", SelectedCityID.ToString());
-            param.Add("province_id", SelectedProvinceID.ToString());
+            param.Add("city_id", city_id.ToString());
+            param.Add("province_id", (SelectedProvinceID+1).ToString());
             if(resultUrl!=null)
             {
                 param.Add("avatar_url", resultUrl);
             }
-
             var result_update = await RequestHelper.UpdateUserInfo(LocalSettingHelper.GetValue("userid"), param);
-            ShowLoadingVisibility = Visibility.Collapsed;
-            var rootFrame = Window.Current.Content as Frame;
-            rootFrame.Navigate(typeof(MainPage));
+            if (result_update.IsSuccess)
+            {
+                ShowLoadingVisibility = Visibility.Collapsed;
+                var rootFrame = Window.Current.Content as Frame;
+                rootFrame.Navigate(typeof(MainPage));
+
+                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(""), "update_user");
+            }
+            else
+            {
+                ShowLoadingVisibility = Visibility.Collapsed;
+                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>("更新失败，请重试", "toast"));
+            }
 
         }
 
-        private async void LoadCity(int id)
+        public async Task InitialProvinceAsync()
         {
-            await RegionsList.LoadCityList(id);
-            SelectedCityID = 0;
+            await RegionsList.LoadProvinceList();
+            SelectedProvinceID = 0;
+            UpdateCityList(1);
+        }
+
+        public async void InitialUserInfo(User user)
+        {
+            if(RegionsList.ProvinceList.Count==0)
+            {
+                await InitialProvinceAsync();
+            }
+            this.SelectedGender = user.Gender;
+            this.SelectedProvinceID = user.ProvinceID-1;
+
+            this.TempAvatar = user.Avatar;
+        }
+
+        private async void UpdateCityList(int id)
+        {
+            try
+            {
+                await RegionsList.LoadCityList(id);
+                SelectedCityID = 0;
+            }
+            catch(Exception e)
+            {
+
+            }
         }
 
         private bool ValidInput()
@@ -433,22 +483,29 @@ namespace YummyCookWindowsUniversal.ViewModel
 
         public void Activate(object param)
         {
-            var data = param as NavigationData;
-            if (data == null) return;
-            string isLogin = (string)data.paramsData["ToLogin"];
-            if(isLogin=="true")
+            if(param is NavigationData)
             {
-                isToLogin = true;
-                Title = "登录";
-                ShowConfirmVisibility = Visibility.Collapsed;
-                LoginBtnContent = "登录";
+                var data = param as NavigationData;
+                if (data == null) return;
+                string isLogin = (string)data.paramsData["ToLogin"];
+                if (isLogin == "true")
+                {
+                    isToLogin = true;
+                    Title = "登录";
+                    ShowConfirmVisibility = Visibility.Collapsed;
+                    LoginBtnContent = "登录";
+                }
+                else
+                {
+                    isToLogin = false;
+                    Title = "注册";
+                    ShowConfirmVisibility = Visibility.Visible;
+                    LoginBtnContent = "注册";
+                }
             }
-            else
+            else if(param is User)
             {
-                isToLogin = false;
-                Title = "注册";
-                ShowConfirmVisibility = Visibility.Visible;
-                LoginBtnContent = "注册";
+                InitialUserInfo(param as User);
             }
         }
 

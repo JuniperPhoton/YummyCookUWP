@@ -10,6 +10,23 @@ namespace YummyCookWindowsUniversal.Model
 {
     public class Step:ViewModelBase
     {
+        private string _id;
+        public string ID
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if(_id != value)
+                {
+                    _id = value;
+                    RaisePropertyChanged(() => ID);
+                }
+            }
+        }
+
         private string _stepContent;
         public string StepContent
         {
@@ -48,7 +65,8 @@ namespace YummyCookWindowsUniversal.Model
 
         public Step()
         {
-
+            ID = "";
+            StepContent = "";
         }
     }
 }

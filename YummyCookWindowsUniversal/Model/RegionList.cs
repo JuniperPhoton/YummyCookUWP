@@ -13,6 +13,8 @@ namespace YummyCookWindowsUniversal.Model
 {
     public class RegionList:ViewModelBase
     {
+        private string _cityStr = null;
+
         private ObservableCollection<Province> _provinceList;
         public ObservableCollection<Province> ProvinceList
         {
@@ -51,8 +53,6 @@ namespace YummyCookWindowsUniversal.Model
         {
             CityList = new ObservableCollection<City>();
             ProvinceList = new ObservableCollection<Province>();
-
-
         }
 
         public async Task LoadProvinceList()
@@ -81,10 +81,14 @@ namespace YummyCookWindowsUniversal.Model
             try
             {
                 CityList.Clear();
-                var folder = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
-                var provinceFile = await folder.GetFileAsync("City.txt");
-                var str = await FileIO.ReadTextAsync(provinceFile, Windows.Storage.Streams.UnicodeEncoding.Utf8);
-                JsonArray listObj = JsonArray.Parse(str);
+                if (_cityStr == null)
+                {
+                    var folder = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+                    var cityFile = await folder.GetFileAsync("City.txt");
+
+                    _cityStr = await FileIO.ReadTextAsync(cityFile, Windows.Storage.Streams.UnicodeEncoding.Utf8);
+                }
+                JsonArray listObj = JsonArray.Parse(_cityStr);
                 foreach (var item in listObj)
                 {
                     JsonObject job = item.GetObject();

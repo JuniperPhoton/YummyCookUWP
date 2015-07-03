@@ -44,6 +44,7 @@ namespace YummyCookWindowsUniversal.ViewModel
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<UserInfoViewModel>();
+            SimpleIoc.Default.Register<NewRecipeViewModel>();
         }
 
         public MainViewModel MainVM
@@ -59,6 +60,14 @@ namespace YummyCookWindowsUniversal.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<UserInfoViewModel>();
+            }
+        }
+
+        public NewRecipeViewModel NewRecipeVM
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<NewRecipeViewModel>();
             }
         }
 

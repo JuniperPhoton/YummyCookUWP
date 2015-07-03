@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using YummyCookWindowsUniversal.Helper;
 using YummyCookWindowsUniversal.Interface;
 using YummyCookWindowsUniversal.Model;
 
@@ -69,9 +70,26 @@ namespace YummyCookWindowsUniversal.ViewModel
             
         }
 
-        public async void LoadDetailPage()
+        public async Task LoadDetailPage()
         {
+            try
+            {
+                var userName = this.CurrentRecipe.CookUser.UserName;
+                var user = await RequestHelper.GetUserInfoAsync(userName);
+                if (user != null)
+                {
+                    this.CurrentRecipe.CookUser.CityID = user.CityID;
+                    this.CurrentRecipe.CookUser.ProvinceID = user.ProvinceID;
+                    await this.CurrentRecipe.CookUser.LoadRegionInfo();
+                    
+                }
+            }
+            catch(Exception e)
+            {
+                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(e.Message), "toast");
+            }
             
+
         }
 
         public static ObservableCollection<GroupInfoList> GetCheckListsGrouped(ObservableCollection<Ingredient> ingredients)
@@ -103,7 +121,7 @@ namespace YummyCookWindowsUniversal.ViewModel
 
         public void Activate(object param)
         {
-            Messenger.Default.Register<GenericMessage<Recipe>>(this,"recipe", act =>
+            Messenger.Default.Register<GenericMessage<Recipe>>(this,"recipe", async act =>
              {
                  var recipe = act.Content;
                  if(recipe!=null)
@@ -111,6 +129,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                      this.CurrentRecipe = recipe;
                      this.CheckListGrouped=GetCheckListsGrouped(this.CurrentRecipe.IngredientList);
                  }
+                 await LoadDetailPage();
              });
         }
 
