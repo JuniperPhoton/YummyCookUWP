@@ -5,10 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
+using YummyCookWindowsUniversal.Helper;
+using YummyCookWindowsUniversal.Interface;
 
 namespace YummyCookWindowsUniversal.Model
 {
-    public class Step:ViewModelBase
+    public class Step:ViewModelBase, ICanMakeJson
     {
         private string _id;
         public string ID
@@ -67,6 +69,19 @@ namespace YummyCookWindowsUniversal.Model
         {
             ID = "";
             StepContent = "";
+        }
+
+        /// <summary>
+        /// 获得用于上传服务器的JSON 内容
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public string MakeJson()
+        {
+            var content = JsonMaker.MakeJsonObj("content", this.StepContent,true);
+            var url=JsonMaker.MakeJsonObj("imge_url","",true);
+            var json = JsonMaker.MakeJsonString(new List<string> { content });
+            return json;
         }
     }
 }

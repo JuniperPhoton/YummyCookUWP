@@ -7,6 +7,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Imaging;
 using YummyCookWindowsUniversal.Helper;
 using YummyCookWindowsUniversal.Interface;
 using YummyCookWindowsUniversal.Model;
@@ -15,6 +17,25 @@ namespace YummyCookWindowsUniversal.ViewModel
 {
     public class DetailedRecipeViewModel:ViewModelBase,INavigable
     {
+
+        private Visibility _showPictureVisibility;
+        public Visibility ShowPictureVisibility
+        {
+            get
+            {
+                return _showPictureVisibility;
+            }
+            set
+            {
+                if (_showPictureVisibility != value)
+                {
+                    _showPictureVisibility = value;
+                    RaisePropertyChanged(() => ShowPictureVisibility);
+                }
+            }
+        }
+
+
         private Recipe _currentRecipe;
         public Recipe CurrentRecipe
         {
@@ -29,6 +50,50 @@ namespace YummyCookWindowsUniversal.ViewModel
                     _currentRecipe = value;
                     RaisePropertyChanged(() => CurrentRecipe);
                 }
+            }
+        }
+
+        private BitmapImage _currentImage;
+        public BitmapImage CurrentImage
+        {
+            get
+            {
+                return _currentImage;
+            }
+            set
+            {
+                if(_currentImage!=value)
+                {
+                    _currentImage = value;
+                    RaisePropertyChanged(() => CurrentImage);
+                }
+            }
+        }
+
+        private RelayCommand _showPictureCommand;
+        public RelayCommand ShowPictureCommand
+        {
+            get
+            {
+                if (_showPictureCommand != null) return _showPictureCommand;
+                return _showPictureCommand = new RelayCommand(() =>
+                {
+                    this.CurrentImage = CurrentRecipe.TitleImage;
+                    ShowPictureVisibility = Visibility.Visible;
+                });
+            }
+        }
+
+        private RelayCommand _hidePictureCommand;
+        public RelayCommand HidePictureCommand
+        {
+            get
+            {
+                if (_hidePictureCommand != null) return _hidePictureCommand;
+                return _hidePictureCommand = new RelayCommand(() =>
+                  {
+                      ShowPictureVisibility = Visibility.Collapsed;
+                  });
             }
         }
 
@@ -67,7 +132,7 @@ namespace YummyCookWindowsUniversal.ViewModel
 
         public DetailedRecipeViewModel()
         {
-            
+            ShowPictureVisibility = Visibility.Collapsed;
         }
 
         public async Task LoadDetailPage()
@@ -78,15 +143,14 @@ namespace YummyCookWindowsUniversal.ViewModel
                 var user = await RequestHelper.GetUserInfoAsync(userName);
                 if (user != null)
                 {
-                    this.CurrentRecipe.CookUser.CityID = user.CityID;
-                    this.CurrentRecipe.CookUser.ProvinceID = user.ProvinceID;
+                    this.CurrentRecipe.CookUser = user;
                     await this.CurrentRecipe.CookUser.LoadRegionInfo();
                     
                 }
             }
             catch(Exception e)
             {
-                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(e.Message), "toast");
+                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(e.Message), MessengerToken.ToastToken);
             }
             
 
@@ -121,7 +185,7 @@ namespace YummyCookWindowsUniversal.ViewModel
 
         public void Activate(object param)
         {
-            Messenger.Default.Register<GenericMessage<Recipe>>(this,"recipe", async act =>
+            Messenger.Default.Register<GenericMessage<Recipe>>(this, MessengerToken.RecipeToken, async act =>
              {
                  var recipe = act.Content;
                  if(recipe!=null)

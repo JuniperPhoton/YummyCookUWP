@@ -14,9 +14,14 @@ namespace YummyCookWindowsUniversal.Helper
         /// <param name="propertyName">属性名字</param>
         /// <param name="propertyValue">属性值</param>
         /// <returns></returns>
-        public static string MakeJsonObj(string propertyName,string propertyValue)
+        public static string MakeJsonObj(string propertyName,string propertyValue,bool isString=false)
         {
-            string str = string.Format("\"{0}\":\"{1}\"", propertyName, propertyValue);
+            string str;
+            if(isString)
+            {
+                str = string.Format("\\\"{0}\\\":\\\"{1}\\\"", propertyName, propertyValue);
+            }
+            else str = string.Format("\"{0}\":\"{1}\"", propertyName, propertyValue);
 
             return str;
         }
@@ -27,9 +32,14 @@ namespace YummyCookWindowsUniversal.Helper
         /// <param name="propertyName">属性名字</param>
         /// <param name="propertyValue">属性值</param>
         /// <returns></returns>
-        public static string MakeJsonObj(string propertyName, int propertyValue)
+        public static string MakeJsonObj(string propertyName, int propertyValue,bool isString= false)
         {
-            string str = string.Format("\"{0}\":{1}", propertyName, propertyValue);
+            string str;
+            if(isString)
+            {
+                str = string.Format("\\\"{0}\\\":{1}", propertyName, propertyValue);
+            }
+            else str = string.Format("\"{0}\":{1}", propertyName, propertyValue);
 
             return str;
         }
@@ -40,9 +50,14 @@ namespace YummyCookWindowsUniversal.Helper
         /// <param name="propertyName">属性名字</param>
         /// <param name="propertyValue">属性值</param>
         /// <returns></returns>
-        public static string MakeJsonObj(string propertyName, bool propertyValue)
+        public static string MakeJsonObj(string propertyName, bool propertyValue, bool isString = false)
         {
-            string str = string.Format("\"{0}\":{1}", propertyName, propertyValue);
+            string str;
+            if (isString)
+            {
+                str = string.Format("\\\"{0}\\\":{1}", propertyName, propertyValue?"true":"false");
+            }
+            else str = string.Format("\"{0}\":{1}", propertyName, propertyValue? "true" : "false");
 
             return str;
         }

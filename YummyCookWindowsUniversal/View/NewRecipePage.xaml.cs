@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using YummyCookWindowsUniversal.Helper;
 using YummyCookWindowsUniversal.Interface;
 using YummyCookWindowsUniversal.ViewModel;
 
@@ -35,11 +36,17 @@ namespace YummyCookWindowsUniversal.View
         {
             this.InitializeComponent();
 
-            Messenger.Default.Register<GenericMessage<string>>(this, "toast", act =>
+            Messenger.Default.Register<GenericMessage<string>>(this, MessengerToken.ToastToken, act =>
             {
                 var msg = act.Content;
                 ToastControl.ShowMessage(msg);
             });
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            App.SetUpTitleBar(true);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

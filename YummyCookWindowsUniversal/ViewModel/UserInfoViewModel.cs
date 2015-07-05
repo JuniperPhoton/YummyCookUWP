@@ -342,7 +342,7 @@ namespace YummyCookWindowsUniversal.ViewModel
             else
             {
                 ShowLoadingVisibility = Visibility.Collapsed;
-                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(result.ErrorMessage), "toast");
+                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(result.ErrorMessage), MessengerToken.ToastToken);
                 return;
             }
         }
@@ -372,7 +372,7 @@ namespace YummyCookWindowsUniversal.ViewModel
             else
             {
                 ShowLoadingVisibility = Visibility.Collapsed;
-                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(result.ErrorMessage), "toast");
+                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(result.ErrorMessage), MessengerToken.ToastToken);
                 return;
             }
         }
@@ -389,12 +389,12 @@ namespace YummyCookWindowsUniversal.ViewModel
 
             if(tempFile!=null)
             {
-                var fileAfterCompressed =await ImageHandleHelper.CompressImageAsync(tempFile, 200);
+                var fileAfterCompressed =await ImageHandleHelper.CompressImageAsync(tempFile, 70);
                 var fileStream = await fileAfterCompressed.OpenStreamForReadAsync();
                 resultUrl = await RequestHelper.UploadAvatar(LocalSettingHelper.GetValue("userid"), fileStream);
                 if (resultUrl == null)
                 {
-                    Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>("上传头像失败，请再次尝试"), "toast");
+                    Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>("上传头像失败，请再次尝试"), MessengerToken.ToastToken);
                     ShowLoadingVisibility = Visibility.Collapsed;
                     return;
                 }
@@ -415,12 +415,12 @@ namespace YummyCookWindowsUniversal.ViewModel
                 var rootFrame = Window.Current.Content as Frame;
                 rootFrame.Navigate(typeof(MainPage));
 
-                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(""), "update_user");
+                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(""), MessengerToken.UpdateUserToken);
             }
             else
             {
                 ShowLoadingVisibility = Visibility.Collapsed;
-                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>("更新失败，请重试", "toast"));
+                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>("更新失败，请重试", MessengerToken.ToastToken));
             }
 
         }
@@ -461,19 +461,19 @@ namespace YummyCookWindowsUniversal.ViewModel
         {
             if (string.IsNullOrEmpty(UserName))
             {
-                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>("请输入用户名"), "toast");
+                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>("请输入用户名"), MessengerToken.ToastToken);
                 return false;
             }
             if (string.IsNullOrEmpty(Password))
             {
-                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>("请输入密码"), "toast");
+                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>("请输入密码"), MessengerToken.ToastToken);
                 return false;
             }
             if(!isToLogin)
             {
                 if (Password != ConfirmPassword)
                 {
-                    Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>("两次密码不一致"), "toast");
+                    Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>("两次密码不一致"), MessengerToken.ToastToken);
                     return false;
                 }
             }

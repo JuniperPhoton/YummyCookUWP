@@ -307,7 +307,7 @@
                     </StackPanel>
                 </Grid>
             </SplitView.Pane>
-            <Grid>
+            <Grid x:Name="RootGrid">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition x:Name="Column1" Width="1*"/>

@@ -29,7 +29,6 @@ namespace YummyCookWindowsUniversal.View
             this.InitializeComponent();
             DetailVM = new DetailedRecipeViewModel();
             this.DataContext = DetailVM;
-           
         }
     }
 }

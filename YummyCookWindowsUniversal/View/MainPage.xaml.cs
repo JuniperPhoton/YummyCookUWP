@@ -35,34 +35,37 @@ namespace YummyCookWindowsUniversal
                 return (DataContext as MainViewModel);
             }
         }
+
+        private double oriPositionOfX;
+
         public MainPage()
         {
             this.InitializeComponent();
 
-            Messenger.Default.Register<GenericMessage<string>>(this, "toast", act =>
+            Messenger.Default.Register<GenericMessage<string>>(this, MessengerToken.ToastToken, act =>
             {
                 var msg = act.Content;
                 ToastControl.ShowMessage(msg);
             });
+            NavigationCacheMode = NavigationCacheMode.Required;
 
-            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.BackgroundColor = (App.Current.Resources["CookThemeDark"] as SolidColorBrush).Color;
-            titleBar.ForegroundColor = Colors.White;
-            titleBar.InactiveBackgroundColor = titleBar.BackgroundColor;
-            titleBar.InactiveForegroundColor = Colors.White;
-            titleBar.ButtonBackgroundColor = (App.Current.Resources["CookThemeDark"] as SolidColorBrush).Color;
-            titleBar.ButtonForegroundColor = Colors.White;
-            titleBar.ButtonInactiveBackgroundColor = titleBar.BackgroundColor;
-            titleBar.ButtonInactiveForegroundColor = Colors.White;
-            titleBar.ButtonHoverBackgroundColor = (App.Current.Resources["CookTheme"] as SolidColorBrush).Color;
-            if (ApiInformationHelper.CheckStatusBar())
-            {
-                //StatusBar.GetForCurrentView().BackgroundOpacity = 1;
-                //StatusBar.GetForCurrentView().BackgroundColor = ((SolidColorBrush)App.Current.Resources["CookThemeDark"]).Color;
-                //StatusBar.GetForCurrentView().ForegroundColor = Colors.White;
-            }
+            RootGrid.ManipulationStarted += ContentGrid_ManipulationStarted;
+            RootGrid.ManipulationDelta += ContentGrid_ManipulationDelta;
+            RootGrid.ManipulationMode = ManipulationModes.TranslateX;
         }
 
+        private void ContentGrid_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
+        {
+            oriPositionOfX = e.Position.X;   
+        }
+
+        private void ContentGrid_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
+        {
+            if(e.Delta.Translation.X>20 && oriPositionOfX<10)
+            {
+                if (!root_sv.IsPaneOpen) root_sv.IsPaneOpen = true;
+            }
+        }
 
         private void HamburgerClick(object sender,RoutedEventArgs e)
         {
@@ -76,6 +79,14 @@ namespace YummyCookWindowsUniversal
             base.OnNavigatedTo(e);
             Frame.BackStack.Clear();
 
+            App.SetUpTitleBar();
+            if (ApiInformationHelper.CheckStatusBar())
+            {
+                //StatusBar.GetForCurrentView().BackgroundOpacity = 1;
+                //StatusBar.GetForCurrentView().BackgroundColor = ((SolidColorBrush)App.Current.Resources["CookThemeDark"]).Color;
+                //StatusBar.GetForCurrentView().ForegroundColor = Colors.White;
+            }
+
             App.ContentFrame = this.ContentFrame;
         }
 
@@ -87,8 +98,18 @@ namespace YummyCookWindowsUniversal
 
         public Frame GetFrame()
         {
-            if (ContentFrame.Visibility == Visibility.Visible) return ContentFrame;
-            else return Frame;
+            if (ContentFrame.Visibility == Visibility.Visible)
+            {
+                App.SetUpTitleBar();
+                return ContentFrame;
+                
+            }
+            else
+            {
+                App.SetUpTitleBar(true);
+                return Frame;
+                
+            }
         }
     }
 }

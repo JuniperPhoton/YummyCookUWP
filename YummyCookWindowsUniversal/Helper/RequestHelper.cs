@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Data.Json;
+using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.Web.Http;
@@ -35,7 +36,7 @@ namespace YummyCookWindowsUniversal.Helper
         private const string UserUrl = "https://api.bmob.cn/1/users/";
         private const string LoginUrl = "https://api.bmob.cn/1/login/";
         private const string UploadFileUrl = "https://api.bmob.cn/1/files/";
-        private const string GetRecipeUrl = "https://api.bmob.cn/1/classes/Recipe?";
+        private const string RecipeUrl = "https://api.bmob.cn/1/classes/Recipe?";
 
         /// <summary>
         /// 注册用户
@@ -237,9 +238,10 @@ namespace YummyCookWindowsUniversal.Helper
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Add(AppID.First());
                 client.DefaultRequestHeaders.Add(AppKey.First());
-                var message = await client.GetAsync(new Uri(RequestHelper.GetRecipeUrl+"skip="+start+"&limit="+number+ "&order=-updatedAt"));
+                var message = await client.GetAsync(new Uri(RequestHelper.RecipeUrl+"skip="+start+"&limit="+number+ "&order=-updatedAt"+"&a="+new Random().Next()));
                 if (message.IsSuccessStatusCode)
                 {
+
                     JsonObject job = JsonObject.Parse(await message.Content.ReadAsStringAsync());
                     ObservableCollection<Recipe> listToReturn = new ObservableCollection<Recipe>();
                     JsonArray array = job["results"].GetArray();
@@ -250,8 +252,8 @@ namespace YummyCookWindowsUniversal.Helper
                         {
                             try
                             {
-                                var checklist = JsonParser.GetStringFromJsonObj(item,"checklist");
-                                var content = JsonParser.GetStringFromJsonObj(item,"content");
+                                var ingredientList = JsonParser.GetStringFromJsonObj(item,"checklist");
+                                var stepList = JsonParser.GetStringFromJsonObj(item,"content");
                                 var username = JsonParser.GetStringFromJsonObj(item,"username");
                                 var id = JsonParser.GetStringFromJsonObj(item,"objectId");
                                 var title = JsonParser.GetStringFromJsonObj(item,"title");
@@ -261,29 +263,14 @@ namespace YummyCookWindowsUniversal.Helper
                                 recipe.CookUser = new User();
                                 recipe.CookUser.UserName = username;
                                 recipe.CookUser.Avatar = new BitmapImage();
-                                var folder = await Package.Current.InstalledLocation.GetFolderAsync("Assets\\Image");
-                                var file = await folder.GetFileAsync("1.jpg");
-                                using (var stream = await file.OpenStreamForReadAsync())
-                                {
-                                   await recipe.CookUser.Avatar.SetSourceAsync(stream.AsRandomAccessStream());
-                                }
+                                var getuserTask= RequestHelper.GetUserInfoAsync(username);
+                                
                                 recipe.RecipeID = id;
                                 recipe.Title = title;
 
-                                titleUrl = null;
                                 if(!string.IsNullOrEmpty(titleUrl))
                                 {
-                                    HttpClient clientImage = new HttpClient();
-                                    var response=await clientImage.GetAsync(new Uri(titleUrl));
-                                    if(response.IsSuccessStatusCode)
-                                    {
-                                        var contentImage = await response.Content.ReadAsInputStreamAsync();
-                                        using (var streamImage = contentImage.AsStreamForRead())
-                                        {
-                                            recipe.TitleImage = new BitmapImage();
-                                            await recipe.TitleImage.SetSourceAsync(streamImage.AsRandomAccessStream());
-                                        }
-                                    }
+                                    recipe.TitleImageUrl = titleUrl;
                                 }
                                 else
                                 {
@@ -291,9 +278,10 @@ namespace YummyCookWindowsUniversal.Helper
                                 }
 
                                 recipe.IngredientList = new ObservableCollection<Ingredient>();
-                                if(!string.IsNullOrEmpty(checklist))
+                                if(!string.IsNullOrEmpty(ingredientList))
                                 {
-                                    var regredientArray = JsonArray.Parse(checklist);
+                                    var chekedList = ingredientList.ToLower();
+                                    var regredientArray = JsonArray.Parse(chekedList);
                                     foreach (var ingredient in regredientArray)
                                     {
                                         var newIngredient = new Ingredient();
@@ -306,9 +294,9 @@ namespace YummyCookWindowsUniversal.Helper
                                 
 
                                 recipe.StepsList = new ObservableCollection<Step>();
-                                if(!string.IsNullOrEmpty(content))
+                                if(!string.IsNullOrEmpty(stepList))
                                 {
-                                    var stepArray = JsonArray.Parse(content);
+                                    var stepArray = JsonArray.Parse(stepList);
                                     foreach (var step in stepArray)
                                     {
                                         var newStep = new Step();
@@ -318,12 +306,17 @@ namespace YummyCookWindowsUniversal.Helper
                                     }
                                 }
 
+                                var user=await getuserTask;
+                                recipe.CookUser = user;
+
                                 listToReturn.Add(recipe);
                                 i++;
+
+                                
                             }
                             catch (Exception e)
                             {
-                                Messenger.Default.Send(new GenericMessage<string>(e.Message), "toast");
+                                Messenger.Default.Send(new GenericMessage<string>(e.Message), MessengerToken.ToastToken);
                                 return null;
                             }
                         }
@@ -356,7 +349,7 @@ namespace YummyCookWindowsUniversal.Helper
                 client.DefaultRequestHeaders.Add(AppKey.First());
                 var requestJson = JsonMaker.MakeJsonObj("username", name);
 
-                var message = await client.GetAsync(new Uri(RequestHelper.UserUrl + "?where="+JsonMaker.MakeJsonString(new List<string> { requestJson })+"&a=2"));
+                var message = await client.GetAsync(new Uri(RequestHelper.UserUrl + "?where="+JsonMaker.MakeJsonString(new List<string> { requestJson })+"&a="+new Random().Next()));
                 if (message.IsSuccessStatusCode)
                 {
                     var content = await message.Content.ReadAsStringAsync();
@@ -376,9 +369,19 @@ namespace YummyCookWindowsUniversal.Helper
                         if(resp.IsSuccessStatusCode)
                         {
                             var buffer = await resp.Content.ReadAsBufferAsync();
-                            var stream = buffer.AsStream().AsRandomAccessStream();
                             user.Avatar = new BitmapImage();
-                            await user.Avatar.SetSourceAsync(stream);
+                            await user.Avatar.SetSourceAsync(buffer.AsStream().AsRandomAccessStream());
+                        }
+                    }
+                    else
+                    {
+                        var folder1 = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+                        var folder2 = await folder1.GetFolderAsync("Icon");
+                        var file = await folder2.GetFileAsync("DefaultAccount.png");
+                        using (var fileStream = await file.OpenAsync(FileAccessMode.Read))
+                        {
+                            user.Avatar = new BitmapImage();
+                            await user.Avatar.SetSourceAsync(fileStream);
                         }
                     }
                     return user;
@@ -435,9 +438,44 @@ namespace YummyCookWindowsUniversal.Helper
             }
         }
 
-        public async static Task PublishRecipeAsync()
+        public async static Task<bool> PublishRecipeAsync(string jsonStr)
         {
+            try
+            {
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add(AppID.First());
+                client.DefaultRequestHeaders.Add(AppKey.First());
 
+                var message = await client.PostAsync(new Uri(RequestHelper.RecipeUrl),
+                    new HttpStringContent(jsonStr, Windows.Storage.Streams.UnicodeEncoding.Utf8, JsonContentType.MediaType));
+                if (message.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch(Exception e)
+            {
+                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(e.Message), MessengerToken.ToastToken);
+                return false;
+            }
+        }
+
+        public static async Task<IRandomAccessStream> GetImageFromUrl(string url)
+        {
+            HttpClient clientImage = new HttpClient();
+            var response = await clientImage.GetAsync(new Uri(url));
+            if (response.IsSuccessStatusCode)
+            {
+                var buffer = await response.Content.ReadAsBufferAsync();
+                var streamImage = buffer.AsStream();
+
+                return streamImage.AsRandomAccessStream();
+            }
+            else return null;
         }
     }
 }

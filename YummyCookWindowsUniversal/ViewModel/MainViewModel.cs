@@ -102,7 +102,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                       service.Configure("DetailedPage", typeof(RecipeDetailPage));
                       service.NavigateTo("DetailedPage");
 
-                      Messenger.Default.Send<GenericMessage<Recipe>>(new GenericMessage<Recipe>(recipe), "recipe");
+                      Messenger.Default.Send<GenericMessage<Recipe>>(new GenericMessage<Recipe>(recipe), MessengerToken.RecipeToken);
                   });
             }
         }
@@ -127,12 +127,12 @@ namespace YummyCookWindowsUniversal.ViewModel
             get
             {
                 if (_refreshCommand != null) return _refreshCommand;
-                return _refreshCommand = new RelayCommand(() =>
+                return _refreshCommand = new RelayCommand(async() =>
                   {
                       start = 0;
                       number = 20;
                       RecipeList = new ObservableCollection<Recipe>();
-                      GetRecipes();
+                      await GetRecipes();
                   });
             }
         }
@@ -168,7 +168,7 @@ namespace YummyCookWindowsUniversal.ViewModel
             RecipeList = new ObservableCollection<Recipe>();
             ShowLoadingVisibility = Visibility.Collapsed;
 
-            Messenger.Default.Register<GenericMessage<string>>(this, "update_user", async act =>
+            Messenger.Default.Register<GenericMessage<string>>(this, MessengerToken.UpdateUserToken, async act =>
               {
                   await GetCurrentUser();
               });
@@ -206,11 +206,26 @@ namespace YummyCookWindowsUniversal.ViewModel
                 start += number;
                 this.RecipeList = list;
                 ShowLoadingVisibility = Visibility.Collapsed;
-
+                await LoadAllImge(this.RecipeList);
             }
             catch(Exception e)
             {
-                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(e.Message), "toast");
+                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(e.Message), MessengerToken.ToastToken);
+            }
+        }
+
+        private async Task LoadAllImge(ObservableCollection<Recipe> recipeList)
+        {
+            foreach(var item in recipeList)
+            {
+                if(!string.IsNullOrEmpty(item.TitleImageUrl))
+                {
+                    var stream = await RequestHelper.GetImageFromUrl(item.TitleImageUrl);
+                    if(stream!=null)
+                    {
+                        await item.TitleImage.SetSourceAsync(stream);
+                    }
+                }
             }
         }
 

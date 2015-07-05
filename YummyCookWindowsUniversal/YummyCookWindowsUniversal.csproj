@@ -12,7 +12,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10158.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10158.0</TargetPlatformMinVersion>
+    <TargetPlatformMinVersion>10.0.10069.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
@@ -20,6 +20,8 @@
     <PackageCertificateKeyFile>YummyCookWindowsUniversal_TemporaryKey.pfx</PackageCertificateKeyFile>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundlePlatforms>x86</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -103,7 +105,9 @@
     <Compile Include="Helper\ConfigHelper.cs" />
     <Compile Include="Helper\JsonMaker.cs" />
     <Compile Include="Helper\JsonParser.cs" />
+    <Compile Include="Helper\MessengerToken.cs" />
     <Compile Include="Helper\RequestHelper.cs" />
+    <Compile Include="Interface\ICanMakeJson.cs" />
     <Compile Include="Interface\INavigable.cs" />
     <Compile Include="Model\City.cs" />
     <Compile Include="Model\GroupInfoList.cs" />
@@ -155,11 +159,17 @@
     <None Include="ApplicationInsights.config" />
     <Content Include="Assets\City.txt" />
     <Content Include="Assets\Font\FREESCPT.TTF" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="YummyCookWindowsUniversal_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Icon\Account.png" />
+    <Content Include="Assets\Icon\DefaultAccount.png" />
+    <Content Include="Assets\Icon\Food.png" />
+    <Content Include="Assets\Icon\Ingredient.png" />
+    <Content Include="Assets\Icon\Step.png" />
+    <Content Include="Assets\Icon\Wait.png" />
     <Content Include="Assets\Image\1.jpg" />
     <Content Include="Assets\Image\Food_Sample %280%29.jpg" />
     <Content Include="Assets\Image\Food_Sample %281%29.jpg" />

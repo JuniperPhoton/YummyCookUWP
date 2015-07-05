@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using YummyCookWindowsUniversal.Helper;
 using YummyCookWindowsUniversal.ViewModel;
 
 
@@ -35,7 +36,7 @@ namespace YummyCookWindowsUniversal
         public LoginPage()
         {
             this.InitializeComponent();
-            Messenger.Default.Register<GenericMessage<string>>(this,"toast", act =>
+            Messenger.Default.Register<GenericMessage<string>>(this, MessengerToken.ToastToken, act =>
              {
                  var msg = act.Content;
                  ToastControl.ShowMessage(msg);

@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using YummyCookWindowsUniversal.Helper;
 using YummyCookWindowsUniversal.ViewModel;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -34,7 +35,7 @@ namespace YummyCookWindowsUniversal
         public UserInfoPage()
         {
             this.InitializeComponent();
-            Messenger.Default.Register<GenericMessage<string>>(this, "toast", act =>
+            Messenger.Default.Register<GenericMessage<string>>(this, MessengerToken.ToastToken, act =>
               {
                   ToastControl.ShowMessage(act.Content);
               });

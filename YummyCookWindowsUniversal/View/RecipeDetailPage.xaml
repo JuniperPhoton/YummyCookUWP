@@ -11,7 +11,7 @@
     <local:BindablePage.Transitions>
         <TransitionCollection>
             <NavigationThemeTransition>
-                <DrillInNavigationTransitionInfo/>
+                <ContinuumNavigationTransitionInfo/>
             </NavigationThemeTransition>
         </TransitionCollection>
     </local:BindablePage.Transitions>
@@ -216,8 +216,17 @@
         <ScrollViewer>
             <StackPanel>
                 <Grid Height="300" Background="{StaticResource CookThemeGrayLight}">
-                    <Image Source="{x:Bind DetailVM.CurrentRecipe.TitleImage}" Stretch="UniformToFill"/>
-                    <Border Background="Black" Opacity="0.3" />
+                    <Button 
+                        Command="{x:Bind DetailVM.ShowPictureCommand}" 
+                        CommandParameter="{x:Bind DetailVM.CurrentRecipe.TitleImage}"
+                        HorizontalContentAlignment="Stretch" 
+                        VerticalContentAlignment="Stretch" Padding="0" Style="{StaticResource BtnStyle}" Background="{x:Null}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <Grid>
+                            <Image Source="{x:Bind DetailVM.CurrentRecipe.TitleImage}" Stretch="UniformToFill"/>
+                            <Border Background="Black" Opacity="0.3" />
+                        </Grid>
+                    </Button>
+                    
                     <StackPanel VerticalAlignment="Bottom">
                         <TextBlock Text="{x:Bind DetailVM.CurrentRecipe.Title,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="33.333" Margin="0,0,0,10" Foreground="White" FontWeight="Bold"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -302,6 +311,14 @@
                 </ListView>
             </StackPanel>
         </ScrollViewer>
-
+        <Grid d:IsHidden="True"  Visibility="{x:Bind DetailVM.ShowPictureVisibility,Mode=OneWay}">
+            <Border Background="Black" Opacity="0.8"/>
+            <Image Margin="40" Source="{x:Bind DetailVM.CurrentImage,Mode=OneWay}"/>
+            <Button Command="{x:Bind DetailVM.HidePictureCommand}" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Top" Width="30" Height="30" Margin="0,20,20,0">
+                <Border>
+                    <SymbolIcon Symbol="Cancel" Foreground="White"/>
+                </Border>
+            </Button>
+        </Grid>
     </Grid>
 </local:BindablePage>

@@ -9,7 +9,9 @@ using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Foundation.Metadata;
+using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -107,6 +109,37 @@ namespace YummyCookWindowsUniversal
                     }
                 };
             }
+        }
+
+        public static void SetUpTitleBar(bool isGray=false)
+        {
+            if (!isGray)
+            {
+                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+                titleBar.BackgroundColor = (App.Current.Resources["CookThemeDark"] as SolidColorBrush).Color;
+                titleBar.ForegroundColor = Colors.White;
+                titleBar.InactiveBackgroundColor = titleBar.BackgroundColor;
+                titleBar.InactiveForegroundColor = Colors.White;
+                titleBar.ButtonBackgroundColor = (App.Current.Resources["CookThemeDark"] as SolidColorBrush).Color;
+                titleBar.ButtonForegroundColor = Colors.White;
+                titleBar.ButtonInactiveBackgroundColor = titleBar.BackgroundColor;
+                titleBar.ButtonInactiveForegroundColor = Colors.White;
+                titleBar.ButtonHoverBackgroundColor = (App.Current.Resources["CookTheme"] as SolidColorBrush).Color;
+            }
+            else
+            {
+                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+                titleBar.BackgroundColor = Colors.LightGray;
+                titleBar.ForegroundColor = Colors.Black;
+                titleBar.InactiveBackgroundColor = titleBar.BackgroundColor;
+                titleBar.InactiveForegroundColor = Colors.Black;
+                titleBar.ButtonBackgroundColor = Colors.LightGray;
+                titleBar.ButtonForegroundColor = Colors.Black;
+                titleBar.ButtonInactiveBackgroundColor = titleBar.BackgroundColor;
+                titleBar.ButtonInactiveForegroundColor = Colors.Black;
+                titleBar.ButtonHoverBackgroundColor = Colors.LightGray;
+            }
+            
         }
 
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)

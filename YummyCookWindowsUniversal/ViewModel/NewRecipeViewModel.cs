@@ -18,6 +18,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
+using JP.Utils.Data;
 
 namespace YummyCookWindowsUniversal.ViewModel
 {
@@ -40,6 +41,23 @@ namespace YummyCookWindowsUniversal.ViewModel
                 {
                     _newRecipe = value;
                     RaisePropertyChanged(() => NewRecipe);
+                }
+            }
+        }
+
+        private Visibility _showLoadingVisibility;
+        public Visibility ShowLoadingVisibility
+        {
+            get
+            {
+                return _showLoadingVisibility;
+            }
+            set
+            {
+                if (_showLoadingVisibility != value)
+                {
+                    _showLoadingVisibility = value;
+                    RaisePropertyChanged(() => ShowLoadingVisibility);
                 }
             }
         }
@@ -185,13 +203,42 @@ namespace YummyCookWindowsUniversal.ViewModel
         public NewRecipeViewModel()
         {
             NewRecipe = new Recipe();
+            ShowLoadingVisibility = Visibility.Collapsed;
+        }
+
+        private void ShowProgressBar()
+        {
+            ShowLoadingVisibility = Visibility.Visible;
+        }
+
+        private void HideProgressBar()
+        {
+            ShowLoadingVisibility = Visibility.Collapsed;
         }
 
         private bool ValidDataFormat()
         {
             if(tempTitleFile==null)
             {
-                Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>("请添加题图"),"toast");
+                Messenger.Default.Send(new GenericMessage<string>("请添加题图"), MessengerToken.ToastToken);
+                return false;
+            }
+            if(string.IsNullOrEmpty(NewRecipe.Title))
+            {
+                Messenger.Default.Send(new GenericMessage<string>("请添加标题"), MessengerToken.ToastToken);
+
+                return false;
+            }
+            if(NewRecipe.IngredientList.Count==0)
+            {
+                Messenger.Default.Send(new GenericMessage<string>("请添加食材"), MessengerToken.ToastToken);
+
+                return false;
+            }
+            if(NewRecipe.StepsList.Count==0)
+            {
+                Messenger.Default.Send(new GenericMessage<string>("请添加步骤"), MessengerToken.ToastToken);
+
                 return false;
             }
             return true;
@@ -203,19 +250,46 @@ namespace YummyCookWindowsUniversal.ViewModel
             {
                 try
                 {
+                    ShowProgressBar();
+
+                    //upload title image
                     var newTitleFile = await ImageHandleHelper.CompressImageAsync(tempTitleFile, 1000);
                     using (var stream = await newTitleFile.OpenStreamForReadAsync())
                     {
                         byte[] data = new byte[stream.Length];
                         stream.Read(data, 0, (int)stream.Length);
-                        var result = await RequestHelper.UploadImageAsync("test.jpg", data);
-                        Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(result), "toast");
-
+                        var resultUrl = await RequestHelper.UploadImageAsync("test.jpg", data);
+                        if(resultUrl!=null)
+                        {
+                            NewRecipe.TitleImageUrl = resultUrl;
+                            var MainVM = (App.Current.Resources["Locator"] as ViewModelLocator).MainVM;
+                            NewRecipe.CookUser.UserName = MainVM.CurrentUser.UserName;
+                            var recipeStr= NewRecipe.MakeJson();
+                            var result = await RequestHelper.PublishRecipeAsync(recipeStr);
+                            if(result)
+                            {
+                                var rootFrame = Window.Current.Content as Frame;
+                                if(rootFrame.CanGoBack)
+                                {
+                                    rootFrame.GoBack();
+                                }
+                            }
+                            else
+                            {
+                                HideProgressBar();
+                                Messenger.Default.Send(new GenericMessage<string>("发布失败，请再次尝试"), MessengerToken.ToastToken);
+                            }
+                        }
+                        else
+                        {
+                            HideProgressBar();
+                            Messenger.Default.Send(new GenericMessage<string>("上传图片失败，请再次尝试"), MessengerToken.ToastToken);
+                        }
                     }
                 }
                 catch (Exception e)
                 {
-                    Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(e.Message), "toast");
+                    Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(e.Message), MessengerToken.ToastToken);
                 }
 
             }
@@ -234,6 +308,10 @@ namespace YummyCookWindowsUniversal.ViewModel
         public override void Cleanup()
         {
             base.Cleanup();
+            this.NewRecipe.TitleImage = null;
+            this.NewRecipe = null;
+            NewRecipe = new Recipe();
+            ShowLoadingVisibility = Visibility.Collapsed;
         }
     }
 }

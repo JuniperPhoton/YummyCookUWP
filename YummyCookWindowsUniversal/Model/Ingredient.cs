@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using YummyCookWindowsUniversal.Converter;
 using YummyCookWindowsUniversal.Helper;
+using YummyCookWindowsUniversal.Interface;
 
 namespace YummyCookWindowsUniversal.Model
 {
-    public class Ingredient : ViewModelBase
+    public class Ingredient : ViewModelBase, ICanMakeJson
     {
         private string _id;
         public string ID
@@ -60,23 +62,6 @@ namespace YummyCookWindowsUniversal.Model
                 }
             }
         }
-
-        //private string _unit;
-        //public string Unit
-        //{
-        //    get
-        //    {
-        //        return _unit;
-        //    }
-        //    set
-        //    {
-        //        if (_unit != value)
-        //        {
-        //            _unit = value;
-        //            RaisePropertyChanged(() => Unit);
-        //        }
-        //    }
-        //}
 
         private int _selectedUnit;
         public int SelectedUnit
@@ -171,11 +156,12 @@ namespace YummyCookWindowsUniversal.Model
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public static string MakeJson(Ingredient item)
+        public string MakeJson()
         {
-            var name=JsonMaker.MakeJsonObj("name", item.IngredientName);
-            var quality = JsonMaker.MakeJsonObj("quality", item.Quality);
-            var main = JsonMaker.MakeJsonObj("is_main", item.IsMain);
+            var unit = UnitConverter.UnitList.ElementAt(this.SelectedUnit);
+            var name=JsonMaker.MakeJsonObj("name", this.IngredientName,true);
+            var quality = JsonMaker.MakeJsonObj("quality", this.Quality+ unit,true);
+            var main = JsonMaker.MakeJsonObj("is_main", SelectedIsMain==0?true:false,true);
             var json = JsonMaker.MakeJsonString(new List<string> { name, quality,main});
             return json;
         }

@@ -11,7 +11,6 @@
     mc:Ignorable="d"
     DataContext="{Binding NewRecipeVM,Source={StaticResource Locator}}">
     <common:BindablePage.Resources>
-      
         <Style x:Key="TextBoxStyle1" TargetType="TextBox">
             <Setter Property="MinWidth" Value="{ThemeResource TextControlThemeMinWidth}"/>
             <Setter Property="MinHeight" Value="{ThemeResource TextControlThemeMinHeight}"/>
@@ -175,22 +174,26 @@
             <StackPanel Orientation="Vertical">
                
                 <Grid>
-                    <Border Background="{StaticResource CookTheme}" Opacity="0.8"/>
-                    <Image Height="200" Source="{x:Bind NewRecipeVM.NewRecipe.TitleImage,Mode=OneWay}" Stretch="UniformToFill"/>
-                    <Button Command="{x:Bind NewRecipeVM.UploadTitleImgCommand}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Style="{StaticResource BtnStyle}" VerticalAlignment="Stretch" HorizontalAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" Margin="0,0,0,20">
-                        <Grid Width="200" Height="40" VerticalAlignment="Bottom" Background="#FFFF7B7B" Margin="0">
-                            <SymbolIcon Symbol="Pictures" Foreground="White" HorizontalAlignment="Left" Margin="30,0,0,0"/>
-                            <TextBlock Text="上传题图" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border Background="#FFEEEEEE" Opacity="0.8"/>
+                    <Image Height="300" Source="{x:Bind NewRecipeVM.NewRecipe.TitleImage,Mode=OneWay}" Stretch="UniformToFill"/>
+                    <Button Command="{x:Bind NewRecipeVM.UploadTitleImgCommand}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Style="{StaticResource BtnStyle}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" Margin="10,0,0,10">
+                        <Grid  BorderThickness="2" Margin="0" Height="30" Width="100" Background="{StaticResource CookTheme}" BorderBrush="#FFFFABAB">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="ms-appx:///Assets/Icon/Food.png"/>
+                                <TextBlock Text="上传题图" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </StackPanel>
                         </Grid>
                     </Button>
                 </Grid>
-                <TextBox PlaceholderText="添加标题" BorderBrush="{x:Null}" Margin="0,10,0,0" FontSize="20" Style="{StaticResource TextBoxStyle1}" SelectionHighlightColor="White" TextAlignment="Center"/>
+                <TextBox Text="{x:Bind NewRecipeVM.NewRecipe.Title,Mode=TwoWay}" PlaceholderText="添加标题" BorderBrush="{x:Null}" Margin="0,10,0,0" FontSize="20" Style="{StaticResource TextBoxStyle1}" SelectionHighlightColor="{StaticResource CookTheme}" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <StackPanel Orientation="Vertical" Margin="10,0,10,31">
                     <Button Command="{x:Bind NewRecipeVM.AddIngredientCommand}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Style="{StaticResource BtnStyle}" VerticalAlignment="Stretch" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}">
-                        <StackPanel Orientation="Horizontal"  Height="40" VerticalAlignment="Bottom" Background="{StaticResource CookTheme}" Margin="0">
-                            <SymbolIcon Symbol="Add" Foreground="White" HorizontalAlignment="Left" Margin="10,0,0,0"/>
-                            <TextBlock Text="添加食材" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0"/>
-                        </StackPanel>
+                        <Grid  BorderThickness="2" Margin="0" Height="30" Width="100" Background="{StaticResource CookTheme}" BorderBrush="#FFFFABAB">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="ms-appx:///Assets/Icon/Ingredient.png"/>
+                                <TextBlock Text="添加食材" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </Grid>
                     </Button>
                     <!--<GridView 
                     Margin="0,10,20,0" 
@@ -233,7 +236,7 @@
                             ItemsSource="{x:Bind NewRecipeVM.NewRecipe.IngredientList,Mode=OneWay}">
                         <GridView.ItemTemplate>
                             <DataTemplate x:DataType="model:Ingredient">
-                                <Grid Width="360" Margin="0,5,0,5">
+                                <Grid Margin="0,5,0,5" MaxWidth="380" >
                                     <Grid.Resources>
                                         <converter:IsMainConverter x:Key="IsMainConverter"/>
                                         <converter:UnitConverter x:Key="UnitConverter"/>
@@ -245,7 +248,7 @@
                                         <ColumnDefinition Width="65"/>
                                         <ColumnDefinition Width="40"/>
                                     </Grid.ColumnDefinitions>
-                                    <ComboBox MinWidth="0" SelectedIndex="{x:Bind SelectedIsMain,Mode=TwoWay}" HorizontalAlignment="Stretch" BorderBrush="{StaticResource CookThemeBlackDark}">
+                                    <ComboBox MinWidth="0" SelectedIndex="{x:Bind SelectedIsMain,Mode=TwoWay}" HorizontalAlignment="Stretch" BorderBrush="#FFDADADA" BorderThickness="0,0,0,2">
                                         <ComboBoxItem>
                                             <TextBlock Text="主料"/> 
                                         </ComboBoxItem>
@@ -253,9 +256,9 @@
                                             <TextBlock Text="辅料"/>
                                         </ComboBoxItem>
                                     </ComboBox>
-                                    <TextBox MinWidth="0" Text="{x:Bind IngredientName,Mode=TwoWay}" VerticalAlignment="Center" PlaceholderText="食材名字" Grid.Column="1" Margin="5,0,0,0" BorderBrush="{StaticResource CookThemeBlackDark}"/>
-                                    <TextBox MinWidth="0" Text="{x:Bind Quality,Mode=TwoWay}" Grid.Column="2" VerticalAlignment="Center" Margin="5,0,0,0" PlaceholderText="分量" BorderBrush="{StaticResource CookThemeBlackDark}"/>
-                                    <ComboBox SelectedIndex="{Binding SelectedUnit,Mode=TwoWay}" Grid.Column="3" MinWidth="0" HorizontalAlignment="Stretch" Margin="5,0,0,0" Background="White" BorderBrush="{StaticResource CookThemeBlackDark}" >
+                                    <TextBox MinWidth="0" Text="{x:Bind IngredientName,Mode=TwoWay}" VerticalAlignment="Center" PlaceholderText="食材名字" Grid.Column="1" Margin="5,0,0,0" BorderBrush="#FFDADADA" BorderThickness="0,0,0,2"/>
+                                    <TextBox MinWidth="0" Text="{x:Bind Quality,Mode=TwoWay}" Grid.Column="2" VerticalAlignment="Center" Margin="5,0,0,0" PlaceholderText="分量" BorderBrush="#FFDADADA" BorderThickness="0,0,0,2"/>
+                                    <ComboBox SelectedIndex="{Binding SelectedUnit,Mode=TwoWay}" Grid.Column="3" MinWidth="0" HorizontalAlignment="Stretch" Margin="5,0,0,0" Background="White" BorderBrush="#FFDADADA" BorderThickness="0,0,0,2" >
                                         <ComboBoxItem Content="g"/>
                                         <ComboBoxItem Content="kg"/>
                                         <ComboBoxItem Content="勺"/>
@@ -270,7 +273,7 @@
                                         VerticalContentAlignment="Stretch" 
                                         Grid.Column="4" Margin="10,0,0,0" Background="{x:Null}">
                                         <Grid>
-                                            <SymbolIcon Symbol="Delete"/>
+                                            <SymbolIcon Symbol="Delete" Foreground="#FF737373"/>
                                         </Grid>
                                     </Button>
                                 </Grid>
@@ -279,10 +282,12 @@
 
                     </GridView>
                     <Button Command="{x:Bind NewRecipeVM.AddStepCommand}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Style="{StaticResource BtnStyle}" VerticalAlignment="Stretch" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}">
-                        <StackPanel Orientation="Horizontal"  Height="40" VerticalAlignment="Bottom" Background="{StaticResource CookTheme}" Margin="0">
-                            <SymbolIcon Symbol="Add" Foreground="White" HorizontalAlignment="Left" Margin="10,0,0,0"/>
-                            <TextBlock Text="添加步骤" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0"/>
-                        </StackPanel>
+                        <Grid  BorderThickness="2" Margin="0" Height="30" Width="100" Background="{StaticResource CookTheme}" BorderBrush="#FFFFABAB">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="ms-appx:///Assets/Icon/Step.png"/>
+                                <TextBlock Text="添加步骤" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </Grid>
                     </Button>
                     <ListView
                     ItemContainerStyle="{StaticResource ListViewItemStyle1}"
@@ -290,17 +295,18 @@
                     HorizontalAlignment="Stretch" 
                     VerticalAlignment="Center"
                     SelectionMode="None"
-                    ItemsSource="{x:Bind NewRecipeVM.NewRecipe.StepsList,Mode=OneWay}">
+                        IsItemClickEnabled="False"
+                    ItemsSource="{x:Bind NewRecipeVM.NewRecipe.StepsList,Mode=OneWay}" >
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="model:Step">
-                                <Grid Margin="-10,10,0,10">
+                                <Grid Margin="-10,10,0,10" >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="20"/>
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="50"/>
                                     </Grid.ColumnDefinitions>
-                                    <Ellipse Width="15" Height="15" Fill="{StaticResource CookTheme}"/>
-                                    <TextBox Margin="10,0,0,0" Grid.Column="1" TextWrapping="Wrap" Text="{x:Bind StepContent,Mode=TwoWay}"/>
+                                    <Ellipse Width="15" Height="15" Fill="White" Stroke="{StaticResource CookTheme}" StrokeThickness="3"/>
+                                    <TextBox Margin="10,0,0,0" Grid.Column="1" TextWrapping="Wrap" Text="{x:Bind StepContent,Mode=TwoWay}" BorderBrush="#FFDADADA" BorderThickness="0,0,0,2"/>
                                     <Button 
                                         Command="{Binding NewRecipeVM.DeleteStepCommand,Source={StaticResource Locator}}" 
                                         CommandParameter="{x:Bind ID,Mode=OneWay}" 
@@ -310,7 +316,7 @@
                                         VerticalContentAlignment="Stretch" 
                                         Grid.Column="2" Margin="10,0,0,0" Background="{x:Null}">
                                         <Grid>
-                                            <SymbolIcon Symbol="Delete"/>
+                                            <SymbolIcon Symbol="Delete" Foreground="#FF737373"/>
                                             <!--<TextBlock Text="{x:Bind ID,Mode=OneWay}" Margin="0" Foreground="Black"/>-->
                                         </Grid>
                                     </Button>
@@ -321,7 +327,15 @@
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
-
-        <common:ToastUC x:Name="ToastControl" />
+        <Grid Visibility="{x:Bind NewRecipeVM.ShowLoadingVisibility,Mode=OneWay}" d:IsHidden="True">
+            <Border Background="Black" Opacity="0.8" />
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0">
+                <Image Source="ms-appx:///Assets/Icon/Wait.png" Width="60"/>
+                <TextBlock Text="这需要一点时间..." Foreground="White" HorizontalAlignment="Center" FontSize="20"/>
+                <ProgressBar IsIndeterminate="True" Background="{x:Null}" Foreground="White" Margin="100,10,100,0"/>
+            </StackPanel>
+         
+        </Grid>
+        <common:ToastUC d:IsHidden="True"  x:Name="ToastControl" />
     </Grid>
 </common:BindablePage>
