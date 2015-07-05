@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Messaging;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,15 +13,13 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using YummyCookWindowsUniversal.Helper;
 using YummyCookWindowsUniversal.ViewModel;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace YummyCookWindowsUniversal.View
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
+
     public sealed partial class RecipeDetailPage : BindablePage
     {
         public DetailedRecipeViewModel DetailVM;
@@ -29,6 +28,15 @@ namespace YummyCookWindowsUniversal.View
             this.InitializeComponent();
             DetailVM = new DetailedRecipeViewModel();
             this.DataContext = DetailVM;
+
+            Messenger.Default.Register<GenericMessage<string>>(this, MessengerToken.ShowPictureToken, act =>
+              {
+                  ShowPictureStory.Begin();
+              });
+            Messenger.Default.Register<GenericMessage<string>>(this, MessengerToken.HidePictureToken, act =>
+            {
+                HidePictureStory.Begin();
+            });
         }
     }
 }

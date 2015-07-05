@@ -161,6 +161,51 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <ItemsPanelTemplate x:Key="ItemsPanelTemplate1">
+            <ItemsStackPanel Orientation="Vertical" />
+        </ItemsPanelTemplate>
+        <Style x:Key="ListViewStyle1" TargetType="ListView">
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="TabNavigation" Value="Once"/>
+            <Setter Property="IsSwipeEnabled" Value="True"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled"/>
+            <Setter Property="ScrollViewer.IsHorizontalRailEnabled" Value="False"/>
+            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Enabled"/>
+            <Setter Property="ScrollViewer.IsVerticalRailEnabled" Value="True"/>
+            <Setter Property="ScrollViewer.ZoomMode" Value="Disabled"/>
+            <Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False"/>
+            <Setter Property="ScrollViewer.BringIntoViewOnFocusChange" Value="True"/>
+            <Setter Property="ItemContainerTransitions">
+                <Setter.Value>
+                    <TransitionCollection>
+                        <AddDeleteThemeTransition/>
+                        <ContentThemeTransition/>
+                        <ReorderThemeTransition/>
+                        <EntranceThemeTransition IsStaggeringEnabled="False"/>
+                    </TransitionCollection>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <ItemsStackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListView">
+                        <Border BorderThickness="{TemplateBinding BorderThickness}">
+                            <ScrollViewer x:Name="ScrollViewer" AutomationProperties.AccessibilityView="Raw" BringIntoViewOnFocusChange="{TemplateBinding ScrollViewer.BringIntoViewOnFocusChange}" HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}" IsHorizontalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsHorizontalScrollChainingEnabled}" IsVerticalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsVerticalScrollChainingEnabled}" IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}" IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}" TabNavigation="{TemplateBinding TabNavigation}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}" Background="{x:Null}">
+                                <ItemsPresenter FooterTransitions="{TemplateBinding FooterTransitions}" FooterTemplate="{TemplateBinding FooterTemplate}" Footer="{TemplateBinding Footer}" HeaderTemplate="{TemplateBinding HeaderTemplate}" Header="{TemplateBinding Header}" HeaderTransitions="{TemplateBinding HeaderTransitions}" Padding="{TemplateBinding Padding}"/>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </common:BindablePage.Resources>
     <common:BindablePage.BottomAppBar>
         <CommandBar Background="{StaticResource CookTheme}" RequestedTheme="Dark">
@@ -172,7 +217,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <ScrollViewer>
             <StackPanel Orientation="Vertical">
-               
+
                 <Grid>
                     <Border Background="#FFEEEEEE" Opacity="0.8"/>
                     <Image Height="300" Source="{x:Bind NewRecipeVM.NewRecipe.TitleImage,Mode=OneWay}" Stretch="UniformToFill"/>
@@ -250,7 +295,7 @@
                                     </Grid.ColumnDefinitions>
                                     <ComboBox MinWidth="0" SelectedIndex="{x:Bind SelectedIsMain,Mode=TwoWay}" HorizontalAlignment="Stretch" BorderBrush="#FFDADADA" BorderThickness="0,0,0,2">
                                         <ComboBoxItem>
-                                            <TextBlock Text="主料"/> 
+                                            <TextBlock Text="主料"/>
                                         </ComboBoxItem>
                                         <ComboBoxItem>
                                             <TextBlock Text="辅料"/>
@@ -295,19 +340,35 @@
                     HorizontalAlignment="Stretch" 
                     VerticalAlignment="Center"
                     SelectionMode="None"
-                        IsItemClickEnabled="False"
-                    ItemsSource="{x:Bind NewRecipeVM.NewRecipe.StepsList,Mode=OneWay}" >
+                    IsItemClickEnabled="False"
+                    
+                    ItemsSource="{x:Bind NewRecipeVM.NewRecipe.StepsList,Mode=OneWay}" ItemsPanel="{StaticResource ItemsPanelTemplate1}" Style="{StaticResource ListViewStyle1}" IsSwipeEnabled="False" >
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="model:Step">
                                 <Grid Margin="-10,10,0,10" >
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="20"/>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="50"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Ellipse Width="15" Height="15" Fill="White" Stroke="{StaticResource CookTheme}" StrokeThickness="3"/>
-                                    <TextBox Margin="10,0,0,0" Grid.Column="1" TextWrapping="Wrap" Text="{x:Bind StepContent,Mode=TwoWay}" BorderBrush="#FFDADADA" BorderThickness="0,0,0,2"/>
-                                    <Button 
+                                    
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Visibility="{x:Bind ShowImageVisibility,Mode=OneWay}" Grid.Row="0" Margin="10,0,0,10" HorizontalAlignment="Left">
+                                        <Image Height="100" Source="{x:Bind InsertedImage,Mode=OneWay}" HorizontalAlignment="Left"/>
+                                        <Button Command="{x:Bind DeleteInsertedImageCommand}" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Top" Background="{x:Null}">
+                                            <Grid Background="#FF454545">
+                                                <SymbolIcon Symbol="Cancel" Foreground="White"/>
+                                            </Grid>
+                                        </Button>
+                                    </Grid>
+                                    <Grid Grid.Row="1" Grid.ColumnSpan="4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="20"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="40"/>
+                                            <ColumnDefinition Width="40"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Ellipse Width="15" Height="15" Fill="White" Stroke="{StaticResource CookTheme}" StrokeThickness="3"/>
+                                        <TextBox Margin="10,0,0,0" Grid.Column="1" TextWrapping="Wrap" Text="{x:Bind StepContent,Mode=TwoWay}" BorderBrush="#FFDADADA" BorderThickness="0,0,0,2"/>
+                                        <Button 
                                         Command="{Binding NewRecipeVM.DeleteStepCommand,Source={StaticResource Locator}}" 
                                         CommandParameter="{x:Bind ID,Mode=OneWay}" 
                                         Style="{StaticResource BtnStyle}" 
@@ -315,11 +376,26 @@
                                         Padding="0" 
                                         VerticalContentAlignment="Stretch" 
                                         Grid.Column="2" Margin="10,0,0,0" Background="{x:Null}">
-                                        <Grid>
-                                            <SymbolIcon Symbol="Delete" Foreground="#FF737373"/>
-                                            <!--<TextBlock Text="{x:Bind ID,Mode=OneWay}" Margin="0" Foreground="Black"/>-->
-                                        </Grid>
-                                    </Button>
+                                            <Grid>
+                                                <SymbolIcon Symbol="Delete" Foreground="#FF737373"/>
+                                                <!--<TextBlock Text="{x:Bind ID,Mode=OneWay}" Margin="0" Foreground="Black"/>-->
+                                            </Grid>
+                                        </Button>
+                                        <Button 
+                                        Command="{x:Bind InsertImageCommand}" 
+                                        Style="{StaticResource BtnStyle}" 
+                                        HorizontalContentAlignment="Stretch" 
+                                        Padding="0" 
+                                        VerticalContentAlignment="Stretch" 
+                                        Grid.Column="3" Margin="10,0,0,0" Background="{x:Null}">
+                                            <Grid>
+                                                <SymbolIcon Symbol="Pictures" Foreground="#FF737373"/>
+                                                <!--<TextBlock Text="{x:Bind ID,Mode=OneWay}" Margin="0" Foreground="Black"/>-->
+                                            </Grid>
+                                        </Button>
+                                    </Grid>
+                                    
+                                    
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -334,7 +410,7 @@
                 <TextBlock Text="这需要一点时间..." Foreground="White" HorizontalAlignment="Center" FontSize="20"/>
                 <ProgressBar IsIndeterminate="True" Background="{x:Null}" Foreground="White" Margin="100,10,100,0"/>
             </StackPanel>
-         
+
         </Grid>
         <common:ToastUC d:IsHidden="True"  x:Name="ToastControl" />
     </Grid>

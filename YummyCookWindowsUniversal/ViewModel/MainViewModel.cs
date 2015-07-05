@@ -137,6 +137,20 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
+        private RelayCommand _gotoAboutCommand;
+        public RelayCommand GoToAboutCommand
+        {
+            get
+            {
+                if (_gotoAboutCommand != null) return _gotoAboutCommand;
+                return _gotoAboutCommand = new RelayCommand(() =>
+                  {
+                      var rootFrame = Window.Current.Content as Frame;
+                      rootFrame.Navigate(typeof(AboutPage));
+                  });
+            }
+        }
+
         private RelayCommand _logoutCommand;
         public RelayCommand LogoutCommand
         {

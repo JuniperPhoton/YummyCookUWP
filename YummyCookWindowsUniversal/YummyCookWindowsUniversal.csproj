@@ -122,9 +122,12 @@
     <Compile Include="Util\ListViewCommandEx.cs" />
     <Compile Include="Util\NavigationService.cs" />
     <Compile Include="ViewModel\DetailedRecipeViewModel.cs" />
-    <Compile Include="ViewModel\NewRecipeViewModel.cs" />
+    <Compile Include="NewRecipeViewModel.cs" />
     <Compile Include="ViewModel\UserInfoViewModel.cs" />
     <Compile Include="Base\BindablePage.cs" />
+    <Compile Include="View\AboutPage.xaml.cs">
+      <DependentUpon>AboutPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
@@ -189,6 +192,7 @@
     <Content Include="Assets\Image\Food_Sample %289%29.jpg" />
     <Content Include="Assets\Image\IMG_8577b.jpg" />
     <Content Include="Assets\Image\StartBackImg.jpg" />
+    <Content Include="Assets\LOGO_512.png" />
     <Content Include="Assets\Province.txt" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\Logo.scale-100.png" />
@@ -208,6 +212,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="UserControl\ToastUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AboutPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

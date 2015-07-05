@@ -79,7 +79,10 @@ namespace YummyCookWindowsUniversal.ViewModel
                 return _showPictureCommand = new RelayCommand(() =>
                 {
                     this.CurrentImage = CurrentRecipe.TitleImage;
+                    
                     ShowPictureVisibility = Visibility.Visible;
+
+                    Messenger.Default.Send(new GenericMessage<string>(""), MessengerToken.ShowPictureToken);
                 });
             }
         }
@@ -92,8 +95,27 @@ namespace YummyCookWindowsUniversal.ViewModel
                 if (_hidePictureCommand != null) return _hidePictureCommand;
                 return _hidePictureCommand = new RelayCommand(() =>
                   {
+                      Messenger.Default.Send(new GenericMessage<string>(""), MessengerToken.HidePictureToken);
+
                       ShowPictureVisibility = Visibility.Collapsed;
                   });
+            }
+        }
+
+        private RelayCommand _savePictureCommand;
+        public RelayCommand SavePictureCommand
+        {
+            get
+            {
+                if (_savePictureCommand != null) return _savePictureCommand;
+                return _savePictureCommand=new RelayCommand(()=>
+                {
+                    if(CurrentImage==null)
+                    {
+                        return;
+                    }
+                    return;
+                });
             }
         }
 

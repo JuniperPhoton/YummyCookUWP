@@ -11,5 +11,8 @@ namespace YummyCookWindowsUniversal.Helper
         public const string ToastToken = "toast";
         public const string UpdateUserToken = "update_user";
         public const string RecipeToken = "recipe";
+        public const string ShowPictureToken = "showpicture";
+        public const string HidePictureToken = "hidepicture";
+
     }
 }

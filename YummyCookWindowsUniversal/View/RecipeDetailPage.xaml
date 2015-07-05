@@ -210,6 +210,19 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Storyboard x:Name="ShowPictureStory">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="grid">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="HidePictureStory">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="grid">
+                <SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+                <SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
     </local:BindablePage.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -311,12 +324,18 @@
                 </ListView>
             </StackPanel>
         </ScrollViewer>
-        <Grid d:IsHidden="True"  Visibility="{x:Bind DetailVM.ShowPictureVisibility,Mode=OneWay}">
+        <Grid x:Name="grid" d:IsHidden="True"  Visibility="{x:Bind DetailVM.ShowPictureVisibility,Mode=OneWay}">
+            
             <Border Background="Black" Opacity="0.8"/>
-            <Image Margin="40" Source="{x:Bind DetailVM.CurrentImage,Mode=OneWay}"/>
-            <Button Command="{x:Bind DetailVM.HidePictureCommand}" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Top" Width="30" Height="30" Margin="0,20,20,0">
+            <Image Margin="40,40,40,70" Source="{x:Bind DetailVM.CurrentImage,Mode=OneWay}"/>
+            <Button Command="{x:Bind DetailVM.HidePictureCommand}" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Top" Width="30" Height="30" Margin="0,20,20,0" Background="{x:Null}">
                 <Border>
                     <SymbolIcon Symbol="Cancel" Foreground="White"/>
+                </Border>
+            </Button>
+            <Button Command="{x:Bind DetailVM.SavePictureCommand}" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="30" Height="30" Margin="0,0,0,20" Background="{x:Null}">
+                <Border>
+                    <SymbolIcon Symbol="Save" Foreground="White"/>
                 </Border>
             </Button>
         </Grid>
