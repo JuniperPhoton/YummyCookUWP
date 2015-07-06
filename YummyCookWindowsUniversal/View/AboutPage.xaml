@@ -14,6 +14,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid Background="{StaticResource CookTheme}">
+            <Image Source="ms-appx:///Assets/Image/foods_backgrd.png" Stretch="UniformToFill" Opacity="0.2"/>
             <StackPanel Orientation="Vertical" VerticalAlignment="Bottom">
                 <Image Source="ms-appx:///Assets/LOGO_512.png" Width="150" Height="150"/>
                 <TextBlock Text="YummyCook" Foreground="White" FontSize="26.667" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10" FontWeight="Light"/>

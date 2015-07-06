@@ -1,12 +1,15 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using JP.Utils.Data;
+using JP.Utils.Functions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Imaging;
 using YummyCookWindowsUniversal.Helper;
@@ -18,23 +21,22 @@ namespace YummyCookWindowsUniversal.ViewModel
     public class DetailedRecipeViewModel:ViewModelBase,INavigable
     {
 
-        private Visibility _showPictureVisibility;
-        public Visibility ShowPictureVisibility
+        private Visibility _showLargePictureVisibility;
+        public Visibility ShowLargePictureVisibility
         {
             get
             {
-                return _showPictureVisibility;
+                return _showLargePictureVisibility;
             }
             set
             {
-                if (_showPictureVisibility != value)
+                if (_showLargePictureVisibility != value)
                 {
-                    _showPictureVisibility = value;
-                    RaisePropertyChanged(() => ShowPictureVisibility);
+                    _showLargePictureVisibility = value;
+                    RaisePropertyChanged(() => ShowLargePictureVisibility);
                 }
             }
         }
-
 
         private Recipe _currentRecipe;
         public Recipe CurrentRecipe
@@ -70,34 +72,35 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
-        private RelayCommand _showPictureCommand;
-        public RelayCommand ShowPictureCommand
+        private RelayCommand<BitmapImage> _showLargePictureCommand;
+        public RelayCommand<BitmapImage> ShowLargePictureCommand
         {
             get
             {
-                if (_showPictureCommand != null) return _showPictureCommand;
-                return _showPictureCommand = new RelayCommand(() =>
+                if (_showLargePictureCommand != null) return _showLargePictureCommand;
+                return _showLargePictureCommand = new RelayCommand<BitmapImage>((img) =>
                 {
-                    this.CurrentImage = CurrentRecipe.TitleImage;
                     
-                    ShowPictureVisibility = Visibility.Visible;
+                    this.CurrentImage = img;
+                    
+                    ShowLargePictureVisibility = Visibility.Visible;
 
                     Messenger.Default.Send(new GenericMessage<string>(""), MessengerToken.ShowPictureToken);
                 });
             }
         }
 
-        private RelayCommand _hidePictureCommand;
-        public RelayCommand HidePictureCommand
+        private RelayCommand _hideLargePictureCommand;
+        public RelayCommand HideLargePictureCommand
         {
             get
             {
-                if (_hidePictureCommand != null) return _hidePictureCommand;
-                return _hidePictureCommand = new RelayCommand(() =>
+                if (_hideLargePictureCommand != null) return _hideLargePictureCommand;
+                return _hideLargePictureCommand = new RelayCommand(() =>
                   {
                       Messenger.Default.Send(new GenericMessage<string>(""), MessengerToken.HidePictureToken);
 
-                      ShowPictureVisibility = Visibility.Collapsed;
+                      ShowLargePictureVisibility = Visibility.Collapsed;
                   });
             }
         }
@@ -152,9 +155,109 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
+        #region Command bar involved
+
+        private RelayCommand _toggleAddUserCommand;
+        public RelayCommand ToggleAddUserCommand
+        {
+            get
+            {
+                if (_toggleAddUserCommand != null) return _toggleAddUserCommand;
+                return _toggleAddUserCommand = new RelayCommand(async() =>
+                  {
+                      var id = CurrentRecipe.CookUser.ID;
+                      var mainVM = (App.Current.Resources["Locator"] as ViewModelLocator).MainVM;
+
+                      if(id==mainVM.CurrentUser.ID)
+                      {
+                          Messenger.Default.Send(new GenericMessage<string>("无法关注你自己 ;)"), MessengerToken.ToastToken);
+                          return;
+                      }
+                      //Check if it's already followed.
+                      var findID = mainVM.CurrentUser.FriendsList.Find(s =>
+                        {
+                            if (s == id) return true;
+                            else return false;
+                        });
+                      if(findID!=null)
+                      {
+                          MessageDialog md = new MessageDialog("关注该用户，可以方便你以后查找他（她）的亨饪攻略。", "取消关注");
+                          md.Commands.Add(new UICommand("取消关注",async act =>
+                           {
+                               mainVM.CurrentUser.FriendsList.Remove(findID);
+                               await UpdateFriendList();
+                           }));
+                          md.Commands.Add(new UICommand("按错了", act =>
+                          {
+                              return;
+                          }));
+                          md.DefaultCommandIndex = 1;
+                          await md.ShowAsync();
+                      }
+                      else
+                      {
+                          mainVM.CurrentUser.FriendsList.Add(id);
+                          await UpdateFriendList();
+                      }
+                      
+                  });
+            }
+        }
+
+        private RelayCommand _toggleAddFavorCommand;
+        public RelayCommand ToggleAddFavorCommand
+        {
+            get
+            {
+                if (_toggleAddFavorCommand != null) return _toggleAddFavorCommand;
+                return _toggleAddFavorCommand = new RelayCommand(async() =>
+                {
+                    var id = CurrentRecipe.RecipeID;
+                    var mainVM = (App.Current.Resources["Locator"] as ViewModelLocator).MainVM;
+
+                    //Check if it's already favored.
+                    var findID = mainVM.CurrentUser.FavorsList.Find(s =>
+                    {
+                        if (s == id) return true;
+                        else return false;
+                    });
+                    if (findID != null)
+                    {
+                        MessageDialog md = new MessageDialog("", "取消收藏");
+                        md.Commands.Add(new UICommand("取消收藏", async act =>
+                        {
+                            mainVM.CurrentUser.FavorsList.Remove(findID);
+                            await UpdateFavorList();
+                        }));
+                        md.Commands.Add(new UICommand("按错了", act =>
+                        {
+                            return;
+                        }));
+                        md.DefaultCommandIndex = 1;
+                        await md.ShowAsync();
+                    }
+                    else
+                    {
+                        mainVM.CurrentUser.FavorsList.Add(id);
+                        await UpdateFavorList();
+                    }
+                });
+            }
+        }
+        #endregion
+
         public DetailedRecipeViewModel()
         {
-            ShowPictureVisibility = Visibility.Collapsed;
+            ShowLargePictureVisibility = Visibility.Collapsed;
+
+            Messenger.Default.Register<GenericMessage<BitmapImage>>(this, MessengerToken.ShowPictureToken, act =>
+            {
+                var bitmap = act.Content;
+                if (bitmap != null)
+                {
+                    ShowLargePictureCommand.Execute(bitmap);
+                }
+            });
         }
 
         public async Task LoadDetailPage()
@@ -167,7 +270,21 @@ namespace YummyCookWindowsUniversal.ViewModel
                 {
                     this.CurrentRecipe.CookUser = user;
                     await this.CurrentRecipe.CookUser.LoadRegionInfo();
-                    
+                }
+
+                foreach(var step in this.CurrentRecipe.StepsList)
+                {
+                    step.ShowImageVisibility = Visibility.Collapsed;
+                    if(!string.IsNullOrEmpty(step.ImageUrl))
+                    {
+                        step.ShowImageVisibility = Visibility.Visible;
+                        var stream = await RequestHelper.GetImageFromUrl(step.ImageUrl);
+                        if(stream!=null)
+                        {
+                            step.InsertedImage = new BitmapImage();
+                            var task=step.InsertedImage.SetSourceAsync(stream);
+                        }
+                    }
                 }
             }
             catch(Exception e)
@@ -176,6 +293,40 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
             
 
+        }
+
+        private async Task UpdateFriendList()
+        {
+            var mainVM = (App.Current.Resources["Locator"] as ViewModelLocator).MainVM;
+            var dic = new Dictionary<string, string>();
+            var friendlist = Functions.MakeStringFromList(mainVM.CurrentUser.FriendsList);
+            dic.Add("friends_list", friendlist);
+            var isSuccess = await RequestHelper.UpdateUserInfo(LocalSettingHelper.GetValue("userid"), dic);
+            if (isSuccess.IsSuccess)
+            {
+                Messenger.Default.Send(new GenericMessage<string>("操作成功"), MessengerToken.ToastToken);
+            }
+            else
+            {
+                Messenger.Default.Send(new GenericMessage<string>("操作失败"), MessengerToken.ToastToken);
+            }
+        }
+
+        private async Task UpdateFavorList()
+        {
+            var mainVM = (App.Current.Resources["Locator"] as ViewModelLocator).MainVM;
+            var dic = new Dictionary<string, string>();
+            var favorList = Functions.MakeStringFromList(mainVM.CurrentUser.FavorsList);
+            dic.Add("favors_list", favorList);
+            var isSuccess = await RequestHelper.UpdateUserInfo(LocalSettingHelper.GetValue("userid"), dic);
+            if (isSuccess.IsSuccess)
+            {
+                Messenger.Default.Send(new GenericMessage<string>("操作成功"), MessengerToken.ToastToken);
+            }
+            else
+            {
+                Messenger.Default.Send(new GenericMessage<string>("操作失败"), MessengerToken.ToastToken);
+            }
         }
 
         public static ObservableCollection<GroupInfoList> GetCheckListsGrouped(ObservableCollection<Ingredient> ingredients)

@@ -121,8 +121,9 @@
     <Compile Include="Interface\INavigationServiceEx.cs" />
     <Compile Include="Util\ListViewCommandEx.cs" />
     <Compile Include="Util\NavigationService.cs" />
+    <Compile Include="Util\UIElementTapCommand.cs" />
     <Compile Include="ViewModel\DetailedRecipeViewModel.cs" />
-    <Compile Include="NewRecipeViewModel.cs" />
+    <Compile Include="ViewModel\NewRecipeViewModel.cs" />
     <Compile Include="ViewModel\UserInfoViewModel.cs" />
     <Compile Include="Base\BindablePage.cs" />
     <Compile Include="View\AboutPage.xaml.cs">
@@ -151,6 +152,9 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\StartViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\UserDetailPage.xaml.cs">
+      <DependentUpon>UserDetailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UserInfoPage.xaml.cs">
       <DependentUpon>UserInfoPage.xaml</DependentUpon>
     </Compile>
@@ -174,6 +178,7 @@
     <Content Include="Assets\Icon\Step.png" />
     <Content Include="Assets\Icon\Wait.png" />
     <Content Include="Assets\Image\1.jpg" />
+    <Content Include="Assets\Image\foods_backgrd.png" />
     <Content Include="Assets\Image\Food_Sample %280%29.jpg" />
     <Content Include="Assets\Image\Food_Sample %281%29.jpg" />
     <Content Include="Assets\Image\Food_Sample %2810%29.jpg" />
@@ -236,6 +241,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\StartPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserDetailPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

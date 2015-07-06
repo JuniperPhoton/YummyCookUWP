@@ -36,36 +36,23 @@ namespace YummyCookWindowsUniversal
             }
         }
 
-        private double oriPositionOfX;
 
         public MainPage()
         {
             this.InitializeComponent();
 
             Messenger.Default.Register<GenericMessage<string>>(this, MessengerToken.ToastToken, act =>
-            {
-                var msg = act.Content;
-                ToastControl.ShowMessage(msg);
-            });
+                {
+                    var msg = act.Content;
+                    ToastControl.ShowMessage(msg);
+                });
+            Messenger.Default.Register<GenericMessage<string>>(this, MessengerToken.HidePaneToken, act =>
+                  {
+                      root_sv_PaneClosed(null, null);
+                  });
             NavigationCacheMode = NavigationCacheMode.Required;
-
-            RootGrid.ManipulationStarted += ContentGrid_ManipulationStarted;
-            RootGrid.ManipulationDelta += ContentGrid_ManipulationDelta;
-            RootGrid.ManipulationMode = ManipulationModes.TranslateX;
         }
 
-        private void ContentGrid_ManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
-        {
-            oriPositionOfX = e.Position.X;   
-        }
-
-        private void ContentGrid_ManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
-        {
-            if(e.Delta.Translation.X>20 && oriPositionOfX<10)
-            {
-                if (!root_sv.IsPaneOpen) root_sv.IsPaneOpen = true;
-            }
-        }
 
         private void HamburgerClick(object sender,RoutedEventArgs e)
         {
@@ -94,6 +81,16 @@ namespace YummyCookWindowsUniversal
         {
             MaskOutStory.Begin();
             HamOutStory.Begin();
+        }
+
+        protected override void RegisterHandleBackLogic()
+        {
+            base.RegisterHandleBackLogic();
+        }
+
+        protected override void UnRegisterHandleBackLogic()
+        {
+            base.UnRegisterHandleBackLogic();
         }
 
         public Frame GetFrame()

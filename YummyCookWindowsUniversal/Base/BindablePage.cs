@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using YummyCookWindowsUniversal.Helper;
 using YummyCookWindowsUniversal.Interface;
 
 namespace YummyCookWindowsUniversal
@@ -30,13 +31,45 @@ namespace YummyCookWindowsUniversal
             if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
                 var task=StatusBar.GetForCurrentView().HideAsync();
-                StatusBar.GetForCurrentView().BackgroundOpacity = 0.001;
-                StatusBar.GetForCurrentView().BackgroundColor = ((SolidColorBrush)App.Current.Resources["CookThemeDark"]).Color;
+                //StatusBar.GetForCurrentView().BackgroundOpacity = 0.001;
+                //StatusBar.GetForCurrentView().BackgroundColor = ((SolidColorBrush)App.Current.Resources["CookThemeDark"]).Color;
             }
             this.IsTextScaleFactorEnabled = false;
         }
 
-        
+        protected virtual void RegisterHandleBackLogic()
+        {
+            SystemNavigationManager.GetForCurrentView().BackRequested += BindablePage_BackRequested;
+            if (ApiInformationHelper.CheckHardwareButton())
+            {
+                Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+            }
+        }
+
+        protected virtual void UnRegisterHandleBackLogic()
+        {
+            SystemNavigationManager.GetForCurrentView().BackRequested -= BindablePage_BackRequested;
+            if (ApiInformationHelper.CheckHardwareButton())
+            {
+                Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
+            }
+        }
+
+        private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
+        {
+            if (Frame.CanGoBack)
+            {
+                e.Handled = true;
+                Frame.GoBack();
+            }
+        }
+
+        private void BindablePage_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            if (Frame.CanGoBack)
+                Frame.GoBack();
+        }
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
@@ -46,6 +79,7 @@ namespace YummyCookWindowsUniversal
                 NavigationViewModel.Activate(e.Parameter);
             }
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            RegisterHandleBackLogic();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -56,6 +90,7 @@ namespace YummyCookWindowsUniversal
             {
                 NavigationViewModel.Deactivate(null);
             }
+            UnRegisterHandleBackLogic();
         }
 
     }

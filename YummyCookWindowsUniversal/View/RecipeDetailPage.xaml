@@ -224,16 +224,16 @@
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </local:BindablePage.Resources>
-
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <ScrollViewer>
+        <ScrollViewer Margin="0,0,0,50">
             <StackPanel>
                 <Grid Height="300" Background="{StaticResource CookThemeGrayLight}">
                     <Button 
-                        Command="{x:Bind DetailVM.ShowPictureCommand}" 
+                        Command="{x:Bind DetailVM.ShowLargePictureCommand}" 
                         CommandParameter="{x:Bind DetailVM.CurrentRecipe.TitleImage}"
                         HorizontalContentAlignment="Stretch" 
-                        VerticalContentAlignment="Stretch" Padding="0" Style="{StaticResource BtnStyle}" Background="{x:Null}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        VerticalContentAlignment="Stretch" Padding="0" Style="{StaticResource BtnStyle}" Background="{x:Null}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="{x:Null}" BorderThickness="0">
                         <Grid>
                             <Image Source="{x:Bind DetailVM.CurrentRecipe.TitleImage}" Stretch="UniformToFill"/>
                             <Border Background="Black" Opacity="0.3" />
@@ -251,7 +251,7 @@
                                     </Grid.ColumnDefinitions>
                                     <Ellipse Width="25" Height="25" Margin="10,0,0,0">
                                         <Ellipse.Fill>
-                                            <ImageBrush Stretch="Fill" ImageSource="ms-appx:///Assets/Image/1.jpg"/>
+                                            <ImageBrush Stretch="Fill" ImageSource="{x:Bind DetailVM.CurrentRecipe.CookUser.Avatar,Mode=OneWay}"/>
                                         </Ellipse.Fill>
                                     </Ellipse>
                                     <TextBlock Text="{x:Bind DetailVM.CurrentRecipe.CookUser.UserName,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="White" Grid.Column="1"/>
@@ -311,33 +311,51 @@
                     ItemsSource="{x:Bind DetailVM.CurrentRecipe.StepsList,Mode=OneWay}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="model:Step">
-                            <Grid Margin="-10,10,0,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="20"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Ellipse Width="15" Height="15" Fill="{StaticResource CookTheme}"/>
-                                <TextBlock Margin="10,0,0,0" Grid.Column="1" TextWrapping="Wrap" Text="{x:Bind StepContent,Mode=OneWay}"/>
-                            </Grid>
+                            <StackPanel Orientation="Vertical" Margin="-10,10,0,10" >
+                                <Button 
+                                    Style="{StaticResource BtnStyle}" 
+                                    Padding="0" 
+                                    VerticalContentAlignment="Stretch" 
+                                    HorizontalContentAlignment="Stretch" 
+                                    Visibility="{x:Bind ShowImageVisibility,Mode=OneWay}" 
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center"
+                                    Command="{x:Bind ShowCurrentPictureCommand}" 
+                                    CommandParameter="{x:Bind InsertedImage}" BorderThickness="0" Grid.Column="2">
+                                    <Image Height="130" Source="{x:Bind InsertedImage,Mode=OneWay}"/>
+                                </Button>
+                                <Grid Grid.Row="1" Margin="0,15,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <Ellipse Width="15" Height="15" Fill="{StaticResource CookTheme}" VerticalAlignment="Top" Margin="0,2,0,0"/>
+                                    <TextBlock Margin="10,0" Grid.Column="1" TextWrapping="Wrap" Text="{x:Bind StepContent,Mode=OneWay}" VerticalAlignment="Top"/>
+                                </Grid>
+                            </StackPanel>
+                           
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
             </StackPanel>
         </ScrollViewer>
-        <Grid x:Name="grid" d:IsHidden="True"  Visibility="{x:Bind DetailVM.ShowPictureVisibility,Mode=OneWay}">
-            
-            <Border Background="Black" Opacity="0.8"/>
+        <Grid  x:Name="grid" d:IsHidden="True" Visibility="{x:Bind DetailVM.ShowLargePictureVisibility,Mode=OneWay}">
+            <Border attach:UIElementTapCommand.ItemTapCommand="{x:Bind DetailVM.HideLargePictureCommand}" Background="Black" Opacity="0.9"/>
             <Image Margin="40,40,40,70" Source="{x:Bind DetailVM.CurrentImage,Mode=OneWay}"/>
-            <Button Command="{x:Bind DetailVM.HidePictureCommand}" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Top" Width="30" Height="30" Margin="0,20,20,0" Background="{x:Null}">
+            <Button Command="{x:Bind DetailVM.HideLargePictureCommand}" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Top" Width="30" Height="30" Margin="0,20,20,0" Background="{x:Null}">
                 <Border>
                     <SymbolIcon Symbol="Cancel" Foreground="White"/>
                 </Border>
             </Button>
-            <Button Command="{x:Bind DetailVM.SavePictureCommand}" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="30" Height="30" Margin="0,0,0,20" Background="{x:Null}">
-                <Border>
-                    <SymbolIcon Symbol="Save" Foreground="White"/>
-                </Border>
-            </Button>
         </Grid>
+        <CommandBar VerticalAlignment="Bottom" Background="#FFF6F6F6">
+            <AppBarButton Command="{x:Bind DetailVM.ToggleAddUserCommand}" Label="关注作者">
+                <TextBlock Text="&#xE1E2;" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
+            </AppBarButton>
+            <AppBarButton Command="{x:Bind DetailVM.ToggleAddFavorCommand}" Label="收藏">
+                <TextBlock  Text="&#xE1CE;" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
+            </AppBarButton>
+        </CommandBar>
     </Grid>
 </local:BindablePage>

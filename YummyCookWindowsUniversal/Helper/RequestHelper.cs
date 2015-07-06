@@ -340,6 +340,11 @@ namespace YummyCookWindowsUniversal.Helper
             }
         }
 
+        /// <summary>
+        /// 根据用户名获取用户信息
+        /// </summary>
+        /// <param name="name">用户名字</param>
+        /// <returns>User用户</returns>
         public async static Task<User> GetUserInfoAsync(string name)
         {
             try
@@ -355,24 +360,43 @@ namespace YummyCookWindowsUniversal.Helper
                     var content = await message.Content.ReadAsStringAsync();
                     var obj = JsonObject.Parse(content);
                     var value = obj["results"].GetArray().FirstOrDefault();
+
                     User user = new User();
-                    user.Gender = int.Parse(JsonParser.GetStringFromJsonObj(value, "gender"));
                     user.UserName = name;
+                    user.Gender = int.Parse(JsonParser.GetStringFromJsonObj(value, "gender"));
+                    user.ID = JsonParser.GetStringFromJsonObj(value, "objectId");
                     user.ProvinceID = int.Parse(JsonParser.GetStringFromJsonObj(value, "province_id"));
                     user.CityID = int.Parse(JsonParser.GetStringFromJsonObj(value, "city_id"));
-                    var avatar = JsonParser.GetStringFromJsonObj(value, "avatar_url");
-                    if (!string.IsNullOrEmpty(avatar))
-                    {
-                        HttpClient client_temp = new HttpClient();
 
-                        var resp = await client_temp.GetAsync(new Uri(avatar));
-                        if(resp.IsSuccessStatusCode)
+                    var friendsList = JsonParser.GetStringFromJsonObj(value, "friends_list");
+                    if(!string.IsNullOrEmpty(friendsList))
+                    {
+                        var list = friendsList.Split(',');
+                        foreach(var follow in list)
                         {
-                            var buffer = await resp.Content.ReadAsBufferAsync();
-                            user.Avatar = new BitmapImage();
-                            await user.Avatar.SetSourceAsync(buffer.AsStream().AsRandomAccessStream());
+                            user.FriendsList.Add(follow);
                         }
                     }
+
+                    var favorsList = JsonParser.GetStringFromJsonObj(value, "favors_list");
+                    if (!string.IsNullOrEmpty(favorsList))
+                    {
+                        var list = favorsList.Split(',');
+                        foreach (var favor in list)
+                        {
+                            user.FavorsList.Add(favor);
+                        }
+                    }
+
+                    var avatarUrl = JsonParser.GetStringFromJsonObj(value, "avatar_url");
+                    //Get avatar of the user
+                    if (!string.IsNullOrEmpty(avatarUrl))
+                    {
+                        var stream = await GetImageFromUrl(avatarUrl);
+                        user.Avatar = new BitmapImage();
+                        await user.Avatar.SetSourceAsync(stream);
+                    }
+                    //use the default avatar
                     else
                     {
                         var folder1 = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
@@ -402,6 +426,12 @@ namespace YummyCookWindowsUniversal.Helper
             }
         }
 
+        /// <summary>
+        /// 上传图像
+        /// </summary>
+        /// <param name="fileNameWithExt">完整的文件名</param>
+        /// <param name="srcData">byte[] 类型的二进制数据</param>
+        /// <returns>返回图片的URL 地址</returns>
         public async static Task<string> UploadImageAsync(string fileNameWithExt, byte[] srcData)
         {
             try
@@ -415,16 +445,16 @@ namespace YummyCookWindowsUniversal.Helper
 
                 HttpBufferContent bufferContent = new HttpBufferContent(bufferData);
 
-                var message = await client.PostAsync(new Uri(RequestHelper.UploadFileUrl + fileNameWithExt), bufferContent);
+                var respMsg = await client.PostAsync(new Uri(RequestHelper.UploadFileUrl + fileNameWithExt+"?a="+new Random().Next()), bufferContent);
 
-                if (message.IsSuccessStatusCode)
+                if (respMsg.IsSuccessStatusCode)
                 {
-                    JsonObject job = JsonObject.Parse(await message.Content.ReadAsStringAsync());
+                    JsonObject job = JsonObject.Parse(await respMsg.Content.ReadAsStringAsync());
                     return "http://file.bmob.cn/" + job["url"].GetString();
                 }
                 else
                 {
-                    var errorContent = await message.Content.ReadAsStringAsync();
+                    var errorContent = await respMsg.Content.ReadAsStringAsync();
                     JsonObject errorObj = JsonObject.Parse(errorContent);
 
                     return null;
@@ -438,6 +468,11 @@ namespace YummyCookWindowsUniversal.Helper
             }
         }
 
+        /// <summary>
+        /// 发表攻略
+        /// </summary>
+        /// <param name="jsonStr">合成的JSON 数据</param>
+        /// <returns></returns>
         public async static Task<bool> PublishRecipeAsync(string jsonStr)
         {
             try
@@ -464,6 +499,11 @@ namespace YummyCookWindowsUniversal.Helper
             }
         }
 
+        /// <summary>
+        /// 根据URL 获取图片流
+        /// </summary>
+        /// <param name="url">URL 地址</param>
+        /// <returns>返回IRandomAccessStream</returns>
         public static async Task<IRandomAccessStream> GetImageFromUrl(string url)
         {
             HttpClient clientImage = new HttpClient();
@@ -477,5 +517,6 @@ namespace YummyCookWindowsUniversal.Helper
             }
             else return null;
         }
+
     }
 }

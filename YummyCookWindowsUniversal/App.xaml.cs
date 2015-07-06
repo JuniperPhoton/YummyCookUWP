@@ -89,26 +89,6 @@ namespace YummyCookWindowsUniversal
             }
             Window.Current.Activate();
 
-           
-
-            // 注册后退按钮事件。调用一次就好了，别手贱。例如可以在程序启动时调用
-            SystemNavigationManager.GetForCurrentView().BackRequested += (s, e1) =>
-            {
-                if (rootFrame.CanGoBack)
-                    rootFrame.GoBack();
-            };
-            if (ApiInformationHelper.CheckHardwareButton())
-            {
-                // 如果设备有后退按钮，那么同样处理下。
-                Windows.Phone.UI.Input.HardwareButtons.BackPressed += (s, ee) =>
-                {
-                    if (rootFrame.CanGoBack)
-                    {
-                        ee.Handled = true;
-                        rootFrame.GoBack();
-                    }
-                };
-            }
         }
 
         public static void SetUpTitleBar(bool isGray=false)
@@ -139,7 +119,6 @@ namespace YummyCookWindowsUniversal
                 titleBar.ButtonInactiveForegroundColor = Colors.Black;
                 titleBar.ButtonHoverBackgroundColor = Colors.LightGray;
             }
-            
         }
 
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)

@@ -13,6 +13,6 @@ namespace YummyCookWindowsUniversal.Helper
         public const string RecipeToken = "recipe";
         public const string ShowPictureToken = "showpicture";
         public const string HidePictureToken = "hidepicture";
-
+        public const string HidePaneToken = "hidepane";
     }
 }

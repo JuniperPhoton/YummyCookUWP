@@ -86,7 +86,23 @@ namespace YummyCookWindowsUniversal.ViewModel
                   {
                       var rootFrame = Window.Current.Content as Frame;
                       rootFrame.Navigate(typeof(UserInfoPage),CurrentUser);
+                      Messenger.Default.Send(new GenericMessage<string>(""), MessengerToken.HidePaneToken);
                   });
+            }
+        }
+
+        private RelayCommand _gotoUserDetailCommand;
+        public RelayCommand GotoUserDetailCommand
+        {
+            get
+            {
+                if (_gotoUserDetailCommand != null) return _gotoUserDetailCommand;
+                return _gotoUserDetailCommand = new RelayCommand(() =>
+                {
+                    var rootFrame = Window.Current.Content as Frame;
+                    rootFrame.Navigate(typeof(UserDetailPage));
+                    Messenger.Default.Send(new GenericMessage<string>(""), MessengerToken.HidePaneToken);
+                });
             }
         }
 
@@ -131,7 +147,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                   {
                       start = 0;
                       number = 20;
-                      RecipeList = new ObservableCollection<Recipe>();
+                      //RecipeList = new ObservableCollection<Recipe>();
                       await GetRecipes();
                   });
             }
@@ -147,6 +163,8 @@ namespace YummyCookWindowsUniversal.ViewModel
                   {
                       var rootFrame = Window.Current.Content as Frame;
                       rootFrame.Navigate(typeof(AboutPage));
+                      Messenger.Default.Send(new GenericMessage<string>(""), MessengerToken.HidePaneToken);
+
                   });
             }
         }
@@ -245,11 +263,22 @@ namespace YummyCookWindowsUniversal.ViewModel
 
         public async Task GetCurrentUser()
         {
-            var user = await RequestHelper.GetUserInfoAsync(LocalSettingHelper.GetValue("username"));
-            if(user!=null)
+            var isLogin = await RequestHelper.Login(LocalSettingHelper.GetValue("username"), LocalSettingHelper.GetValue("password"));
+            if(isLogin.IsSuccess)
             {
-                this.CurrentUser = user;
-                await this.CurrentUser.LoadRegionInfo();
+                
+                var user = await RequestHelper.GetUserInfoAsync(LocalSettingHelper.GetValue("username"));
+                if (user != null)
+                {
+                    this.CurrentUser = user;
+                    await this.CurrentUser.LoadRegionInfo();
+
+                    Messenger.Default.Send(new GenericMessage<string>(user.UserName+",»¶Ó­»ØÀ´ :-)"), MessengerToken.ToastToken);
+                }
+            }
+           else
+            {
+                Messenger.Default.Send(new GenericMessage<string>("µÇÂ¼Ê§°Ü"), MessengerToken.ToastToken);
             }
         }
 

@@ -9,7 +9,7 @@ namespace YummyCookWindowsUniversal.Converter
 {
     public class UnitConverter : IValueConverter
     {
-        public static List<string> UnitList = new List<string> { "g", "kg", "勺", "个" };
+        public static List<string> UnitList = new List<string> { "g", "kg", "适量", "少许","勺", "个","块","根", "只","棵"};
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             int index = UnitList.FindIndex(s =>

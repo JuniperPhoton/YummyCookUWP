@@ -28,6 +28,23 @@ namespace YummyCookWindowsUniversal.ViewModel
         private int ingredientCount = 0;
         private int stepCount = 0;
 
+        private string _uploadBtnContent;
+        public string UploadBtnContent
+        {
+            get
+            {
+                return _uploadBtnContent;
+            }
+            set
+            {
+                if(_uploadBtnContent!=value)
+                {
+                    _uploadBtnContent = value;
+                    RaisePropertyChanged(() => UploadBtnContent);
+                }
+            }
+        }
+
         private Recipe _newRecipe;
         public Recipe NewRecipe
         {
@@ -82,6 +99,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                         {
                             NewRecipe.TitleImage = new BitmapImage();
                             await NewRecipe.TitleImage.SetSourceAsync(stream.AsRandomAccessStream());
+                            UploadBtnContent = "修改题图";
                         }
                     }
                 });
@@ -96,8 +114,6 @@ namespace YummyCookWindowsUniversal.ViewModel
                 if (_addIngredientCommand != null) return _addIngredientCommand;
                 return _addIngredientCommand = new RelayCommand(() =>
                   {
-                      //var newIng = new Ingredient("", "");
-                      //newIng.ID = ingredientCount.ToString();
                       var newlng=new Ingredient();
                       newlng.ID= ingredientCount.ToString();
                       NewRecipe.IngredientList.Add(newlng);
@@ -204,6 +220,9 @@ namespace YummyCookWindowsUniversal.ViewModel
         {
             NewRecipe = new Recipe();
             ShowLoadingVisibility = Visibility.Collapsed;
+            UploadBtnContent = "上传题图";
+
+            
         }
 
         private void ShowProgressBar()
@@ -258,32 +277,65 @@ namespace YummyCookWindowsUniversal.ViewModel
                     {
                         byte[] data = new byte[stream.Length];
                         stream.Read(data, 0, (int)stream.Length);
-                        var resultUrl = await RequestHelper.UploadImageAsync("test.jpg", data);
-                        if(resultUrl!=null)
+
+                        string resultUrl = null;
+                        for (int i = 0; i < 5; i++)
                         {
-                            NewRecipe.TitleImageUrl = resultUrl;
-                            var MainVM = (App.Current.Resources["Locator"] as ViewModelLocator).MainVM;
-                            NewRecipe.CookUser.UserName = MainVM.CurrentUser.UserName;
-                            var recipeStr= NewRecipe.MakeJson();
-                            var result = await RequestHelper.PublishRecipeAsync(recipeStr);
-                            if(result)
+                            var result = await RequestHelper.UploadImageAsync("titleImage.jpg", data);
+                            if (!string.IsNullOrEmpty(result))
                             {
-                                var rootFrame = Window.Current.Content as Frame;
-                                if(rootFrame.CanGoBack)
+                                resultUrl = result;
+                                break;
+                            }
+                        }
+                        
+                        if(resultUrl!= null)
+                        {
+                            bool isUploadAllImageOfSteps = true;
+                            foreach (var step in NewRecipe.StepsList)
+                            {
+                                if (step._tempFile != null)
                                 {
-                                    rootFrame.GoBack();
+                                    var isSuccess = await step.UploadImage();
+                                    if (!isSuccess)
+                                    {
+                                        isUploadAllImageOfSteps = false;
+                                        break;
+                                    }
                                 }
+                            }
+
+                            if(!isUploadAllImageOfSteps)
+                            {
+                                HideProgressBar();
+                                Messenger.Default.Send(new GenericMessage<string>("后台问题，上传图片失败，请再次尝试"), MessengerToken.ToastToken);
                             }
                             else
                             {
-                                HideProgressBar();
-                                Messenger.Default.Send(new GenericMessage<string>("发布失败，请再次尝试"), MessengerToken.ToastToken);
+                                NewRecipe.TitleImageUrl = resultUrl;
+                                NewRecipe.CookUser.UserName = LocalSettingHelper.GetValue("username");
+
+                                var recipeStr = NewRecipe.MakeJson();
+                                var result = await RequestHelper.PublishRecipeAsync(recipeStr);
+                                if (result)
+                                {
+                                    var rootFrame = Window.Current.Content as Frame;
+                                    if (rootFrame.CanGoBack)
+                                    {
+                                        rootFrame.GoBack();
+                                    }
+                                }
+                                else
+                                {
+                                    HideProgressBar();
+                                    Messenger.Default.Send(new GenericMessage<string>("发布失败，请再次尝试"), MessengerToken.ToastToken);
+                                }
                             }
                         }
                         else
                         {
                             HideProgressBar();
-                            Messenger.Default.Send(new GenericMessage<string>("上传图片失败，请再次尝试"), MessengerToken.ToastToken);
+                            Messenger.Default.Send(new GenericMessage<string>("上传题图失败，请再次尝试"), MessengerToken.ToastToken);
                         }
                     }
                 }
@@ -312,6 +364,7 @@ namespace YummyCookWindowsUniversal.ViewModel
             this.NewRecipe = null;
             NewRecipe = new Recipe();
             ShowLoadingVisibility = Visibility.Collapsed;
+            UploadBtnContent = "上传题图";
         }
     }
 }

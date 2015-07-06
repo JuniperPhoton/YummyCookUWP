@@ -12,6 +12,24 @@ namespace YummyCookWindowsUniversal.Model
 {
     public class User:ViewModelBase
     {
+
+        private string _id;
+        public string ID
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    _id = value;
+                    RaisePropertyChanged(() => ID);
+                }
+            }
+        }
+
         private string _userName;
         public string UserName
         {
@@ -113,8 +131,6 @@ namespace YummyCookWindowsUniversal.Model
             }
         }
 
-        
-
         private List<string> _friendsList;
         public List<string> FriendsList
         {
@@ -154,6 +170,7 @@ namespace YummyCookWindowsUniversal.Model
             FriendsList = new List<string>();
             FavorsList = new List<string>();
             RegionName = "";
+            ID = "";
         }
 
         public async Task LoadRegionInfo()
@@ -197,5 +214,6 @@ namespace YummyCookWindowsUniversal.Model
             
         }
 
+        
     }
 }

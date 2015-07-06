@@ -1,7 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
+using JP.Utils.Image;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +19,7 @@ namespace YummyCookWindowsUniversal.Model
 {
     public class Step:ViewModelBase, ICanMakeJson
     {
-        private StorageFile _tempFile;
+        public StorageFile _tempFile;
 
         private string _id;
         public string ID
@@ -86,7 +89,7 @@ namespace YummyCookWindowsUniversal.Model
             }
         }
 
-        public string ImageUrl;
+        public string ImageUrl { get; set; }
 
         private RelayCommand _insertImageCommand;
         public RelayCommand InsertImageCommand
@@ -131,12 +134,50 @@ namespace YummyCookWindowsUniversal.Model
             }
         }
 
+        private RelayCommand _showCurrentPictureCommand;
+        public RelayCommand ShowCurrentPictureCommand
+        {
+            get
+            {
+                if (_showCurrentPictureCommand != null) return _showCurrentPictureCommand;
+                return _showCurrentPictureCommand = new RelayCommand(() =>
+                  {
+                      Messenger.Default.Send(new GenericMessage<BitmapImage>(this.InsertedImage), MessengerToken.ShowPictureToken);
+                  });
+            }
+        }
+
         public Step()
         {
             ID = "";
             StepContent = "";
             ImageUrl = "";
             ShowImageVisibility = Visibility.Collapsed;
+        }
+
+        public async Task<bool> UploadImage()
+        {
+            var newTitleFile = await ImageHandleHelper.CompressImageAsync(_tempFile, 600);
+            using (var stream = await newTitleFile.OpenStreamForReadAsync())
+            {
+                byte[] data = new byte[stream.Length];
+                stream.Read(data, 0, (int)stream.Length);
+                bool isSuccess = false;
+                for(int i=0;i<5;i++)
+                {
+                    if(isSuccess)
+                    {
+                        return true;
+                    }
+                    var resultUrl = await RequestHelper.UploadImageAsync("step.jpg", data);
+                    if (!string.IsNullOrEmpty(resultUrl))
+                    {
+                        this.ImageUrl = resultUrl;
+                        isSuccess = true;
+                    }
+                }
+                return isSuccess;
+            }
         }
 
         /// <summary>
@@ -147,8 +188,8 @@ namespace YummyCookWindowsUniversal.Model
         public string MakeJson()
         {
             var content = JsonMaker.MakeJsonObj("content", this.StepContent,true);
-            var url=JsonMaker.MakeJsonObj("imge_url","",true);
-            var json = JsonMaker.MakeJsonString(new List<string> { content });
+            var url=JsonMaker.MakeJsonObj("image_url",string.IsNullOrEmpty(this.ImageUrl)?"":this.ImageUrl,true);
+            var json = JsonMaker.MakeJsonString(new List<string> { content,url });
             return json;
         }
     }
