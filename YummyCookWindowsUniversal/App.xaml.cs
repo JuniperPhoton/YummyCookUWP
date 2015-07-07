@@ -36,6 +36,7 @@ namespace YummyCookWindowsUniversal
         public static Microsoft.ApplicationInsights.TelemetryClient TelemetryClient;
 
         public static Frame ContentFrame = null;
+        public static Frame MainFrame = null;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code

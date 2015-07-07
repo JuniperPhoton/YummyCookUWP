@@ -10,11 +10,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 using YummyCookWindowsUniversal.Helper;
 using YummyCookWindowsUniversal.Interface;
 using YummyCookWindowsUniversal.Model;
+using YummyCookWindowsUniversal.View;
 
 namespace YummyCookWindowsUniversal.ViewModel
 {
@@ -170,7 +173,7 @@ namespace YummyCookWindowsUniversal.ViewModel
 
                       if(id==mainVM.CurrentUser.ID)
                       {
-                          Messenger.Default.Send(new GenericMessage<string>("无法关注你自己 ;)"), MessengerToken.ToastToken);
+                          Messenger.Default.Send(new GenericMessage<string>("无法关注你自己 ;)"), MessengerToken.ToastTokenFollow);
                           return;
                       }
                       //Check if it's already followed.
@@ -244,6 +247,21 @@ namespace YummyCookWindowsUniversal.ViewModel
                 });
             }
         }
+
+        private RelayCommand _gotoCookingModeCommand;
+        public RelayCommand GotoCookingModeCommand
+        {
+            get
+            {
+                if (_gotoCookingModeCommand != null) return _gotoCookingModeCommand;
+                return _gotoCookingModeCommand = new RelayCommand(() =>
+                  {
+                      var rootFrame = Window.Current.Content as Frame;
+                      rootFrame.Navigate(typeof(CookingPage));
+                      ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
+                  });
+            }
+        }
         #endregion
 
         public DetailedRecipeViewModel()
@@ -304,11 +322,11 @@ namespace YummyCookWindowsUniversal.ViewModel
             var isSuccess = await RequestHelper.UpdateUserInfo(LocalSettingHelper.GetValue("userid"), dic);
             if (isSuccess.IsSuccess)
             {
-                Messenger.Default.Send(new GenericMessage<string>("操作成功"), MessengerToken.ToastToken);
+                Messenger.Default.Send(new GenericMessage<string>("操作成功"), MessengerToken.ToastTokenFollow);
             }
             else
             {
-                Messenger.Default.Send(new GenericMessage<string>("操作失败"), MessengerToken.ToastToken);
+                Messenger.Default.Send(new GenericMessage<string>("操作失败"), MessengerToken.ToastTokenFollow);
             }
         }
 
@@ -321,11 +339,11 @@ namespace YummyCookWindowsUniversal.ViewModel
             var isSuccess = await RequestHelper.UpdateUserInfo(LocalSettingHelper.GetValue("userid"), dic);
             if (isSuccess.IsSuccess)
             {
-                Messenger.Default.Send(new GenericMessage<string>("操作成功"), MessengerToken.ToastToken);
+                Messenger.Default.Send(new GenericMessage<string>("操作成功"), MessengerToken.ToastTokenFollow);
             }
             else
             {
-                Messenger.Default.Send(new GenericMessage<string>("操作失败"), MessengerToken.ToastToken);
+                Messenger.Default.Send(new GenericMessage<string>("操作失败"), MessengerToken.ToastTokenFollow);
             }
         }
 
@@ -364,6 +382,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                  if(recipe!=null)
                  {
                      this.CurrentRecipe = recipe;
+                    
                      this.CheckListGrouped=GetCheckListsGrouped(this.CurrentRecipe.IngredientList);
                  }
                  await LoadDetailPage();

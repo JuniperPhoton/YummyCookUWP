@@ -21,12 +21,13 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using YummyCookWindowsUniversal.Helper;
 using YummyCookWindowsUniversal.Model;
+using YummyCookWindowsUniversal.View;
 using YummyCookWindowsUniversal.ViewModel;
 
 namespace YummyCookWindowsUniversal
 {
 
-    public sealed partial class MainPage : BindablePage,IFrame
+    public sealed partial class MainPage : BindablePage
     {
         private MainViewModel MainVM
         {
@@ -36,19 +37,13 @@ namespace YummyCookWindowsUniversal
             }
         }
 
-
         public MainPage()
         {
             this.InitializeComponent();
-
-            Messenger.Default.Register<GenericMessage<string>>(this, MessengerToken.ToastToken, act =>
-                {
-                    var msg = act.Content;
-                    ToastControl.ShowMessage(msg);
-                });
             Messenger.Default.Register<GenericMessage<string>>(this, MessengerToken.HidePaneToken, act =>
                   {
                       root_sv_PaneClosed(null, null);
+                      root_sv.IsPaneOpen = false;
                   });
             NavigationCacheMode = NavigationCacheMode.Required;
         }
@@ -74,7 +69,9 @@ namespace YummyCookWindowsUniversal
                 //StatusBar.GetForCurrentView().ForegroundColor = Colors.White;
             }
 
-            App.ContentFrame = this.ContentFrame;
+            App.MainFrame = this.MainContentFrame;
+
+            MainContentFrame.Navigate(typeof(HomePage));
         }
 
         private void root_sv_PaneClosed(SplitView sender, object args)
@@ -82,31 +79,6 @@ namespace YummyCookWindowsUniversal
             MaskOutStory.Begin();
             HamOutStory.Begin();
         }
-
-        protected override void RegisterHandleBackLogic()
-        {
-            base.RegisterHandleBackLogic();
-        }
-
-        protected override void UnRegisterHandleBackLogic()
-        {
-            base.UnRegisterHandleBackLogic();
-        }
-
-        public Frame GetFrame()
-        {
-            if (ContentFrame.Visibility == Visibility.Visible)
-            {
-                App.SetUpTitleBar();
-                return ContentFrame;
-                
-            }
-            else
-            {
-                App.SetUpTitleBar(true);
-                return Frame;
-                
-            }
-        }
+       
     }
 }

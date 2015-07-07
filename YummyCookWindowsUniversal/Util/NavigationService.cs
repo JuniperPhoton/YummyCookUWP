@@ -1,17 +1,4 @@
-﻿// ****************************************************************************
-// <copyright file="NavigationService.cs" company="GalaSoft Laurent Bugnion">
-// Copyright © GalaSoft Laurent Bugnion 2009-2015
-// </copyright>
-// ****************************************************************************
-// <author>Laurent Bugnion</author>
-// <email>laurent@galasoft.ch</email>
-// <date>02.10.2014</date>
-// <project>GalaSoft.MvvmLight</project>
-// <web>http://www.mvvmlight.net</web>
-// <license>
-// See license.txt in this solution or http://www.galasoft.ch/license_MIT.txt
-// </license>
-// ****************************************************************************
+﻿
 
 using System;
 using System.Collections.Generic;
@@ -143,7 +130,7 @@ namespace GalaSoft.MvvmLight.Views
         {
             Frame frame = null;
             var rootFrame = Window.Current.Content as Frame;
-            IFrame intf = rootFrame.Content as IFrame;
+            IFrame intf = ((rootFrame.Content as Page).FindName("MainContentFrame") as Frame).Content as IFrame;
             if (intf == null)
                 frame = (Frame)Window.Current.Content;
             else

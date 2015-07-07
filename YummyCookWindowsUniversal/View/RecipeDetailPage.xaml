@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:YummyCookWindowsUniversal"
+    xmlns:common="using:YummyCookWindowsUniversal"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:model="using:YummyCookWindowsUniversal.Model"
     xmlns:attach="using:YummyCookWindowsUniversal.Attached"
@@ -340,7 +341,19 @@
                 </ListView>
             </StackPanel>
         </ScrollViewer>
-        <Grid  x:Name="grid" d:IsHidden="True" Visibility="{x:Bind DetailVM.ShowLargePictureVisibility,Mode=OneWay}">
+        
+        <CommandBar VerticalAlignment="Bottom" Background="#FFF6F6F6">
+            <AppBarButton Command="{x:Bind DetailVM.GotoCookingModeCommand}" Label="亨饪模式">
+                <Image Source="ms-appx:///Assets/Icon/Cooking.png"/>
+            </AppBarButton>
+            <AppBarButton Command="{x:Bind DetailVM.ToggleAddUserCommand}" Label="关注作者">
+                <TextBlock Text="&#xE1E2;" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
+            </AppBarButton>
+            <AppBarButton Command="{x:Bind DetailVM.ToggleAddFavorCommand}" Label="收藏">
+                <TextBlock  Text="&#xE1CE;" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
+            </AppBarButton>
+        </CommandBar>
+        <Grid d:IsHidden="True"  x:Name="grid" Visibility="{x:Bind DetailVM.ShowLargePictureVisibility,Mode=OneWay}" Grid.RowSpan="2">
             <Border attach:UIElementTapCommand.ItemTapCommand="{x:Bind DetailVM.HideLargePictureCommand}" Background="Black" Opacity="0.9"/>
             <Image Margin="40,40,40,70" Source="{x:Bind DetailVM.CurrentImage,Mode=OneWay}"/>
             <Button Command="{x:Bind DetailVM.HideLargePictureCommand}" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Top" Width="30" Height="30" Margin="0,20,20,0" Background="{x:Null}">
@@ -349,13 +362,6 @@
                 </Border>
             </Button>
         </Grid>
-        <CommandBar VerticalAlignment="Bottom" Background="#FFF6F6F6">
-            <AppBarButton Command="{x:Bind DetailVM.ToggleAddUserCommand}" Label="关注作者">
-                <TextBlock Text="&#xE1E2;" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
-            </AppBarButton>
-            <AppBarButton Command="{x:Bind DetailVM.ToggleAddFavorCommand}" Label="收藏">
-                <TextBlock  Text="&#xE1CE;" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
-            </AppBarButton>
-        </CommandBar>
+        <common:ToastUC d:IsHidden="True" x:Name="ToastControl" />
     </Grid>
 </local:BindablePage>

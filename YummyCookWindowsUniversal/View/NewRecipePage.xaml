@@ -164,7 +164,7 @@
      
     </common:BindablePage.Resources>
     <common:BindablePage.BottomAppBar>
-        <CommandBar Background="{StaticResource CookTheme}" RequestedTheme="Dark">
+        <CommandBar>
             <AppBarButton Label="发布" Icon="Send" Command="{x:Bind NewRecipeVM.PublishCommand}"/>
             <AppBarButton Label="取消" Icon="Cancel" Command="{x:Bind NewRecipeVM.CancelCommand}"/>
         </CommandBar>
@@ -173,7 +173,7 @@
         <ScrollViewer>
             <StackPanel Orientation="Vertical">
                 <Grid>
-                    <Border Background="{StaticResource CookTheme}" Opacity="0.8"/>
+                    <Border Background="{StaticResource CookThemeDark}"/>
                     <Image Height="300" Stretch="UniformToFill" Source="ms-appx:///Assets/Image/foods_backgrd.png" Opacity="0.2"/>
                     <Image Height="300" Source="{x:Bind NewRecipeVM.NewRecipe.TitleImage,Mode=OneWay}" Stretch="UniformToFill"/>
                     <Button Command="{x:Bind NewRecipeVM.UploadTitleImgCommand}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Style="{StaticResource BtnStyle}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" Margin="10,0,0,10">
@@ -186,7 +186,7 @@
                     </Button>
                 </Grid>
                 <TextBox Text="{x:Bind NewRecipeVM.NewRecipe.Title,Mode=TwoWay}" PlaceholderText="添加标题" BorderBrush="{StaticResource CookTheme}" Margin="0,10,0,0" FontSize="20" Style="{StaticResource TextBoxStyle1}" SelectionHighlightColor="{StaticResource CookTheme}" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0,0,0,2"/>
-                <StackPanel Orientation="Vertical" Margin="10,0,10,31">
+                <StackPanel Orientation="Vertical" Margin="10,20,10,31">
                     <Button Command="{x:Bind NewRecipeVM.AddIngredientCommand}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Style="{StaticResource BtnStyle}" VerticalAlignment="Stretch" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}">
                         <Grid  BorderThickness="2" Margin="0" Height="30" Width="100" Background="{StaticResource CookTheme}" BorderBrush="#FFFFABAB">
                             <StackPanel Orientation="Horizontal">

@@ -38,6 +38,12 @@ namespace YummyCookWindowsUniversal.View
             {
                 HidePictureStory.Begin();
             });
+            Messenger.Default.Register<GenericMessage<string>>(this, MessengerToken.ToastTokenFollow, act =>
+            {
+                var msg = act.Content;
+                ToastControl.ShowMessage(msg);
+            });
+            NavigationCacheMode = NavigationCacheMode.Disabled;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

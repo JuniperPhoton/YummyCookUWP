@@ -9,6 +9,7 @@ namespace YummyCookWindowsUniversal.Helper
     public class MessengerToken
     {
         public const string ToastToken = "toast";
+        public const string ToastTokenFollow = "toast_follow";
         public const string UpdateUserToken = "update_user";
         public const string RecipeToken = "recipe";
         public const string ShowPictureToken = "showpicture";

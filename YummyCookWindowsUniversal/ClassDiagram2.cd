@@ -1,0 +1,339 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="YummyCookWindowsUniversal.App" Collapsed="true">
+    <Position X="20.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAQAAAAAAAAAAAAAAAAAAAAQACAQAAIAAg=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.BindablePage">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACBAAAAAAAAAAAAAQAAAAAACQAAAgAAAAAAAA=</HashCode>
+      <FileName>Base\BindablePage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.ToastUC" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserControl\ToastUC.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.LoginPage">
+    <Position X="8" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\LoginPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.MainPage">
+    <Position X="3.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAABAIAAAAAIAAAAAQAAAABACAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\MainPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.StartPage">
+    <Position X="5.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\StartPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.UserInfoPage">
+    <Position X="12" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\UserInfoPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Converter.IsMainConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\IsMainConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Converter.UnitConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAQAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\UnitConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="StateTriggersSample.CustomTriggers.ControlSizeTrigger" Collapsed="true">
+    <Position X="24" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAkAAAEIAAAAAACAAAAAAQQAAAAAAQAAAAEAI=</HashCode>
+      <FileName>CustomTriggers\ControlSizeTrigger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StateTriggersSample.CustomTriggers.DeviceFamilyTrigger" Collapsed="true">
+    <Position X="18.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>CustomTriggers\DeviceFamilyTrigger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StateTriggersSample.CustomTriggers.InputTypeTrigger" Collapsed="true">
+    <Position X="24" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAIAAAAAAAAAAAAAAQKIAAAAAAAAAEAA=</HashCode>
+      <FileName>CustomTriggers\InputTypeTrigger.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Helper.ApiInformationHelper" Collapsed="true">
+    <Position X="18.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Helper\ApiInformationHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Helper.ConfigHelper" Collapsed="true">
+    <Position X="22.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAA=</HashCode>
+      <FileName>Helper\ConfigHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Helper.JsonMaker" Collapsed="true">
+    <Position X="22.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>Helper\JsonMaker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Helper.JsonParser" Collapsed="true">
+    <Position X="18.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAIAAAAAAA=</HashCode>
+      <FileName>Helper\JsonParser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Helper.MessengerToken" Collapsed="true">
+    <Position X="24" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAQAEAAQAAAAABAAAAAAgAAAAAA=</HashCode>
+      <FileName>Helper\MessengerToken.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Helper.RequestHelper" Collapsed="true">
+    <Position X="18.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EIAAAAEQAABACAAAAAAAgAQAACAAAAABAAASBACAAAI=</HashCode>
+      <FileName>Helper\RequestHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Model.City">
+    <Position X="33.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABIAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\City.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Model.GroupInfoList" Collapsed="true">
+    <Position X="20.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\GroupInfoList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Model.Ingredient" BaseTypeListCollapsed="true">
+    <Position X="32" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAgABAJQBAAAAQBAAQAQAAAAAABAAAgAQ=</HashCode>
+      <FileName>Model\Ingredient.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Model.NavigationData">
+    <Position X="35.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\NavigationData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Model.Province">
+    <Position X="35.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Province.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Model.Recipe" BaseTypeListCollapsed="true">
+    <Position X="33.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAgGAIAAAEAABAIAACAAAAAAwAAAEAAEAAAABAA=</HashCode>
+      <FileName>Model\Recipe.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Model.RegionList" Collapsed="true">
+    <Position X="25.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgACAAAAAAAgAAAAAAABAAAAAAAAQAEgAAAAAAAAAAA=</HashCode>
+      <FileName>Model\RegionList.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Model.ResponseData">
+    <Position X="35.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAABAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\ResponseData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Model.Step" BaseTypeListCollapsed="true">
+    <Position X="30.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAQIQAAAgBgAAABABAIAhAgQAAAAoAAgAAAAAAAAA=</HashCode>
+      <FileName>Model\Step.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Model.User">
+    <Position X="37.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAGAABAAgAiACAAAxABAAAAAAAAAACAQIBABAIAAA=</HashCode>
+      <FileName>Model\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Attached.ListViewCommandEx" Collapsed="true">
+    <Position X="25.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAIAgAAAAAAAAAgEACAAAAAIAAAQAAAAAAAA=</HashCode>
+      <FileName>Util\ListViewCommandEx.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.Attached.UIElementTapCommand" Collapsed="true">
+    <Position X="22.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAIAACAAAAAAAAAAAAAAACAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Util\UIElementTapCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GalaSoft.MvvmLight.Views.NavigationServiceEX" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEEAAAIAAAEAAAADAACAAAAAAAAEAAAAAAAABAIA=</HashCode>
+      <FileName>Util\NavigationService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.View.AboutPage">
+    <Position X="12.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\AboutPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.View.NewRecipePage">
+    <Position X="1.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAQAAAAAAAAAAEA=</HashCode>
+      <FileName>View\NewRecipePage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.View.RecipeDetailPage">
+    <Position X="3.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\RecipeDetailPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.View.UserDetailPage">
+    <Position X="10" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\UserDetailPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.ViewModel.DetailedRecipeViewModel" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CgAEAAAAQQBAEQBECAACABAAGQAABACAABQMAACAAAA=</HashCode>
+      <FileName>ViewModel\DetailedRecipeViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.ViewModel.MainViewModel" BaseTypeListCollapsed="true">
+    <Position X="20.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QACAAABACIBQQCBhgEEAAEAAAAAAAAIAAAhIAhARAIA=</HashCode>
+      <FileName>ViewModel\MainViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.ViewModel.NewRecipeViewModel" BaseTypeListCollapsed="true">
+    <Position X="26.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QgABAAAAKAZAECBEAEAAQAICQAACAAIAgIgUCEBBAwA=</HashCode>
+      <FileName>ViewModel\NewRecipeViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.ViewModel.StartViewModel" BaseTypeListCollapsed="true">
+    <Position X="18.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAABAAARAAAAAAAAAIAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModel\StartViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.ViewModel.UserInfoViewModel" BaseTypeListCollapsed="true">
+    <Position X="22.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AoSEkEAAGoRIAEBAAEAAAABjARgAAUAiAUoFAAABLiA=</HashCode>
+      <FileName>ViewModel\UserInfoViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="YummyCookWindowsUniversal.ViewModel.ViewModelLocator" Collapsed="true">
+    <Position X="20.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAABAAAAAAAAAEAAAEA=</HashCode>
+      <FileName>ViewModel\ViewModelLocator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="YummyCookWindowsUniversal.Interface.ICanMakeJson" Collapsed="true">
+    <Position X="18.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interface\ICanMakeJson.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="YummyCookWindowsUniversal.Interface.INavigable" Collapsed="true">
+    <Position X="22.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interface\INavigable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="YummyCookWindowsUniversal.Util.INavigationServiceEx" Collapsed="true">
+    <Position X="24" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Interface\INavigationServiceEx.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="GalaSoft.MvvmLight.Views.IFrame" Collapsed="true">
+    <Position X="20.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Util\NavigationService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

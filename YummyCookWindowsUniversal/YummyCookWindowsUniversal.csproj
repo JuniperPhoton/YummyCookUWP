@@ -122,12 +122,20 @@
     <Compile Include="Util\ListViewCommandEx.cs" />
     <Compile Include="Util\NavigationService.cs" />
     <Compile Include="Util\UIElementTapCommand.cs" />
+    <Compile Include="ViewModel\CookingModeViewModel.cs" />
     <Compile Include="ViewModel\DetailedRecipeViewModel.cs" />
+    <Compile Include="ViewModel\FavorViewModel.cs" />
     <Compile Include="ViewModel\NewRecipeViewModel.cs" />
     <Compile Include="ViewModel\UserInfoViewModel.cs" />
     <Compile Include="Base\BindablePage.cs" />
     <Compile Include="View\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CookingPage.xaml.cs">
+      <DependentUpon>CookingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
@@ -152,8 +160,8 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\StartViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="View\UserDetailPage.xaml.cs">
-      <DependentUpon>UserDetailPage.xaml</DependentUpon>
+    <Compile Include="View\FavorPage.xaml.cs">
+      <DependentUpon>FavorPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserInfoPage.xaml.cs">
       <DependentUpon>UserInfoPage.xaml</DependentUpon>
@@ -167,11 +175,13 @@
     <Content Include="Assets\City.txt" />
     <Content Include="Assets\Font\FREESCPT.TTF" />
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="packages.config" />
     <None Include="YummyCookWindowsUniversal_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Icon\Account.png" />
+    <Content Include="Assets\Icon\Cooking.png" />
     <Content Include="Assets\Icon\DefaultAccount.png" />
     <Content Include="Assets\Icon\Food.png" />
     <Content Include="Assets\Icon\Ingredient.png" />
@@ -224,6 +234,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\CookingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -244,7 +262,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\UserDetailPage.xaml">
+    <Page Include="View\FavorPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Views;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +7,6 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -15,25 +15,22 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using YummyCookWindowsUniversal.Helper;
-using YummyCookWindowsUniversal.Interface;
 using YummyCookWindowsUniversal.ViewModel;
 
 
 namespace YummyCookWindowsUniversal.View
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class NewRecipePage : BindablePage
+
+    public sealed partial class HomePage : BindablePage, IFrame
     {
-        public NewRecipeViewModel NewRecipeVM
+        private MainViewModel MainVM
         {
             get
             {
-                return DataContext as NewRecipeViewModel;
+                return (DataContext as MainViewModel);
             }
         }
-        public NewRecipePage()
+        public HomePage()
         {
             this.InitializeComponent();
 
@@ -47,14 +44,27 @@ namespace YummyCookWindowsUniversal.View
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            //App.SetUpTitleBar(true);
+            App.ContentFrame = this.ContentFrame;
+            
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            NewRecipeVM.Cleanup();
             base.OnNavigatedFrom(e);
         }
 
+        public Frame GetFrame()
+        {
+            if (ContentFrame.Visibility == Visibility.Visible)
+            {
+                App.SetUpTitleBar();
+                return ContentFrame;
+            }
+            else
+            {
+                App.SetUpTitleBar(true);
+                return Frame;
+            }
+        }
     }
 }

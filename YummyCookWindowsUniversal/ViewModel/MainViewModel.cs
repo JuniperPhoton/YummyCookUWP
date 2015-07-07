@@ -15,6 +15,7 @@ using YummyCookWindowsUniversal.View;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Views;
 using System.Threading.Tasks;
+using JP.Utils.Network;
 
 namespace YummyCookWindowsUniversal.ViewModel
 {
@@ -23,6 +24,67 @@ namespace YummyCookWindowsUniversal.ViewModel
     {
         private int start = 0;
         private int number = 20;
+
+        private string _title;
+        public string Title
+        {
+            get
+            {
+                return _title;
+            }
+            set
+            {
+                if (_title != value)
+                {
+                    _title = value;
+                    if (value == "美食广场")
+                    {
+                        MainRadioChecked = true;
+                        FavorRadioChecked = false;
+                    }
+                    else
+                    {
+                        MainRadioChecked = false;
+                        FavorRadioChecked = true;
+                    }
+                    RaisePropertyChanged(() => Title);
+                }
+            }
+        }
+
+        private System.Nullable<bool> _mainRadioChecked;
+        public System.Nullable<bool> MainRadioChecked
+        {
+            get
+            {
+                return _mainRadioChecked;
+            }
+            set
+            {
+                if(_mainRadioChecked!=value)
+                {
+                    _mainRadioChecked = value;
+                    RaisePropertyChanged(() => MainRadioChecked);
+                }
+            }
+        }
+
+        private System.Nullable<bool> _favorRadioChecked;
+        public System.Nullable<bool> FavorRadioChecked
+        {
+            get
+            {
+                return _favorRadioChecked;
+            }
+            set
+            {
+                if(_favorRadioChecked != value)
+                {
+                    _favorRadioChecked = value;
+                    RaisePropertyChanged(() => FavorRadioChecked);
+                }
+            }
+        }
 
         private Visibility _showLoadingVisibility;
         public Visibility ShowLoadingVisibility
@@ -76,6 +138,8 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
+        #region SplitView Pane involved
+
         private RelayCommand _modifyInfoCommand;
         public RelayCommand ModifyInfoCommand
         {
@@ -83,28 +147,85 @@ namespace YummyCookWindowsUniversal.ViewModel
             {
                 if (_modifyInfoCommand != null) return _modifyInfoCommand;
                 return _modifyInfoCommand = new RelayCommand(() =>
-                  {
-                      var rootFrame = Window.Current.Content as Frame;
-                      rootFrame.Navigate(typeof(UserInfoPage),CurrentUser);
-                      Messenger.Default.Send(new GenericMessage<string>(""), MessengerToken.HidePaneToken);
-                  });
-            }
-        }
-
-        private RelayCommand _gotoUserDetailCommand;
-        public RelayCommand GotoUserDetailCommand
-        {
-            get
-            {
-                if (_gotoUserDetailCommand != null) return _gotoUserDetailCommand;
-                return _gotoUserDetailCommand = new RelayCommand(() =>
                 {
                     var rootFrame = Window.Current.Content as Frame;
-                    rootFrame.Navigate(typeof(UserDetailPage));
+                    rootFrame.Navigate(typeof(UserInfoPage), CurrentUser);
                     Messenger.Default.Send(new GenericMessage<string>(""), MessengerToken.HidePaneToken);
                 });
             }
         }
+
+        private RelayCommand _gotoMainCommand;
+        public RelayCommand GotoMainCommand
+        {
+            get
+            {
+                if (_gotoMainCommand != null) return _gotoMainCommand;
+                return _gotoMainCommand = new RelayCommand(() =>
+                {
+                    App.MainFrame.Navigate(typeof(HomePage));
+                    Title = "美食广场";
+                    Messenger.Default.Send(new GenericMessage<string>(""), MessengerToken.HidePaneToken);
+                });
+            }
+        }
+
+        private RelayCommand _gotoFavorCommand;
+        public RelayCommand GotoFavorCommand
+        {
+            get
+            {
+                if (_gotoFavorCommand != null) return _gotoFavorCommand;
+                return _gotoFavorCommand = new RelayCommand(() =>
+                {
+                    App.MainFrame.Navigate(typeof(FavorPage),CurrentUser);
+                    Title = "我的收藏";
+                    Messenger.Default.Send(new GenericMessage<string>(""), MessengerToken.HidePaneToken);
+                });
+            }
+        }
+
+        private RelayCommand _gotoAboutCommand;
+        public RelayCommand GoToAboutCommand
+        {
+            get
+            {
+                if (_gotoAboutCommand != null) return _gotoAboutCommand;
+                return _gotoAboutCommand = new RelayCommand(() =>
+                {
+                    var rootFrame = Window.Current.Content as Frame;
+                    rootFrame.Navigate(typeof(AboutPage));
+                    Messenger.Default.Send(new GenericMessage<string>(""), MessengerToken.HidePaneToken);
+                });
+            }
+        }
+
+        private RelayCommand _logoutCommand;
+        public RelayCommand LogoutCommand
+        {
+            get
+            {
+                if (_logoutCommand != null) return _logoutCommand;
+                return _logoutCommand = new RelayCommand(async () =>
+                {
+                    MessageDialog md = new MessageDialog("注销后可以登录其他账户.", "注意");
+                    md.Commands.Add(new UICommand("确认", act =>
+                    {
+                        LocalSettingHelper.CleanUpAll();
+                        var rootFrame = Window.Current.Content as Frame;
+                        rootFrame.Navigate(typeof(StartPage));
+                    }));
+                    md.Commands.Add(new UICommand("取消", act =>
+                    {
+
+                    }));
+                    md.DefaultCommandIndex = 1;
+
+                    await md.ShowAsync();
+                });
+            }
+        }
+        #endregion
 
         private RelayCommand<Recipe> _gotoDetailCommand;
         public RelayCommand<Recipe> GotoDetailCommand
@@ -113,15 +234,23 @@ namespace YummyCookWindowsUniversal.ViewModel
             {
                 if (_gotoDetailCommand != null) return _gotoDetailCommand;
                 return _gotoDetailCommand = new RelayCommand<Recipe>((recipe) =>
-                  {
-                      NavigationServiceEX service = new NavigationServiceEX();
-                      service.Configure("DetailedPage", typeof(RecipeDetailPage));
-                      service.NavigateTo("DetailedPage");
-
-                      Messenger.Default.Send<GenericMessage<Recipe>>(new GenericMessage<Recipe>(recipe), MessengerToken.RecipeToken);
-                  });
+                {
+                    if (App.ContentFrame.Visibility == Visibility.Visible)
+                    {
+                        App.ContentFrame.Navigate(typeof(RecipeDetailPage));
+                    }
+                    else
+                    {
+                        var rootFrame = Window.Current.Content as Frame;
+                        rootFrame.Navigate(typeof(RecipeDetailPage));
+                    }
+                    Messenger.Default.Send(new GenericMessage<Recipe>(recipe), MessengerToken.RecipeToken);
+                });
             }
         }
+
+        #region Commandbar involved
+
 
         private RelayCommand _addNewCommand;
         public RelayCommand AddNewCommand
@@ -153,47 +282,7 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
-        private RelayCommand _gotoAboutCommand;
-        public RelayCommand GoToAboutCommand
-        {
-            get
-            {
-                if (_gotoAboutCommand != null) return _gotoAboutCommand;
-                return _gotoAboutCommand = new RelayCommand(() =>
-                  {
-                      var rootFrame = Window.Current.Content as Frame;
-                      rootFrame.Navigate(typeof(AboutPage));
-                      Messenger.Default.Send(new GenericMessage<string>(""), MessengerToken.HidePaneToken);
-
-                  });
-            }
-        }
-
-        private RelayCommand _logoutCommand;
-        public RelayCommand LogoutCommand
-        {
-            get
-            {
-                if (_logoutCommand != null) return _logoutCommand;
-                return _logoutCommand = new RelayCommand(async () =>
-                {
-                    MessageDialog md = new MessageDialog("注销后可以登录其他账户.", "注意");
-                    md.Commands.Add(new UICommand("确认", act =>
-                        {
-                            LocalSettingHelper.CleanUpAll();
-                            var rootFrame = Window.Current.Content as Frame;
-                            rootFrame.Navigate(typeof(StartPage));
-                        }));
-                    md.Commands.Add(new UICommand("取消", act =>
-                     {
-
-                     }));
-                    md.DefaultCommandIndex = 1;
-                    
-                    await md.ShowAsync();
-                });
-            }
-        }
+        #endregion
 
         public MainViewModel()
         {
@@ -205,9 +294,11 @@ namespace YummyCookWindowsUniversal.ViewModel
                   await GetCurrentUser();
               });
 
+            MainRadioChecked = true;
+            FavorRadioChecked = false;
         }
 
-        public async void InitialSampleData()
+        private async void InitialSampleData()
         {
             RecipeList = new ObservableCollection<Recipe>();
             for (int i = 0; i < 10; i++)
@@ -284,11 +375,13 @@ namespace YummyCookWindowsUniversal.ViewModel
 
         public void Activate(object param)
         {
+            Title = "美食广场";
             if (RecipeList == null) RecipeList = new ObservableCollection<Recipe>();
+            
             if (RecipeList.Count == 0)
             {
-                GetRecipes();
-                GetCurrentUser();
+                var getRecipeTask=GetRecipes();
+                var getUserTask=GetCurrentUser();
             }
         }
 

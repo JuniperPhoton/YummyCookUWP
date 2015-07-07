@@ -1,0 +1,102 @@
+﻿<local:BindablePage
+    x:Class="YummyCookWindowsUniversal.View.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+     xmlns:local="using:YummyCookWindowsUniversal"
+    xmlns:model="using:YummyCookWindowsUniversal.Model"
+    xmlns:attach="using:YummyCookWindowsUniversal.Attached"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    DataContext="{Binding MainVM,Source={StaticResource Locator}}">
+
+    <Grid x:Name="RootGrid">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="Column2.Width" Value="2*"/>
+                        <Setter Target="ContentGrid.Visibility" Value="Visible"/>
+                        <Setter Target="ContentFrame.Visibility" Value="Visibile"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="Column2.Width" Value="0*"/>
+                        <Setter Target="ContentGrid.Visibility" Value="Collapsed"/>
+                        <Setter Target="ContentFrame.Visibility" Value="Collapsed"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="Column1" Width="1*"/>
+            <ColumnDefinition x:Name="Column2" Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <ListView 
+					x:Name="RecipeListView"
+					Style="{StaticResource ListViewStyle1}" 
+					Grid.Column="0" 
+					Grid.ColumnSpan="1" 
+					HorizontalContentAlignment="Stretch" 
+					VerticalContentAlignment="Stretch"
+                    IsItemClickEnabled="True"
+                    attach:ListViewCommandEx.ItemClickCommand="{x:Bind MainVM.GotoDetailCommand}"
+					ItemContainerStyle="{StaticResource ListViewItemStyle1}" 
+					SelectionMode="None" Margin="0,0,0,50"
+					ItemsSource="{x:Bind MainVM.RecipeList,Mode=OneWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:Recipe">
+                    <Grid Height="150" Margin="-10,3,-10,0" d:DesignWidth="224.833">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Image Stretch="UniformToFill" Source="{x:Bind TitleImage,Mode=OneWay}" Grid.RowSpan="3"/>
+                        <Border BorderBrush="{StaticResource CookThemeBlackDark}" BorderThickness="1" Grid.RowSpan="3" Background="{StaticResource CookThemeBlackDark}" Opacity="0.5"/>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal">
+                            <Border BorderThickness="1" Height="6" Width="20" Background="White" BorderBrush="White"/>
+                            <Ellipse Fill="White" Height="7" Stroke="White" Width="7" Margin="3,0,0,0"/>
+                            <TextBlock x:Name="title" Text="{x:Bind Title,Mode=OneWay}" Margin="10,0" TextWrapping="Wrap" d:LayoutOverrides="TopPosition, BottomPosition" HorizontalAlignment="Center" FontWeight="Bold" Foreground="White" FontSize="26.667"/>
+                            <Ellipse Fill="White" Height="7" Stroke="White" Width="7" Margin="0,0,3,0"/>
+                            <Border BorderThickness="1" Height="6" Width="20" Background="White" BorderBrush="White"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center" Grid.Row="3" Orientation="Horizontal" Margin="0,10,0,0" VerticalAlignment="Top">
+                            <Ellipse HorizontalAlignment="Left" Width="25" Height="25" Stroke="White" d:LayoutOverrides="Height, TopMargin, BottomMargin, TopPosition, BottomPosition">
+                                <Ellipse.Fill>
+                                    <ImageBrush
+        						Stretch="Fill" ImageSource="{x:Bind CookUser.Avatar,Mode=OneWay}"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <TextBlock x:Name="nameBlock" Text="{x:Bind CookUser.UserName,Mode=OneWay}" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0" Foreground="White"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Grid Visibility="{x:Bind MainVM.ShowLoadingVisibility,Mode=OneWay}">
+            <Border Background="White" Opacity="0.7"/>
+            <ProgressRing IsActive="True" Foreground="{StaticResource CookTheme}" Margin="20,0,0,0" Width="30" Height="30"/>
+        </Grid>
+        <CommandBar VerticalAlignment="Bottom">
+            <AppBarButton Label="添加" Command="{x:Bind MainVM.AddNewCommand}" Icon="Add"/>
+            <AppBarButton Label="刷新" Command="{x:Bind MainVM.RefreshCommand}" Icon="Refresh"/>
+        </CommandBar>
+        <local:ToastUC x:Name="ToastControl" Grid.RowSpan="3"/>
+
+        <Grid x:Name="ContentGrid" Grid.Column="1"  Visibility="Visible">
+            <Image Source="ms-appx:///Assets/Image/Food_Sample (4).jpg" Stretch="UniformToFill"/>
+            <Border Background="White" Opacity="0.8"/>
+            <Frame x:Name="ContentFrame"/>
+        </Grid>
+
+    </Grid>
+</local:BindablePage>
