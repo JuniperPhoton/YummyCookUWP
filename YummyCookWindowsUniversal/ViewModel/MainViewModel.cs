@@ -149,7 +149,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                 return _modifyInfoCommand = new RelayCommand(() =>
                 {
                     var rootFrame = Window.Current.Content as Frame;
-                    rootFrame.Navigate(typeof(UserInfoPage), CurrentUser);
+                    rootFrame.Navigate(typeof(ModifyUserInfoPage), CurrentUser);
                     Messenger.Default.Send(new GenericMessage<string>(""), MessengerToken.HidePaneToken);
                 });
             }
@@ -361,6 +361,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                 var user = await RequestHelper.GetUserInfoAsync(LocalSettingHelper.GetValue("username"));
                 if (user != null)
                 {
+                    await user.DownloadAvatar();
                     this.CurrentUser = user;
                     await this.CurrentUser.LoadRegionInfo();
 

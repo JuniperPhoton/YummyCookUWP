@@ -23,7 +23,7 @@ namespace YummyCookWindowsUniversal
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class UserInfoPage : BindablePage
+    public sealed partial class ModifyUserInfoPage : BindablePage
     {
         private UserInfoViewModel UserInfoVM
         {
@@ -32,7 +32,7 @@ namespace YummyCookWindowsUniversal
                 return (DataContext as UserInfoViewModel);
             }
         }
-        public UserInfoPage()
+        public ModifyUserInfoPage()
         {
             this.InitializeComponent();
             Messenger.Default.Register<GenericMessage<string>>(this, MessengerToken.ToastToken, act =>

@@ -366,7 +366,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                     SelectedProvinceID = 0;
                     SelectedCityID = 0;
                     TempAvatar = new BitmapImage(new Uri("ms-appx://Assets/Icon/Account.png"));
-                    rootFrame.Navigate(typeof(UserInfoPage));
+                    rootFrame.Navigate(typeof(ModifyUserInfoPage));
                 }
             }
             else

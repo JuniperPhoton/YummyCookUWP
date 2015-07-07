@@ -43,7 +43,7 @@ namespace YummyCookWindowsUniversal.View
                 var msg = act.Content;
                 ToastControl.ShowMessage(msg);
             });
-            NavigationCacheMode = NavigationCacheMode.Disabled;
+            NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

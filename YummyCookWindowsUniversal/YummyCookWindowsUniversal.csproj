@@ -163,8 +163,8 @@
     <Compile Include="View\FavorPage.xaml.cs">
       <DependentUpon>FavorPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\UserInfoPage.xaml.cs">
-      <DependentUpon>UserInfoPage.xaml</DependentUpon>
+    <Compile Include="View\ModifyUserInfoPage.xaml.cs">
+      <DependentUpon>ModifyUserInfoPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -266,7 +266,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\UserInfoPage.xaml">
+    <Page Include="View\ModifyUserInfoPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

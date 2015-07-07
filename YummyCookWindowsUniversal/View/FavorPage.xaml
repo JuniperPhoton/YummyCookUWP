@@ -9,6 +9,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <common:BindablePage.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Label="刷新" Command="{x:Bind FavorVM.RefreshCommand}" Icon="Refresh"/>
+        </CommandBar>
+    </common:BindablePage.BottomAppBar>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Pivot SelectedIndex="{x:Bind FavorVM.SelectedIndex,Mode=TwoWay}">
@@ -28,17 +33,32 @@
 					ItemsSource="{x:Bind FavorVM.FriendsList,Mode=OneWay}">
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="model:User">
-                                <Grid Height="50" Margin="-10,10,-10,0" d:DesignWidth="224.833">
+                                <Grid Height="50" Margin="-10,10,-10,10" d:DesignWidth="224.833">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="50"/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <Ellipse>
                                         <Ellipse.Fill>
-                                            <ImageBrush Stretch="UniformToFill" ImageSource="ms-appx:///Assets/Image/1.jpg"/>
+                                            <ImageBrush Stretch="UniformToFill" ImageSource="{x:Bind Avatar,Mode=OneWay}"/>
                                         </Ellipse.Fill>
                                     </Ellipse>
-                                    <TextBlock Grid.Column="1" Text="JUNIPER PHOTON" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                    <Grid  Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock  Text="{x:Bind UserName,Mode=OneWay}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                        <StackPanel Opacity="0.6" Grid.Row="1" Margin="10,0,0,0" Orientation="Horizontal">
+                                            <TextBlock Text="关注数："/>
+                                            <TextBlock  Text="{x:Bind FriendsIDList.Count,Mode=OneWay}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                            <TextBlock Margin="10,0,0,0" Text="收藏数："/>
+                                            <TextBlock  Text="{x:Bind FavorsIDList.Count,Mode=OneWay}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                            <TextBlock Margin="10,0,0,0" Text="菜谱数："/>
+                                            <TextBlock  Text="{x:Bind FavorsIDList.Count,Mode=OneWay}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+
+                                        </StackPanel>
+                                    </Grid>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -47,21 +67,18 @@
             </PivotItem>
             <PivotItem Header="我的收藏">
                 <Grid>
-                    <ListView 
-					x:Name="RecipeListView"
-					Style="{StaticResource ListViewStyle1}" 
+                    <GridView 
 					Grid.Column="0" 
 					Grid.ColumnSpan="1" 
 					HorizontalContentAlignment="Stretch" 
 					VerticalContentAlignment="Stretch"
                     IsItemClickEnabled="True"
                     attach:ListViewCommandEx.ItemClickCommand="{x:Bind FavorVM.GotoDetailCommand}"
-					ItemContainerStyle="{StaticResource ListViewItemStyle1}" 
 					SelectionMode="None" Margin="0,0,0,50"
 					ItemsSource="{x:Bind FavorVM.RecipeList,Mode=OneWay}">
-                        <ListView.ItemTemplate>
+                        <GridView.ItemTemplate>
                             <DataTemplate x:DataType="model:Recipe">
-                                <Grid Height="150" Margin="-10,3,-10,0" d:DesignWidth="224.833">
+                                <Grid Height="150" Width="300" Margin="0" d:DesignWidth="224.833">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
                                         <RowDefinition/>
@@ -87,8 +104,8 @@
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                        </GridView.ItemTemplate>
+                    </GridView>
                 </Grid>
             </PivotItem>
         </Pivot>

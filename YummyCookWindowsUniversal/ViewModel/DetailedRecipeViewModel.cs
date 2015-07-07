@@ -177,7 +177,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                           return;
                       }
                       //Check if it's already followed.
-                      var findID = mainVM.CurrentUser.FriendsList.Find(s =>
+                      var findID = mainVM.CurrentUser.FriendsIDList.Find(s =>
                         {
                             if (s == id) return true;
                             else return false;
@@ -187,7 +187,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                           MessageDialog md = new MessageDialog("关注该用户，可以方便你以后查找他（她）的亨饪攻略。", "取消关注");
                           md.Commands.Add(new UICommand("取消关注",async act =>
                            {
-                               mainVM.CurrentUser.FriendsList.Remove(findID);
+                               mainVM.CurrentUser.FriendsIDList.Remove(findID);
                                await UpdateFriendList();
                            }));
                           md.Commands.Add(new UICommand("按错了", act =>
@@ -199,7 +199,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                       }
                       else
                       {
-                          mainVM.CurrentUser.FriendsList.Add(id);
+                          mainVM.CurrentUser.FriendsIDList.Add(id);
                           await UpdateFriendList();
                       }
                       
@@ -219,7 +219,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                     var mainVM = (App.Current.Resources["Locator"] as ViewModelLocator).MainVM;
 
                     //Check if it's already favored.
-                    var findID = mainVM.CurrentUser.FavorsList.Find(s =>
+                    var findID = mainVM.CurrentUser.FavorsIDList.Find(s =>
                     {
                         if (s == id) return true;
                         else return false;
@@ -229,7 +229,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                         MessageDialog md = new MessageDialog("", "取消收藏");
                         md.Commands.Add(new UICommand("取消收藏", async act =>
                         {
-                            mainVM.CurrentUser.FavorsList.Remove(findID);
+                            mainVM.CurrentUser.FavorsIDList.Remove(findID);
                             await UpdateFavorList();
                         }));
                         md.Commands.Add(new UICommand("按错了", act =>
@@ -241,7 +241,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                     }
                     else
                     {
-                        mainVM.CurrentUser.FavorsList.Add(id);
+                        mainVM.CurrentUser.FavorsIDList.Add(id);
                         await UpdateFavorList();
                     }
                 });
@@ -276,6 +276,17 @@ namespace YummyCookWindowsUniversal.ViewModel
                     ShowLargePictureCommand.Execute(bitmap);
                 }
             });
+            Messenger.Default.Register<GenericMessage<Recipe>>(this, MessengerToken.RecipeToken, async act =>
+            {
+                var recipe = act.Content;
+                if (recipe != null)
+                {
+                    this.CurrentRecipe = recipe;
+
+                    this.CheckListGrouped = GetCheckListsGrouped(this.CurrentRecipe.IngredientList);
+                }
+                await LoadDetailPage();
+            });
         }
 
         public async Task LoadDetailPage()
@@ -286,6 +297,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                 var user = await RequestHelper.GetUserInfoAsync(userName);
                 if (user != null)
                 {
+                    await user.DownloadAvatar();
                     this.CurrentRecipe.CookUser = user;
                     await this.CurrentRecipe.CookUser.LoadRegionInfo();
                 }
@@ -317,7 +329,7 @@ namespace YummyCookWindowsUniversal.ViewModel
         {
             var mainVM = (App.Current.Resources["Locator"] as ViewModelLocator).MainVM;
             var dic = new Dictionary<string, string>();
-            var friendlist = Functions.MakeStringFromList(mainVM.CurrentUser.FriendsList);
+            var friendlist = Functions.MakeStringFromList(mainVM.CurrentUser.FriendsIDList);
             dic.Add("friends_list", friendlist);
             var isSuccess = await RequestHelper.UpdateUserInfo(LocalSettingHelper.GetValue("userid"), dic);
             if (isSuccess.IsSuccess)
@@ -334,7 +346,7 @@ namespace YummyCookWindowsUniversal.ViewModel
         {
             var mainVM = (App.Current.Resources["Locator"] as ViewModelLocator).MainVM;
             var dic = new Dictionary<string, string>();
-            var favorList = Functions.MakeStringFromList(mainVM.CurrentUser.FavorsList);
+            var favorList = Functions.MakeStringFromList(mainVM.CurrentUser.FavorsIDList);
             dic.Add("favors_list", favorList);
             var isSuccess = await RequestHelper.UpdateUserInfo(LocalSettingHelper.GetValue("userid"), dic);
             if (isSuccess.IsSuccess)
@@ -376,17 +388,7 @@ namespace YummyCookWindowsUniversal.ViewModel
 
         public void Activate(object param)
         {
-            Messenger.Default.Register<GenericMessage<Recipe>>(this, MessengerToken.RecipeToken, async act =>
-             {
-                 var recipe = act.Content;
-                 if(recipe!=null)
-                 {
-                     this.CurrentRecipe = recipe;
-                    
-                     this.CheckListGrouped=GetCheckListsGrouped(this.CurrentRecipe.IngredientList);
-                 }
-                 await LoadDetailPage();
-             });
+            
         }
 
         public void Deactivate(object param)

@@ -236,7 +236,7 @@
                         HorizontalContentAlignment="Stretch" 
                         VerticalContentAlignment="Stretch" Padding="0" Style="{StaticResource BtnStyle}" Background="{x:Null}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderBrush="{x:Null}" BorderThickness="0">
                         <Grid>
-                            <Image Source="{x:Bind DetailVM.CurrentRecipe.TitleImage}" Stretch="UniformToFill"/>
+                            <Image Source="{x:Bind DetailVM.CurrentRecipe.TitleImage,Mode=OneWay}" Stretch="UniformToFill"/>
                             <Border Background="Black" Opacity="0.3" />
                         </Grid>
                     </Button>

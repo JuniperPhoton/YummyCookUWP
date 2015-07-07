@@ -16,11 +16,18 @@ using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Views;
 using System.Threading.Tasks;
 using JP.Utils.Network;
+using System.Collections.Generic;
 
 namespace YummyCookWindowsUniversal.ViewModel
 {
     public class FavorViewModel: ViewModelBase, INavigable
     {
+        private bool isLoadFriends = false;
+        private bool isLoadRecipe = false;
+
+        private List<string> friendIDList;
+        public List<string> recipeIDList;
+
         private int _selectedIndex;
         public int SelectedIndex
         {
@@ -33,6 +40,23 @@ namespace YummyCookWindowsUniversal.ViewModel
                 if(_selectedIndex!=value)
                 {
                     _selectedIndex = value;
+                    switch(value)
+                    {
+                        case 0:
+                            {
+                                if (!isLoadFriends)
+                                {
+                                    var task1=LoadUserList();
+                                }
+                            };break;
+                        case 1:
+                            {
+                                if(!isLoadRecipe)
+                                {
+                                   var task2= LoadRecipeList();
+                                }
+                            }; break;
+                    }
                     RaisePropertyChanged(() => SelectedIndex);
                 }
             }
@@ -104,30 +128,114 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
+        private RelayCommand _refreshCommand;
+        public RelayCommand RefreshCommand
+        {
+            get
+            {
+                if (_refreshCommand != null) return _refreshCommand;
+                return _refreshCommand = new RelayCommand(async() =>
+                  {
+                      var user = await RequestHelper.GetUserInfoAsync(LocalSettingHelper.GetValue("username"));
+                      if(user!=null)
+                      {
+                          var locator = App.Current.Resources["Locator"] as ViewModelLocator;
+                          locator.MainVM.CurrentUser = user;
+                          this.friendIDList = user.FriendsIDList;
+                          this.recipeIDList = user.FavorsIDList;
+
+                          if (SelectedIndex == 0)
+                          {
+                              FriendsList.Clear();
+                              await LoadUserList();
+                          }
+                          else
+                          {
+                              RecipeList.Clear();
+                              await LoadRecipeList();
+                          }
+                      }
+                  });
+            }
+        }
+
         public FavorViewModel()
         {
             FriendsList = new ObservableCollection<User>();
             RecipeList = new ObservableCollection<Recipe>();
-
-            for(int i=0;i<10;i++)
-            {
-                FriendsList.Add(new User());
-                RecipeList.Add(new Recipe());
-            }
         }
 
         private async Task LoadUserList()
         {
+            try
+            {
+                foreach(var friendID in friendIDList)
+                {
+                    var newUser = await RequestHelper.GetUserInfoAsync(friendID,false);
+                    if(newUser!=null)
+                    {
+                        await newUser.DownloadAvatar();
+                        FriendsList.Add(newUser);
+                        isLoadFriends = true;
+                    }
+                }
+            }
+            catch(Exception)
+            {
 
+            }
+        }
+
+        private async Task LoadRecipeList()
+        {
+            try
+            {
+                foreach (var recipeID in recipeIDList)
+                {
+                    var newRecipe = await RequestHelper.GetRecipeAsync(recipeID);
+                    if (newRecipe != null)
+                    {
+                        RecipeList.Add(newRecipe);
+                        isLoadRecipe = true;
+                    }
+                }
+                await LoadAllImge(this.RecipeList);
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private async Task LoadAllImge(ObservableCollection<Recipe> recipeList)
+        {
+            foreach (var item in recipeList)
+            {
+                if (!string.IsNullOrEmpty(item.TitleImageUrl))
+                {
+                    var stream = await RequestHelper.GetImageFromUrl(item.TitleImageUrl);
+                    if (stream != null)
+                    {
+                        await item.TitleImage.SetSourceAsync(stream);
+                    }
+                }
+            }
         }
 
         public void Activate(object param)
         {
             if(param is User)
             {
-                if(FriendsList.Count==0)
+                if(!isLoadFriends)
                 {
-                    LoadUserList();
+                    var user = param as User;
+                    
+                    if (user != null)
+                    {
+                        this.friendIDList = user.FriendsIDList;
+                        this.recipeIDList = user.FavorsIDList;
+                        var loadTask=LoadUserList();
+                    }
                 }
             }
         }

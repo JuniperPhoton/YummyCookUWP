@@ -4,14 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
+using Windows.Data.Json;
+using Windows.Storage;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using YummyCookWindowsUniversal.Helper;
 using YummyCookWindowsUniversal.ViewModel;
 
 namespace YummyCookWindowsUniversal.Model
 {
     public class User:ViewModelBase
     {
+        public string AvatarUrl { get; set; }
 
         private string _id;
         public string ID
@@ -131,46 +136,112 @@ namespace YummyCookWindowsUniversal.Model
             }
         }
 
-        private List<string> _friendsList;
-        public List<string> FriendsList
+        private List<string> _friendsIDList;
+        public List<string> FriendsIDList
         {
             get
             {
-                return _friendsList;
+                return _friendsIDList;
             }
             set
             {
-                if(_friendsList!=value)
+                if(_friendsIDList!=value)
                 {
-                    _friendsList = value;
-                    RaisePropertyChanged(() => FriendsList);
+                    _friendsIDList = value;
+                    RaisePropertyChanged(() => FriendsIDList);
                 }
             }
         }
 
-        private List<string> _favorsList;
-        public List<string> FavorsList
+        private List<string> _favorsIDList;
+        public List<string> FavorsIDList
         {
             get
             {
-                return _favorsList;
+                return _favorsIDList;
             }
             set
             {
-                if (_favorsList != value)
+                if (_favorsIDList != value)
                 {
-                    _favorsList = value;
-                    RaisePropertyChanged(() => FavorsList);
+                    _favorsIDList = value;
+                    RaisePropertyChanged(() => FavorsIDList);
                 }
             }
         }
 
         public User()
         {
-            FriendsList = new List<string>();
-            FavorsList = new List<string>();
+            FriendsIDList = new List<string>();
+            FavorsIDList = new List<string>();
             RegionName = "";
             ID = "";
+        }
+
+        public static async Task<User> PopulateInstanceFromJson(IJsonValue value)
+        {
+            try
+            {
+                User user = new User();
+                user.UserName = JsonParser.GetStringFromJsonObj(value, "username");
+                user.Gender = int.Parse(JsonParser.GetStringFromJsonObj(value, "gender"));
+                user.ID = JsonParser.GetStringFromJsonObj(value, "objectId");
+                user.ProvinceID = int.Parse(JsonParser.GetStringFromJsonObj(value, "province_id"));
+                user.CityID = int.Parse(JsonParser.GetStringFromJsonObj(value, "city_id"));
+                user.AvatarUrl = JsonParser.GetStringFromJsonObj(value, "avatar_url");
+
+                var friendsList = JsonParser.GetStringFromJsonObj(value, "friends_list");
+                if (!string.IsNullOrEmpty(friendsList))
+                {
+                    var list = friendsList.Split(',');
+                    foreach (var follow in list)
+                    {
+                        user.FriendsIDList.Add(follow);
+                    }
+                }
+
+                var favorsList = JsonParser.GetStringFromJsonObj(value, "favors_list");
+                if (!string.IsNullOrEmpty(favorsList))
+                {
+                    var list = favorsList.Split(',');
+                    foreach (var favor in list)
+                    {
+                        user.FavorsIDList.Add(favor);
+                    }
+                }
+
+                var avatarUrl = JsonParser.GetStringFromJsonObj(value, "avatar_url");
+                //Get avatar of the user
+                if (string.IsNullOrEmpty(avatarUrl))
+                {
+                    var folder1 = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
+                    var folder2 = await folder1.GetFolderAsync("Icon");
+                    var file = await folder2.GetFileAsync("DefaultAccount.png");
+                    using (var fileStream = await file.OpenAsync(FileAccessMode.Read))
+                    {
+                        user.Avatar = new BitmapImage();
+                        await user.Avatar.SetSourceAsync(fileStream);
+                    }
+                }
+                return user;
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
+
+        public async Task DownloadAvatar()
+        {
+            if(!string.IsNullOrEmpty(this.AvatarUrl))
+            {
+                var stream = await RequestHelper.GetImageFromUrl(this.AvatarUrl);
+                this.Avatar = new BitmapImage();
+                await this.Avatar.SetSourceAsync(stream);
+            }
+            
         }
 
         public async Task LoadRegionInfo()

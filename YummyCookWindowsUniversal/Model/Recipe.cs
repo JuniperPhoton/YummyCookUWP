@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Data.Json;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 using YummyCookWindowsUniversal.Helper;
@@ -161,6 +162,77 @@ namespace YummyCookWindowsUniversal.Model
 
             var allJson = JsonMaker.MakeJsonString(new List<string> { title, titleImage, checklist, steplist,name });
             return allJson;
+        }
+
+        public async static Task<Recipe> PopulateInstanceFromJson(IJsonValue item)
+        {
+            try
+            {
+                var ingredientList = JsonParser.GetStringFromJsonObj(item, "checklist");
+                var stepList = JsonParser.GetStringFromJsonObj(item, "content");
+                var username = JsonParser.GetStringFromJsonObj(item, "username");
+                var id = JsonParser.GetStringFromJsonObj(item, "objectId");
+                var title = JsonParser.GetStringFromJsonObj(item, "title");
+                var titleUrl = JsonParser.GetStringFromJsonObj(item, "title_img");
+
+                var recipe = new Recipe();
+                recipe.CookUser = new User();
+                recipe.CookUser.UserName = username;
+                recipe.CookUser.Avatar = new BitmapImage();
+                var getuserTask = RequestHelper.GetUserInfoAsync(username);
+
+                recipe.RecipeID = id;
+                recipe.Title = title;
+
+                if (!string.IsNullOrEmpty(titleUrl))
+                {
+                    recipe.TitleImageUrl = titleUrl;
+                }
+                else
+                {
+                    recipe.TitleImage = new BitmapImage(new System.Uri("ms-appx:///Assets/Image/Food_Sample (0).jpg"));
+                }
+
+                recipe.IngredientList = new ObservableCollection<Ingredient>();
+                if (!string.IsNullOrEmpty(ingredientList))
+                {
+                    var chekedList = ingredientList.ToLower();
+                    var regredientArray = JsonArray.Parse(chekedList);
+                    foreach (var ingredient in regredientArray)
+                    {
+                        var newIngredient = new Ingredient();
+                        newIngredient.IngredientName = JsonParser.GetStringFromJsonObj(ingredient, "name");
+                        newIngredient.Quality = JsonParser.GetStringFromJsonObj(ingredient, "quality");
+                        newIngredient.IsMain = JsonParser.GetBooleanFromJsonObj(ingredient, "is_main", true);
+                        recipe.IngredientList.Add(newIngredient);
+                    }
+                }
+
+
+                recipe.StepsList = new ObservableCollection<Step>();
+                if (!string.IsNullOrEmpty(stepList))
+                {
+                    var stepArray = JsonArray.Parse(stepList);
+                    foreach (var step in stepArray)
+                    {
+                        var newStep = new Step();
+                        newStep.ImageUrl = JsonParser.GetStringFromJsonObj(step, "image_url");
+                        newStep.StepContent = JsonParser.GetStringFromJsonObj(step, "content");
+                        recipe.StepsList.Add(newStep);
+                    }
+                }
+
+                var user = await getuserTask;
+                await user.DownloadAvatar();
+                recipe.CookUser = user;
+
+                return recipe;
+            }
+            catch(Exception)
+            {
+                return null;
+            }
+            
         }
     }
 }

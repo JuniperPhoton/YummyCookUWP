@@ -36,7 +36,7 @@ namespace YummyCookWindowsUniversal.Helper
         private const string UserUrl = "https://api.bmob.cn/1/users/";
         private const string LoginUrl = "https://api.bmob.cn/1/login/";
         private const string UploadFileUrl = "https://api.bmob.cn/1/files/";
-        private const string RecipeUrl = "https://api.bmob.cn/1/classes/Recipe?";
+        private const string RecipeUrl = "https://api.bmob.cn/1/classes/Recipe/";
 
         /// <summary>
         /// 注册用户
@@ -238,7 +238,7 @@ namespace YummyCookWindowsUniversal.Helper
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Add(AppID.First());
                 client.DefaultRequestHeaders.Add(AppKey.First());
-                var message = await client.GetAsync(new Uri(RequestHelper.RecipeUrl+"skip="+start+"&limit="+number+ "&order=-updatedAt"+"&a="+new Random().Next()));
+                var message = await client.GetAsync(new Uri(RequestHelper.RecipeUrl+"?skip="+start+"&limit="+number+ "&order=-updatedAt"+"&a="+new Random().Next()));
                 if (message.IsSuccessStatusCode)
                 {
 
@@ -252,67 +252,10 @@ namespace YummyCookWindowsUniversal.Helper
                         {
                             try
                             {
-                                var ingredientList = JsonParser.GetStringFromJsonObj(item,"checklist");
-                                var stepList = JsonParser.GetStringFromJsonObj(item,"content");
-                                var username = JsonParser.GetStringFromJsonObj(item,"username");
-                                var id = JsonParser.GetStringFromJsonObj(item,"objectId");
-                                var title = JsonParser.GetStringFromJsonObj(item,"title");
-                                var titleUrl = JsonParser.GetStringFromJsonObj(item,"title_img");
-
-                                var recipe = new Recipe();
-                                recipe.CookUser = new User();
-                                recipe.CookUser.UserName = username;
-                                recipe.CookUser.Avatar = new BitmapImage();
-                                var getuserTask= RequestHelper.GetUserInfoAsync(username);
-                                
-                                recipe.RecipeID = id;
-                                recipe.Title = title;
-
-                                if(!string.IsNullOrEmpty(titleUrl))
-                                {
-                                    recipe.TitleImageUrl = titleUrl;
-                                }
-                                else
-                                {
-                                    recipe.TitleImage = new BitmapImage(new System.Uri("ms-appx:///Assets/Image/Food_Sample (" + i % 15 + ").jpg"));
-                                }
-
-                                recipe.IngredientList = new ObservableCollection<Ingredient>();
-                                if(!string.IsNullOrEmpty(ingredientList))
-                                {
-                                    var chekedList = ingredientList.ToLower();
-                                    var regredientArray = JsonArray.Parse(chekedList);
-                                    foreach (var ingredient in regredientArray)
-                                    {
-                                        var newIngredient = new Ingredient();
-                                        newIngredient.IngredientName = JsonParser.GetStringFromJsonObj(ingredient, "name");
-                                        newIngredient.Quality = JsonParser.GetStringFromJsonObj(ingredient, "quality");
-                                        newIngredient.IsMain = JsonParser.GetBooleanFromJsonObj(ingredient, "is_main",true);
-                                        recipe.IngredientList.Add(newIngredient);
-                                    }
-                                }
-                                
-
-                                recipe.StepsList = new ObservableCollection<Step>();
-                                if(!string.IsNullOrEmpty(stepList))
-                                {
-                                    var stepArray = JsonArray.Parse(stepList);
-                                    foreach (var step in stepArray)
-                                    {
-                                        var newStep = new Step();
-                                        newStep.ImageUrl=JsonParser.GetStringFromJsonObj(step,"image_url");
-                                        newStep.StepContent = JsonParser.GetStringFromJsonObj(step,"content");
-                                        recipe.StepsList.Add(newStep);
-                                    }
-                                }
-
-                                var user=await getuserTask;
-                                recipe.CookUser = user;
+                                var recipe = await Recipe.PopulateInstanceFromJson(item);
 
                                 listToReturn.Add(recipe);
                                 i++;
-
-                                
                             }
                             catch (Exception e)
                             {
@@ -341,18 +284,28 @@ namespace YummyCookWindowsUniversal.Helper
         }
 
         /// <summary>
-        /// 根据用户名获取用户信息
+        /// 获取用户信息
         /// </summary>
-        /// <param name="name">用户名字</param>
-        /// <returns>User用户</returns>
-        public async static Task<User> GetUserInfoAsync(string name)
+        /// <param name="nameOrID">用户名字/ID</param>
+        /// <param name="isName">是否为用户名字</param>
+        /// <returns></returns>
+        /// 在返回后，有需要的话，可以调用 DownloadAvatar() 获取头像
+        public async static Task<User> GetUserInfoAsync(string nameOrID,bool isName=true)
         {
             try
             {
                 HttpClient client = new HttpClient();
                 client.DefaultRequestHeaders.Add(AppID.First());
                 client.DefaultRequestHeaders.Add(AppKey.First());
-                var requestJson = JsonMaker.MakeJsonObj("username", name);
+                string requestJson = null;
+                if (isName)
+                {
+                    requestJson = JsonMaker.MakeJsonObj("username", nameOrID);
+                }
+                else
+                {
+                    requestJson = JsonMaker.MakeJsonObj("objectId", nameOrID);
+                }
 
                 var message = await client.GetAsync(new Uri(RequestHelper.UserUrl + "?where="+JsonMaker.MakeJsonString(new List<string> { requestJson })+"&a="+new Random().Next()));
                 if (message.IsSuccessStatusCode)
@@ -361,53 +314,8 @@ namespace YummyCookWindowsUniversal.Helper
                     var obj = JsonObject.Parse(content);
                     var value = obj["results"].GetArray().FirstOrDefault();
 
-                    User user = new User();
-                    user.UserName = name;
-                    user.Gender = int.Parse(JsonParser.GetStringFromJsonObj(value, "gender"));
-                    user.ID = JsonParser.GetStringFromJsonObj(value, "objectId");
-                    user.ProvinceID = int.Parse(JsonParser.GetStringFromJsonObj(value, "province_id"));
-                    user.CityID = int.Parse(JsonParser.GetStringFromJsonObj(value, "city_id"));
+                    var user = await User.PopulateInstanceFromJson(value);
 
-                    var friendsList = JsonParser.GetStringFromJsonObj(value, "friends_list");
-                    if(!string.IsNullOrEmpty(friendsList))
-                    {
-                        var list = friendsList.Split(',');
-                        foreach(var follow in list)
-                        {
-                            user.FriendsList.Add(follow);
-                        }
-                    }
-
-                    var favorsList = JsonParser.GetStringFromJsonObj(value, "favors_list");
-                    if (!string.IsNullOrEmpty(favorsList))
-                    {
-                        var list = favorsList.Split(',');
-                        foreach (var favor in list)
-                        {
-                            user.FavorsList.Add(favor);
-                        }
-                    }
-
-                    var avatarUrl = JsonParser.GetStringFromJsonObj(value, "avatar_url");
-                    //Get avatar of the user
-                    if (!string.IsNullOrEmpty(avatarUrl))
-                    {
-                        var stream = await GetImageFromUrl(avatarUrl);
-                        user.Avatar = new BitmapImage();
-                        await user.Avatar.SetSourceAsync(stream);
-                    }
-                    //use the default avatar
-                    else
-                    {
-                        var folder1 = await Package.Current.InstalledLocation.GetFolderAsync("Assets");
-                        var folder2 = await folder1.GetFolderAsync("Icon");
-                        var file = await folder2.GetFileAsync("DefaultAccount.png");
-                        using (var fileStream = await file.OpenAsync(FileAccessMode.Read))
-                        {
-                            user.Avatar = new BitmapImage();
-                            await user.Avatar.SetSourceAsync(fileStream);
-                        }
-                    }
                     return user;
                 }
                 else
@@ -422,6 +330,38 @@ namespace YummyCookWindowsUniversal.Helper
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
+                return null;
+            }
+        }
+
+        public async static Task<Recipe> GetRecipeAsync(string recipeID)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add(AppID.First());
+                client.DefaultRequestHeaders.Add(AppKey.First());
+                var message = await client.GetAsync(new Uri(RequestHelper.RecipeUrl + "/"+recipeID));
+                if (message.IsSuccessStatusCode)
+                {
+                    JsonObject job = JsonObject.Parse(await message.Content.ReadAsStringAsync());
+                    if(job.GetObject()!=null)
+                    {
+                        var recipe = await Recipe.PopulateInstanceFromJson(job.GetObject());
+                        return recipe;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch(Exception e)
+            {
                 return null;
             }
         }
