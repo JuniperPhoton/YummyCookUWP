@@ -19,6 +19,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Imaging;
 using JP.Utils.Data;
+using System.Threading;
 
 namespace YummyCookWindowsUniversal.ViewModel
 {
@@ -27,6 +28,8 @@ namespace YummyCookWindowsUniversal.ViewModel
         private StorageFile tempTitleFile;
         private int ingredientCount = 0;
         private int stepCount = 0;
+
+        private CancellationTokenSource _cts = null;
 
         private string _uploadBtnContent;
         public string UploadBtnContent
@@ -211,7 +214,26 @@ namespace YummyCookWindowsUniversal.ViewModel
                 if (_publishCommand != null) return _publishCommand;
                 return _publishCommand=new RelayCommand(async()=>
                 {
-                    await Publish();
+                    _cts = new CancellationTokenSource();
+                    var token = _cts.Token;
+                    await Publish(token);
+                });
+            }
+        }
+
+        private RelayCommand _cancelPublishCommand;
+        public RelayCommand CancelPublishCommand
+        {
+            get
+            {
+                if (_cancelPublishCommand != null) return _cancelPublishCommand;
+                return _cancelPublishCommand = new RelayCommand(() =>
+                {
+                    if(_cts!=null)
+                    {
+                        _cts.Cancel() ;
+                        ShowLoadingVisibility = Visibility.Collapsed;
+                    }
                 });
             }
         }
@@ -221,8 +243,6 @@ namespace YummyCookWindowsUniversal.ViewModel
             NewRecipe = new Recipe();
             ShowLoadingVisibility = Visibility.Collapsed;
             UploadBtnContent = "上传题图";
-
-            
         }
 
         private void ShowProgressBar()
@@ -263,13 +283,15 @@ namespace YummyCookWindowsUniversal.ViewModel
             return true;
         }
 
-        private async Task Publish()
+        private async Task Publish(CancellationToken token)
         {
             if (ValidDataFormat())
             {
                 try
                 {
                     ShowProgressBar();
+
+                    token.ThrowIfCancellationRequested();
 
                     //upload title image
                     var newTitleFile = await ImageHandleHelper.CompressImageAsync(tempTitleFile, 1000);
@@ -279,8 +301,10 @@ namespace YummyCookWindowsUniversal.ViewModel
                         stream.Read(data, 0, (int)stream.Length);
 
                         string resultUrl = null;
-                        for (int i = 0; i < 5; i++)
+                        for (int i = 0; i <10; i++)
                         {
+                            token.ThrowIfCancellationRequested();
+
                             var result = await RequestHelper.UploadImageAsync("titleImage.jpg", data);
                             if (!string.IsNullOrEmpty(result))
                             {
@@ -288,7 +312,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                                 break;
                             }
                         }
-                        
+
                         if(resultUrl!= null)
                         {
                             bool isUploadAllImageOfSteps = true;
@@ -296,6 +320,8 @@ namespace YummyCookWindowsUniversal.ViewModel
                             {
                                 if (step._tempFile != null)
                                 {
+                                    token.ThrowIfCancellationRequested();
+
                                     var isSuccess = await step.UploadImage();
                                     if (!isSuccess)
                                     {
@@ -314,6 +340,8 @@ namespace YummyCookWindowsUniversal.ViewModel
                             {
                                 NewRecipe.TitleImageUrl = resultUrl;
                                 NewRecipe.CookUser.UserName = LocalSettingHelper.GetValue("username");
+
+                                token.ThrowIfCancellationRequested();
 
                                 var recipeStr = NewRecipe.MakeJson();
                                 var result = await RequestHelper.PublishRecipeAsync(recipeStr);
@@ -341,7 +369,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                 }
                 catch (Exception e)
                 {
-                    Messenger.Default.Send<GenericMessage<string>>(new GenericMessage<string>(e.Message), MessengerToken.ToastToken);
+                    Messenger.Default.Send(new GenericMessage<string>(e.Message), MessengerToken.ToastToken);
                 }
 
             }
@@ -354,7 +382,12 @@ namespace YummyCookWindowsUniversal.ViewModel
 
         public void Deactivate(object param)
         {
-            
+            if(_cts!=null)
+            {
+                _cts.Cancel();
+                _cts = null;
+                ShowLoadingVisibility = Visibility.Collapsed;
+            }
         }
 
         public override void Cleanup()
@@ -365,6 +398,7 @@ namespace YummyCookWindowsUniversal.ViewModel
             NewRecipe = new Recipe();
             ShowLoadingVisibility = Visibility.Collapsed;
             UploadBtnContent = "上传题图";
+            _cts = null;
         }
     }
 }

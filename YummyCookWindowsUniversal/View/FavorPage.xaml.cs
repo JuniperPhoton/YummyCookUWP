@@ -22,6 +22,8 @@ namespace YummyCookWindowsUniversal.View
 
     public sealed partial class FavorPage : BindablePage
     {
+        public static FavorPage Current;
+
         public FavorViewModel FavorVM
         {
             get
@@ -39,6 +41,8 @@ namespace YummyCookWindowsUniversal.View
                 var msg = act.Content;
                 ToastControl.ShowMessage(msg);
             });
+
+            Current = this;
         }
 
     }

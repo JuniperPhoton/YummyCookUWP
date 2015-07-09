@@ -29,6 +29,9 @@ namespace YummyCookWindowsUniversal
 
     public sealed partial class MainPage : BindablePage
     {
+
+        private FavorPage favorPageInstance = FavorPage.Current;
+
         private MainViewModel MainVM
         {
             get
@@ -71,7 +74,10 @@ namespace YummyCookWindowsUniversal
 
             App.MainFrame = this.MainContentFrame;
 
-            MainContentFrame.Navigate(typeof(HomePage));
+            if(favorPageInstance==null)
+            {
+                MainContentFrame.Navigate(typeof(HomePage));
+            }
         }
 
         private void root_sv_PaneClosed(SplitView sender, object args)

@@ -366,6 +366,49 @@ namespace YummyCookWindowsUniversal.Helper
             }
         }
 
+        public async static Task<ObservableCollection<Recipe>> GetRecipesByUserAsync(string username)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Add(AppID.First());
+                client.DefaultRequestHeaders.Add(AppKey.First());
+                var message = await client.GetAsync(new Uri(RequestHelper.RecipeUrl + "?order=-updatedAt" + "&where=" + JsonMaker.MakeJsonString(new List<string> { JsonMaker.MakeJsonObj("username", username) }) + "&a=" + new Random().Next()));
+                if (message.IsSuccessStatusCode)
+                {
+
+                    JsonObject job = JsonObject.Parse(await message.Content.ReadAsStringAsync());
+                    ObservableCollection<Recipe> listToReturn = new ObservableCollection<Recipe>();
+                    JsonArray array = job["results"].GetArray();
+                    if (array.Count != 0)
+                    {
+                        int i = 0;
+                        foreach (var item in array)
+                        {
+                            try
+                            {
+                                var recipe = await Recipe.PopulateInstanceFromJson(item);
+
+                                listToReturn.Add(recipe);
+                                i++;
+                            }
+                            catch (Exception e)
+                            {
+                                Messenger.Default.Send(new GenericMessage<string>(e.Message), MessengerToken.ToastToken);
+                                return null;
+                            }
+                        }
+                    }
+                    return listToReturn;
+                }
+                else return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         /// 上传图像
         /// </summary>

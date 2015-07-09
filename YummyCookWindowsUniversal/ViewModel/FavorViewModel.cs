@@ -120,10 +120,8 @@ namespace YummyCookWindowsUniversal.ViewModel
                 if (_gotoUserDetailCommand != null) return _gotoUserDetailCommand;
                 return _gotoUserDetailCommand = new RelayCommand<User>((user) =>
                 {
-                    //var rootFrame = Window.Current.Content as Frame;
-                    //rootFrame.Navigate(typeof(RecipeDetailPage));
-
-                    //Messenger.Default.Send(new GenericMessage<Recipe>(recipe), MessengerToken.RecipeToken);
+                    var rootFrame = Window.Current.Content as Frame;
+                    rootFrame.Navigate(typeof(UserInfoPage),user);
                 });
             }
         }

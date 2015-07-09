@@ -335,6 +335,9 @@
                 <Image Source="ms-appx:///Assets/Icon/Wait.png" Width="60"/>
                 <TextBlock Text="这需要一点时间..." Foreground="White" HorizontalAlignment="Center" FontSize="20"/>
                 <ProgressBar IsIndeterminate="True" Background="{x:Null}" Foreground="White" Margin="100,10,100,0"/>
+                <Button Width="130" HorizontalAlignment="Center" Command="{x:Bind NewRecipeVM.CancelPublishCommand}" Margin="0,10,0,0">
+                    <TextBlock Text="取消发布" Foreground="White"/>
+                </Button>
             </StackPanel>
 
         </Grid>

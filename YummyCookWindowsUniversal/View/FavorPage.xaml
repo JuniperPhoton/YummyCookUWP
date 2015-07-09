@@ -9,14 +9,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <common:BindablePage.BottomAppBar>
-        <CommandBar>
-            <AppBarButton Label="刷新" Command="{x:Bind FavorVM.RefreshCommand}" Icon="Refresh"/>
-        </CommandBar>
-    </common:BindablePage.BottomAppBar>
-
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Pivot SelectedIndex="{x:Bind FavorVM.SelectedIndex,Mode=TwoWay}">
+    <common:BindablePage.Resources>
+        <!--<SolidColorBrush x:Key="PivotHeaderForegroundUnSelectedBrush" Color="White"></SolidColorBrush>
+        <SolidColorBrush x:Key="PivotHeaderForegroundSelectedBrush" Color="{StaticResource CookTheme}"></SolidColorBrush>-->
+    </common:BindablePage.Resources>
+    <Grid  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Pivot Margin="10,0,0,0" SelectedIndex="{x:Bind FavorVM.SelectedIndex,Mode=TwoWay}">
+            <Pivot.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" FontSize="15"/>
+                </DataTemplate>
+            </Pivot.HeaderTemplate>
             <PivotItem Header="关注的人" >
                 <Grid>
                     <ListView 
@@ -110,5 +113,8 @@
             </PivotItem>
         </Pivot>
         <local:ToastUC x:Name="ToastControl"/>
+        <CommandBar VerticalAlignment="Bottom">
+            <AppBarButton Label="刷新" Command="{x:Bind FavorVM.RefreshCommand}" Icon="Refresh"/>
+        </CommandBar>
     </Grid>
 </common:BindablePage>

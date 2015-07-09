@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YummyCookWindowsUniversal", "YummyCookWindowsUniversal\YummyCookWindowsUniversal.csproj", "{A116A6BE-A7BE-4FBA-94E3-B5FA0178C300}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JP.Utils", "JP.Utils\JP.Utils\JP.Utils.csproj", "{9D13CEBE-A582-4729-B859-22FC78653A56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JP.Utils", "..\JP.Utils\JP.Utils\JP.Utils.csproj", "{9D13CEBE-A582-4729-B859-22FC78653A56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

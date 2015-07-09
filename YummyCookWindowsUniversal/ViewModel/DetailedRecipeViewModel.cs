@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
 using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
@@ -23,6 +25,7 @@ namespace YummyCookWindowsUniversal.ViewModel
 {
     public class DetailedRecipeViewModel:ViewModelBase,INavigable
     {
+        CancellationTokenSource _cts;
 
         private Visibility _showLargePictureVisibility;
         public Visibility ShowLargePictureVisibility
@@ -75,6 +78,68 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
+        private Visibility _showLoadingVisibility;
+        public Visibility ShowLoadingVisibility
+        {
+            get
+            {
+                return _showLoadingVisibility;
+            }
+            set
+            {
+                if (_showLoadingVisibility != value)
+                {
+                    _showLoadingVisibility = value;
+                    RaisePropertyChanged(() => ShowLoadingVisibility);
+                }
+            }
+        }
+
+        private RelayCommand _goToUserInfoCommand;
+        public RelayCommand GoToUserInfoCommand
+        {
+            get
+            {
+                if (_goToUserInfoCommand != null) return _goToUserInfoCommand;
+                return _goToUserInfoCommand = new RelayCommand(() =>
+                  {
+                      var rootFrame = Window.Current.Content as Frame;
+                      rootFrame.Navigate(typeof(UserInfoPage), CurrentRecipe.CookUser);
+                  });
+            }
+        }
+
+        private RelayCommand _launchMapCommand;
+        public RelayCommand LaunchMapCommand
+        {
+            get
+            {
+                if (_launchMapCommand != null) return _launchMapCommand;
+                return _launchMapCommand = new RelayCommand(async() =>
+                  {
+                      await GetLoacationAndShowAsync();
+                  });
+            }
+        }
+
+        private RelayCommand _cancelLaunchMapCommand;
+        public RelayCommand CancelLaunchMapCommand
+        {
+            get
+            {
+                if (_cancelLaunchMapCommand != null) return _cancelLaunchMapCommand;
+                return _cancelLaunchMapCommand = new RelayCommand(() =>
+                {
+                    if(_cts!=null)
+                    {
+                        _cts.Cancel();
+                        _cts = null;
+                        ShowLoadingVisibility = Visibility.Collapsed;
+                    }
+                });
+            }
+        }
+
         private RelayCommand<BitmapImage> _showLargePictureCommand;
         public RelayCommand<BitmapImage> ShowLargePictureCommand
         {
@@ -108,22 +173,6 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
-        private RelayCommand _savePictureCommand;
-        public RelayCommand SavePictureCommand
-        {
-            get
-            {
-                if (_savePictureCommand != null) return _savePictureCommand;
-                return _savePictureCommand=new RelayCommand(()=>
-                {
-                    if(CurrentImage==null)
-                    {
-                        return;
-                    }
-                    return;
-                });
-            }
-        }
 
         private RelayCommand<Ingredient> _checkItemCommand;
         public RelayCommand<Ingredient> CheckItemCommand
@@ -267,6 +316,7 @@ namespace YummyCookWindowsUniversal.ViewModel
         public DetailedRecipeViewModel()
         {
             ShowLargePictureVisibility = Visibility.Collapsed;
+            ShowLoadingVisibility = Visibility.Collapsed;
 
             Messenger.Default.Register<GenericMessage<BitmapImage>>(this, MessengerToken.ShowPictureToken, act =>
             {
@@ -386,6 +436,49 @@ namespace YummyCookWindowsUniversal.ViewModel
             return groups;
         }
 
+        private async Task GetLoacationAndShowAsync()
+        {
+            try
+            {
+                // Request permission to access location
+                var accessStatus = await Geolocator.RequestAccessAsync();
+
+                switch (accessStatus)
+                {
+                    case GeolocationAccessStatus.Allowed:
+
+                        ShowLoadingVisibility = Visibility.Visible;
+
+                        // Get cancellation token
+                        _cts = new CancellationTokenSource();
+                        CancellationToken token = _cts.Token;
+
+                        // If DesiredAccuracy or DesiredAccuracyInMeters are not set (or value is 0), DesiredAccuracy.Default is used.
+                        Geolocator geolocator = new Geolocator { DesiredAccuracyInMeters = 10 };
+
+                        // Carry out the operation
+                        Geoposition pos = await geolocator.GetGeopositionAsync().AsTask(token);
+
+                        string uriToLaunch = @"bingmaps:?cp="+pos.Coordinate.Point.Position.Latitude+"~"+pos.Coordinate.Point.Position.Longitude+"&lvl=3&where=supermarket";
+
+                        // Launch the URI
+                        var success = await Windows.System.Launcher.LaunchUriAsync(new Uri(uriToLaunch));
+
+                        ShowLoadingVisibility = Visibility.Collapsed;
+
+                        break;
+                    default:
+                        {
+                            Messenger.Default.Send(new GenericMessage<string>("请开启地理位置权限"), MessengerToken.ToastToken);
+                        };break;
+                }
+            }
+            catch (TaskCanceledException ex)
+            {
+                Messenger.Default.Send(new GenericMessage<string>(ex.Message), MessengerToken.ToastTokenFollow);
+            }
+        }
+
         public void Activate(object param)
         {
             
@@ -393,7 +486,12 @@ namespace YummyCookWindowsUniversal.ViewModel
 
         public void Deactivate(object param)
         {
-           
+            if (_cts != null)
+            {
+                _cts.Cancel();
+                _cts = null;
+                ShowLoadingVisibility = Visibility.Collapsed;
+            }
         }
     }
 }

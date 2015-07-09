@@ -1,0 +1,187 @@
+﻿<common:BindablePage
+    x:Class="YummyCookWindowsUniversal.View.UserInfoPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:YummyCookWindowsUniversal.View"
+    xmlns:common="using:YummyCookWindowsUniversal"
+    xmlns:model="using:YummyCookWindowsUniversal.Model"
+    xmlns:attach="using:YummyCookWindowsUniversal.Attached"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Image Stretch="UniformToFill" Source="ms-appx:///Assets/Image/Food_Sample (15).jpg"/>
+            <Border Background="Black" Opacity="0.4"/>
+            <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,10">
+                <Ellipse Width="30" Height="30">
+                    <Ellipse.Fill>
+                        <ImageBrush Stretch="UniformToFill" ImageSource="{x:Bind UserVM.CurrentUser.Avatar,Mode=OneWay}"/>
+                    </Ellipse.Fill>
+                </Ellipse>
+                <TextBlock Text="{x:Bind UserVM.CurrentUser.UserName,Mode=OneWay}" Foreground="White" VerticalAlignment="Center" Margin="10.3,0,0,0"/>
+                <ProgressRing IsActive="{x:Bind UserVM.IsLoading,Mode=OneWay}" Margin="10,0,0,0" Foreground="White" />
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Pivot SelectedIndex="{x:Bind UserVM.SelectedIndex,Mode=TwoWay}">
+                <Pivot.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontSize="15"/>
+                    </DataTemplate>
+                </Pivot.HeaderTemplate>
+                <PivotItem Header="已发表的亨饪攻略">
+                    <Grid>
+                        <GridView 
+					        Grid.Column="0" 
+					        Grid.ColumnSpan="1" 
+					        HorizontalContentAlignment="Stretch" 
+					        VerticalContentAlignment="Stretch"
+                            IsItemClickEnabled="True"
+					        SelectionMode="None"
+                            ScrollViewer.VerticalScrollBarVisibility="Hidden"
+					        ItemsSource="{x:Bind UserVM.RecipesList,Mode=OneWay}">
+                           
+                            <GridView.ItemTemplate>
+                                <DataTemplate x:DataType="model:Recipe">
+                                    <Grid>
+                                        <Grid Loaded="RecipeRootGrid_Loaded" x:Name="RecipeRootGrid" Height="150" Width="340" Margin="0" d:DesignWidth="224.833">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                        
+                                            <Image Stretch="UniformToFill" Source="{x:Bind TitleImage,Mode=OneWay}" Grid.RowSpan="3"/>
+                                            <Border BorderBrush="{StaticResource CookThemeBlackDark}" BorderThickness="1" Grid.RowSpan="3" Background="{StaticResource CookThemeBlackDark}" Opacity="0.5"/>
+                                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal">
+                                                <Border BorderThickness="1" Height="6" Width="20" Background="White" BorderBrush="White"/>
+                                                <Ellipse Fill="White" Height="7" Stroke="White" Width="7" Margin="3,0,0,0"/>
+                                                <TextBlock x:Name="title" Text="{x:Bind Title,Mode=OneWay}" Margin="10,0" TextWrapping="Wrap" d:LayoutOverrides="TopPosition, BottomPosition" HorizontalAlignment="Center" FontWeight="Bold" Foreground="White" FontSize="26.667"/>
+                                                <Ellipse Fill="White" Height="7" Stroke="White" Width="7" Margin="0,0,3,0"/>
+                                                <Border BorderThickness="1" Height="6" Width="20" Background="White" BorderBrush="White"/>
+                                            </StackPanel>
+                                            <StackPanel HorizontalAlignment="Center" Grid.Row="3" Orientation="Horizontal" Margin="0,10,0,0" VerticalAlignment="Top">
+                                                <Ellipse HorizontalAlignment="Left" Width="25" Height="25" Stroke="White" d:LayoutOverrides="Height, TopMargin, BottomMargin, TopPosition, BottomPosition">
+                                                    <Ellipse.Fill>
+                                                        <ImageBrush
+        						Stretch="Fill" ImageSource="{x:Bind CookUser.Avatar,Mode=OneWay}"/>
+                                                    </Ellipse.Fill>
+                                                </Ellipse>
+                                                <TextBlock x:Name="nameBlock" Text="{x:Bind CookUser.UserName,Mode=OneWay}" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0" Foreground="White"/>
+                                            </StackPanel>
+                                        </Grid>
+
+                                    </Grid>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                        </GridView>
+                        <Grid Visibility="{x:Bind UserVM.ShowNoRecipesVisibility,Mode=OneWay}">
+                            <TextBlock Text="没有内容" FontSize="20"/>
+                        </Grid>
+                    </Grid>
+                </PivotItem>
+                <PivotItem Header="关注的人">
+                    <Grid>
+                        <ListView 
+					            x:Name="UserListView"
+					            Style="{StaticResource ListViewStyle1}" 
+					            Grid.Column="0" 
+					            Grid.ColumnSpan="1" 
+					            HorizontalContentAlignment="Stretch" 
+					            VerticalContentAlignment="Stretch"
+                                IsItemClickEnabled="True"
+					            ItemContainerStyle="{StaticResource ListViewItemStyle1}" 
+					            SelectionMode="None"
+					            ItemsSource="{x:Bind UserVM.FriendsList,Mode=OneWay}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate x:DataType="model:User">
+                                    <Grid Height="50" Margin="-10,10,-10,10" d:DesignWidth="224.833">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="50"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Ellipse>
+                                            <Ellipse.Fill>
+                                                <ImageBrush Stretch="UniformToFill" ImageSource="{x:Bind Avatar,Mode=OneWay}"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <Grid  Grid.Column="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock  Text="{x:Bind UserName,Mode=OneWay}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                            <StackPanel Opacity="0.6" Grid.Row="1" Margin="10,0,0,0" Orientation="Horizontal">
+                                                <TextBlock Text="关注数："/>
+                                                <TextBlock  Text="{x:Bind FriendsIDList.Count,Mode=OneWay}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                                <TextBlock Margin="10,0,0,0" Text="收藏数："/>
+                                                <TextBlock  Text="{x:Bind FavorsIDList.Count,Mode=OneWay}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                                <TextBlock Margin="10,0,0,0" Text="菜谱数："/>
+                                                <TextBlock  Text="{x:Bind FavorsIDList.Count,Mode=OneWay}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+
+                                            </StackPanel>
+                                        </Grid>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Grid Visibility="{x:Bind UserVM.ShowNoFriendsVisibility,Mode=OneWay}">
+                            <TextBlock Text="没有内容" FontSize="20"/>
+                        </Grid>
+                    </Grid>
+                </PivotItem>
+                <PivotItem Header="收藏的攻略">
+                    <Grid>
+                        <GridView 
+					        Grid.Column="0" 
+					        Grid.ColumnSpan="1" 
+					        HorizontalContentAlignment="Stretch" 
+					        VerticalContentAlignment="Stretch"
+                            IsItemClickEnabled="True"
+					        SelectionMode="None"
+					        ItemsSource="{x:Bind UserVM.FavorsList,Mode=OneWay}">
+                            <GridView.ItemTemplate>
+                                <DataTemplate x:DataType="model:Recipe">
+                                    <Grid Height="150" Width="300" Margin="0" d:DesignWidth="224.833">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Image Stretch="UniformToFill" Source="{x:Bind TitleImage,Mode=OneWay}" Grid.RowSpan="3"/>
+                                        <Border BorderBrush="{StaticResource CookThemeBlackDark}" BorderThickness="1" Grid.RowSpan="3" Background="{StaticResource CookThemeBlackDark}" Opacity="0.5"/>
+                                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal">
+                                            <Border BorderThickness="1" Height="6" Width="20" Background="White" BorderBrush="White"/>
+                                            <Ellipse Fill="White" Height="7" Stroke="White" Width="7" Margin="3,0,0,0"/>
+                                            <TextBlock x:Name="title" Text="{x:Bind Title,Mode=OneWay}" Margin="10,0" TextWrapping="Wrap" d:LayoutOverrides="TopPosition, BottomPosition" HorizontalAlignment="Center" FontWeight="Bold" Foreground="White" FontSize="26.667"/>
+                                            <Ellipse Fill="White" Height="7" Stroke="White" Width="7" Margin="0,0,3,0"/>
+                                            <Border BorderThickness="1" Height="6" Width="20" Background="White" BorderBrush="White"/>
+                                        </StackPanel>
+                                        <StackPanel HorizontalAlignment="Center" Grid.Row="3" Orientation="Horizontal" Margin="0,10,0,0" VerticalAlignment="Top">
+                                            <Ellipse HorizontalAlignment="Left" Width="25" Height="25" Stroke="White" d:LayoutOverrides="Height, TopMargin, BottomMargin, TopPosition, BottomPosition">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush
+        						Stretch="Fill" ImageSource="{x:Bind CookUser.Avatar,Mode=OneWay}"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                            <TextBlock x:Name="nameBlock" Text="{x:Bind CookUser.UserName,Mode=OneWay}" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0" Foreground="White"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                        </GridView>
+                        <Grid Visibility="{x:Bind UserVM.ShowNoFavorsVisibility,Mode=OneWay}">
+                            <TextBlock Text="没有内容" FontSize="20"/>
+                        </Grid>
+                    </Grid>
+                </PivotItem>
+            </Pivot>
+        </Grid>
+        <common:ToastUC x:Name="ToastControl"/>
+    </Grid>
+</common:BindablePage>

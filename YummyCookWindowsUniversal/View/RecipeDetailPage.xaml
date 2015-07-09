@@ -240,11 +240,10 @@
                             <Border Background="Black" Opacity="0.3" />
                         </Grid>
                     </Button>
-                    
                     <StackPanel VerticalAlignment="Bottom">
                         <TextBlock Text="{x:Bind DetailVM.CurrentRecipe.Title,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="33.333" Margin="0,0,0,10" Foreground="White" FontWeight="Bold"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Margin="0" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="{x:Null}">
+                            <Button Margin="0" Style="{StaticResource BtnStyle}" Command="{x:Bind DetailVM.GoToUserInfoCommand}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="{x:Null}">
                                 <Grid MinWidth="120" Height="40" >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="40"/>
@@ -263,7 +262,12 @@
 
                     </StackPanel>
                 </Grid>
-                <TextBlock Text="材料清单" Margin="20,10,0,0" FontSize="20" FontWeight="Bold" Foreground="{StaticResource CookThemeDark}"/>
+                <StackPanel Orientation="Horizontal" Margin="20,10,0,0">
+                    <TextBlock Text="材料清单"  FontSize="20" VerticalAlignment="Center" FontWeight="Bold" Foreground="{StaticResource CookThemeDark}"/>
+                    <Button  Background="{x:Null}" VerticalAlignment="Center" Margin="10,0,0,0" Command="{x:Bind DetailVM.LaunchMapCommand}" Style="{StaticResource BtnStyle}" Padding="0" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                        <SymbolIcon Symbol="Map"/>
+                    </Button>
+                </StackPanel>
                 <GridView 
                     Margin="20,10,20,0" 
                     HorizontalAlignment="Left" 
@@ -282,11 +286,11 @@
                             </GroupStyle.HeaderTemplate>
                         </GroupStyle>
                     </GridView.GroupStyle>
-                    <!--<GridView.ItemsPanel>
+                    <GridView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapGrid MaximumRowsOrColumns="10" Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
-                    </GridView.ItemsPanel>-->
+                    </GridView.ItemsPanel>
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="model:Ingredient">
                             <Grid Width="140" Margin="5">
@@ -361,6 +365,17 @@
                     <SymbolIcon Symbol="Cancel" Foreground="White"/>
                 </Border>
             </Button>
+        </Grid>
+        <Grid Visibility="{x:Bind DetailVM.ShowLoadingVisibility,Mode=OneWay}">
+            <Border Background="Black" Opacity="0.8"/>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="&#xE1C4;" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontFamily="Segoe MDL2 Assets"/>
+                <TextBlock Text="加载地图中..." Margin="0,20,0,0" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <ProgressBar Margin="0,20,0,0" IsIndeterminate="True" Foreground="White"/>
+                <Button Margin="0,20,0,0" Background="Black" Width="130" Command="{x:Bind DetailVM.CancelLaunchMapCommand}">
+                    <TextBlock Text="取消" Foreground="White"/>
+                </Button>
+            </StackPanel>
         </Grid>
         <common:ToastUC d:IsHidden="True" x:Name="ToastControl" />
     </Grid>

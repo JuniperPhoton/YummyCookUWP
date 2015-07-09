@@ -126,6 +126,7 @@
     <Compile Include="ViewModel\DetailedRecipeViewModel.cs" />
     <Compile Include="ViewModel\FavorViewModel.cs" />
     <Compile Include="ViewModel\NewRecipeViewModel.cs" />
+    <Compile Include="ViewModel\UserDetailViewModel.cs" />
     <Compile Include="ViewModel\UserInfoViewModel.cs" />
     <Compile Include="Base\BindablePage.cs" />
     <Compile Include="View\AboutPage.xaml.cs">
@@ -166,6 +167,9 @@
     <Compile Include="View\ModifyUserInfoPage.xaml.cs">
       <DependentUpon>ModifyUserInfoPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\UserInfoPage.xaml.cs">
+      <DependentUpon>UserInfoPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -174,8 +178,6 @@
     <None Include="ApplicationInsights.config" />
     <Content Include="Assets\City.txt" />
     <Content Include="Assets\Font\FREESCPT.TTF" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
     <None Include="packages.config" />
     <None Include="YummyCookWindowsUniversal_TemporaryKey.pfx" />
   </ItemGroup>
@@ -270,6 +272,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\UserInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="GalaSoft.MvvmLight, Version=5.1.1.35049, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
@@ -309,9 +315,8 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\JP.Utils\JP.Utils\JP.Utils.csproj">
+    <ProjectReference Include="..\..\JP.Utils\JP.Utils\JP.Utils.csproj">
       <Project>{9d13cebe-a582-4729-b859-22fc78653a56}</Project>
       <Name>JP.Utils</Name>
     </ProjectReference>

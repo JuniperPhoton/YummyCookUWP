@@ -94,9 +94,10 @@ namespace YummyCookWindowsUniversal
 
         public static void SetUpTitleBar(bool isGray=false)
         {
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
             if (!isGray)
             {
-                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+               
                 titleBar.BackgroundColor = (App.Current.Resources["CookThemeDark"] as SolidColorBrush).Color;
                 titleBar.ForegroundColor = Colors.White;
                 titleBar.InactiveBackgroundColor = titleBar.BackgroundColor;
@@ -109,7 +110,7 @@ namespace YummyCookWindowsUniversal
             }
             else
             {
-                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+                
                 titleBar.BackgroundColor = Colors.LightGray;
                 titleBar.ForegroundColor = Colors.Black;
                 titleBar.InactiveBackgroundColor = titleBar.BackgroundColor;

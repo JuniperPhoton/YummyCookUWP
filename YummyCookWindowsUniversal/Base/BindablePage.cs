@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,13 @@ using YummyCookWindowsUniversal.Interface;
 
 namespace YummyCookWindowsUniversal
 {
+    /// <summary>
+    /// 提供一个 Page 的基类，继承这个类的 Page，可以实现：
+    /// 在 ViewModel 里获得 OnNavigatedTo 的参数；
+    /// 处理返回键的导航。
+    /// 如果要自定义返回键的行为，可以覆写 RegisterHandleBackLogic() 和 UnRegisterHandleBackLogic() 方法
+    /// NOTE: += 了返回键的事件，必须要在离开页面的时候 -= 
+    /// </summary>
     public partial class BindablePage : Page
     {
         public BindablePage()
@@ -39,35 +47,56 @@ namespace YummyCookWindowsUniversal
 
         protected virtual void RegisterHandleBackLogic()
         {
-            SystemNavigationManager.GetForCurrentView().BackRequested += BindablePage_BackRequested;
-            if (ApiInformationHelper.CheckHardwareButton())
+            try
             {
-                Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+                SystemNavigationManager.GetForCurrentView().BackRequested += BindablePage_BackRequested;
+                if (ApiInformationHelper.CheckHardwareButton())
+                {
+                    Windows.Phone.UI.Input.HardwareButtons.BackPressed += HardwareButtons_BackPressed;
+                }
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
             }
         }
 
         protected virtual void UnRegisterHandleBackLogic()
         {
-            SystemNavigationManager.GetForCurrentView().BackRequested -= BindablePage_BackRequested;
-            if (ApiInformationHelper.CheckHardwareButton())
+            try
             {
-                Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
+                SystemNavigationManager.GetForCurrentView().BackRequested -= BindablePage_BackRequested;
+                if (ApiInformationHelper.CheckHardwareButton())
+                {
+                    Windows.Phone.UI.Input.HardwareButtons.BackPressed -= HardwareButtons_BackPressed;
+                }
             }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+            
         }
 
         private void HardwareButtons_BackPressed(object sender, Windows.Phone.UI.Input.BackPressedEventArgs e)
         {
-            if (Frame.CanGoBack)
+            if (Frame != null)
             {
-                e.Handled = true;
-                Frame.GoBack();
+                if (Frame.CanGoBack)
+                {
+                    e.Handled = true;
+                    Frame.GoBack();
+                }
             }
         }
 
         private void BindablePage_BackRequested(object sender, BackRequestedEventArgs e)
         {
-            if (Frame.CanGoBack)
-                Frame.GoBack();
+            if(Frame!=null)
+            {
+                if (Frame.CanGoBack)
+                    Frame.GoBack();
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
