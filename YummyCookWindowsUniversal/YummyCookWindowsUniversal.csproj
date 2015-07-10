@@ -11,8 +11,8 @@
     <AssemblyName>YummyCookWindowsUniversal</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10158.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10069.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.10166.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10166.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
@@ -191,6 +191,7 @@
     <Content Include="Assets\Icon\Wait.png" />
     <Content Include="Assets\Image\1.jpg" />
     <Content Include="Assets\Image\foods_backgrd.png" />
+    <Content Include="Assets\Image\foods_backgrd_black.png" />
     <Content Include="Assets\Image\Food_Sample %280%29.jpg" />
     <Content Include="Assets\Image\Food_Sample %281%29.jpg" />
     <Content Include="Assets\Image\Food_Sample %2810%29.jpg" />
@@ -322,11 +323,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
-      <Name>BehaviorsXamlSDKManaged</Name>
-    </SDKReference>
-    <SDKReference Include="WindowsMobile, Version=10.0.0.1">
-      <Name>Microsoft Mobile Extension SDK for Universal App Platform</Name>
+    <SDKReference Include="WindowsMobile, Version=10.0.10166.0">
+      <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

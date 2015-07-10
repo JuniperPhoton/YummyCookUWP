@@ -15,26 +15,22 @@ using Windows.UI.Xaml.Navigation;
 using YummyCookWindowsUniversal.Interface;
 using YummyCookWindowsUniversal.ViewModel;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace YummyCookWindowsUniversal.View
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
+    
     public sealed partial class CookingPage : BindablePage
     {
-        private CookingModeViewModel CookingVM
+        public CookingModeViewModel CookingVM
         {
             get
             {
-                return this.DataContext as CookingModeViewModel;
+                return DataContext as CookingModeViewModel;
             }
         }
         public CookingPage()
         {
             this.InitializeComponent();
-            this.DataContext = new CookingModeViewModel();
         }
 
     }

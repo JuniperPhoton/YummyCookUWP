@@ -306,7 +306,7 @@ namespace YummyCookWindowsUniversal.ViewModel
                 return _gotoCookingModeCommand = new RelayCommand(() =>
                   {
                       var rootFrame = Window.Current.Content as Frame;
-                      rootFrame.Navigate(typeof(CookingPage));
+                      rootFrame.Navigate(typeof(CookingPage),CurrentRecipe);
                       ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
                   });
             }

@@ -4,33 +4,121 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:YummyCookWindowsUniversal.View"
     xmlns:common="using:YummyCookWindowsUniversal"
+    xmlns:model="using:YummyCookWindowsUniversal.Model"
+    xmlns:attach="using:YummyCookWindowsUniversal.Attached"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    DataContext="{Binding CookingVM,Source={StaticResource Locator}}"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <common:BindablePage.Resources>
+        <CollectionViewSource x:Name="IngredientCVS" 
+                              Source="{x:Bind CookingVM.CheckListGrouped,Mode=OneWay}"  
+                              IsSourceGrouped="True" 
+                              />
 
+    </common:BindablePage.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <FlipView>
-            <FlipViewItem x:Name="flipView" Background="Black">
-                <Grid>
-                    <Border Background="Black"/>
-                    <TextBlock Foreground="White" Text="Text1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"/>
+        <Border Background="{x:Bind CookingVM.BackgrdColor,Mode=OneWay}"/>
+        <Image Source="ms-appx:///Assets/Image/foods_backgrd_black.png" Stretch="UniformToFill" Opacity="0.03"/>
+        <FlipView Visibility="Visible">
+            <FlipViewItem>
+                <Grid Background="{StaticResource CookThemeGrayLight}">
+                        <Grid>
+                        <Image Source="{x:Bind CookingVM.CurrentRecipe.TitleImage,Mode=OneWay}" Stretch="UniformToFill"/>
+                            <Border Background="Black" Opacity="0.3" />
+                        </Grid>
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock Text="{x:Bind CookingVM.CurrentRecipe.Title,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="33.333" Margin="0,0,0,10" Foreground="White" FontWeight="Bold"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Grid MinWidth="120" Height="40" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Ellipse Width="25" Height="25" Margin="10,0,0,0">
+                                        <Ellipse.Fill>
+                                        <ImageBrush Stretch="Fill" ImageSource="{x:Bind CookingVM.CurrentRecipe.CookUser.Avatar,Mode=OneWay}"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <TextBlock Text="{x:Bind CookingVM.CurrentRecipe.CookUser.UserName,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="White" Grid.Column="1"/>
+                                </Grid>
+                            <TextBlock Text="{x:Bind CookingVM.CurrentRecipe.CookUser.RegionName,Mode=OneWay}" Foreground="White" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        </StackPanel>
+
+                    </StackPanel>
                 </Grid>
             </FlipViewItem>
-            <FlipViewItem Background="Black">
-                <Grid>
-                    <Border Background="Black"/>
-                    <TextBlock Foreground="White" Text="Text2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"/>
-                </Grid>
+            <FlipViewItem>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="准备材料" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="33.333" Margin="0,0,0,10" Foreground="{x:Bind CookingVM.ForegrdColor,Mode=OneWay}" FontWeight="Bold"/>
+                    <GridView 
+                        Margin="20,10,20,0" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center"
+                        SelectionMode="None"
+                        IsItemClickEnabled="True"
+                        attach:ListViewCommandEx.ItemClickCommand="{x:Bind CookingVM.CheckItemCommand}"
+                        ItemsSource="{x:Bind IngredientCVS.View,Mode=OneWay}">
+                        <GridView.GroupStyle>
+                            <GroupStyle >
+                                <GroupStyle.HeaderTemplate>
+                                    <DataTemplate x:DataType="model:GroupInfoList">
+                                        <TextBlock Text="{x:Bind Key}" Foreground="{Binding CookingVM.ForegrdColor,Mode=OneWay,Source={StaticResource Locator}}" FontSize="15" FontWeight="Bold" 
+                                       Style="{ThemeResource TitleTextBlockStyle}"/>
+                                    </DataTemplate>
+                                </GroupStyle.HeaderTemplate>
+                            </GroupStyle>
+                        </GridView.GroupStyle>
+                        <GridView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapGrid MaximumRowsOrColumns="10" Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </GridView.ItemsPanel>
+                        <GridView.ItemTemplate>
+                            <DataTemplate x:DataType="model:Ingredient">
+                                <Grid Width="140" Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Foreground="{Binding CookingVM.ForegrdColor,Mode=OneWay,Source={StaticResource Locator}}" Text="{x:Bind IngredientName,Mode=OneWay}" VerticalAlignment="Center"/>
+                                    <TextBlock Foreground="{Binding CookingVM.ForegrdColor,Mode=OneWay,Source={StaticResource Locator}}" Text="{x:Bind Quality,Mode=OneWay}" Grid.Column="1" VerticalAlignment="Center"/>
+                                    <CheckBox IsChecked="{x:Bind IsChecked,Mode=TwoWay}" Grid.Column="2" Style="{StaticResource CheckBoxStyle1}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+
+                    </GridView>
+                </StackPanel>
+              
             </FlipViewItem>
-            <FlipViewItem Background="Black">
-                <Grid>
-                    <Border Background="Black"/>
-                    <TextBlock Foreground="White" Text="Text3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"/>
-                </Grid>
+            <FlipViewItem>
+                <FlipView 
+                    ItemsSource="{x:Bind CookingVM.CurrentRecipe.StepsList,Mode=OneWay}">
+                    <FlipView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Step">
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                  <Image Source="{x:Bind InsertedImage,Mode=OneWay}"/>
+                                <TextBlock Grid.Row="1" Margin="0,20,0,0" Foreground="{Binding CookingVM.ForegrdColor,Mode=OneWay}"  TextWrapping="Wrap" Text="{x:Bind StepContent,Mode=OneWay}" VerticalAlignment="Center" FontSize="26.667" HorizontalAlignment="Center" TextAlignment="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </FlipView.ItemTemplate>
+                </FlipView>
             </FlipViewItem>
         </FlipView>
-        <Button Command="{x:Bind CookingVM.ExitCommand}" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Background="#33F7F7F7" Width="60" Height="30">
-            <TextBlock Text="退出" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Button>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10">
+            <Button Background="{x:Bind CookingVM.BackgrdColor,Mode=OneWay}"  Command="{x:Bind CookingVM.ToggleLightCommand}" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0" Width="60" Height="30">
+                <TextBlock Text="&#xEA80;" Foreground="{x:Bind CookingVM.ForegrdColor,Mode=OneWay}"  FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Button>
+            <Button Background="{x:Bind CookingVM.BackgrdColor,Mode=OneWay}"  Command="{x:Bind CookingVM.ExitCommand}" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0" Width="60" Height="30">
+                <TextBlock Text="&#xE1D8;" FontFamily="Segoe MDL2 Assets"  Foreground="{x:Bind CookingVM.ForegrdColor,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Button>
+        </StackPanel>
+        
     </Grid>
 </common:BindablePage>

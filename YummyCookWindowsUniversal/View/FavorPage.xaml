@@ -14,7 +14,7 @@
         <SolidColorBrush x:Key="PivotHeaderForegroundSelectedBrush" Color="{StaticResource CookTheme}"></SolidColorBrush>-->
     </common:BindablePage.Resources>
     <Grid  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Pivot Margin="10,0,0,0" SelectedIndex="{x:Bind FavorVM.SelectedIndex,Mode=TwoWay}">
+        <Pivot SelectedIndex="{x:Bind FavorVM.SelectedIndex,Mode=TwoWay}">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" FontSize="15"/>
