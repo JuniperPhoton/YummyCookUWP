@@ -15,6 +15,137 @@
                               Source="{x:Bind CookingVM.CheckListGrouped,Mode=OneWay}"  
                               IsSourceGrouped="True" 
                               />
+        <Style x:Key="TimePickerStyle1" TargetType="TimePicker">
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="MinWidth" Value="242"/>
+            <Setter Property="MaxWidth" Value="456"/>
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TimePicker">
+                        <StackPanel x:Name="LayoutRoot" Margin="{TemplateBinding Padding}">
+                            <StackPanel.Resources>
+                                <Style x:Key="TimePickerFlyoutButtonStyle" TargetType="Button">
+                                    <Setter Property="UseSystemFocusVisuals" Value="False"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Grid Background="{TemplateBinding Background}">
+                                                    <VisualStateManager.VisualStateGroups>
+                                                        <VisualStateGroup x:Name="CommonStates">
+                                                            <VisualState x:Name="Normal"/>
+                                                            <VisualState x:Name="PointerOver">
+                                                                <Storyboard>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightBaseMediumBrush}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ContentPresenter">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlPageBackgroundAltMediumBrush}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightBaseHighBrush}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <VisualState x:Name="Pressed">
+                                                                <Storyboard>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ContentPresenter">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightBaseMediumLowBrush}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightBaseHighBrush}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <VisualState x:Name="Disabled">
+                                                                <Storyboard>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ContentPresenter">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseLowBrush}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseLowBrush}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                        </VisualStateGroup>
+                                                        <VisualStateGroup x:Name="FocusStates">
+                                                            <VisualState x:Name="Focused">
+                                                                <Storyboard>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ContentPresenter">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListAccentLowBrush}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <VisualState x:Name="Unfocused"/>
+                                                            <VisualState x:Name="PointerFocused"/>
+                                                        </VisualStateGroup>
+                                                    </VisualStateManager.VisualStateGroups>
+                                                    <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" BorderThickness="2" Background="{ThemeResource SystemControlBackgroundAltMediumLowBrush}" Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </StackPanel.Resources>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal"/>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="HeaderContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="FirstColumnDivider">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="SecondColumnDivider">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter x:Name="HeaderContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}" Margin="0,0,0,8" Visibility="Collapsed" x:DeferLoadStrategy="Lazy"/>
+                            <Button x:Name="FlyoutButton" Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" IsEnabled="{TemplateBinding IsEnabled}" Style="{StaticResource TimePickerFlyoutButtonStyle}">
+                                <Grid x:Name="FlyoutButtonContentGrid">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition x:Name="FirstTextBlockColumn" Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition x:Name="SecondTextBlockColumn" Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition x:Name="ThirdTextBlockColumn" Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border x:Name="FirstPickerHost" Grid.Column="0">
+                                        <TextBlock x:Name="HourTextBlock" AutomationProperties.AccessibilityView="Raw" FontWeight="{TemplateBinding FontWeight}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" Padding="0,3,0,5" TextAlignment="Center"/>
+                                    </Border>
+                                    <Rectangle x:Name="FirstColumnDivider" Grid.Column="1" Fill="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" Width="2"/>
+                                    <Border x:Name="SecondPickerHost" Grid.Column="2">
+                                        <TextBlock x:Name="MinuteTextBlock" AutomationProperties.AccessibilityView="Raw" FontWeight="{TemplateBinding FontWeight}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" Padding="0,3,0,5" TextAlignment="Center"/>
+                                    </Border>
+                                    <Rectangle x:Name="SecondColumnDivider" Grid.Column="3" Fill="{ThemeResource SystemControlForegroundBaseLowBrush}" HorizontalAlignment="Center" Width="2"/>
+                                    <Border x:Name="ThirdPickerHost" Grid.Column="4">
+                                        <TextBlock x:Name="PeriodTextBlock" AutomationProperties.AccessibilityView="Raw" FontWeight="{TemplateBinding FontWeight}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" Padding="0,3,0,5" TextAlignment="Center"/>
+                                    </Border>
+                                </Grid>
+                            </Button>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
     </common:BindablePage.Resources>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -23,25 +154,25 @@
         <FlipView Visibility="Visible">
             <FlipViewItem>
                 <Grid Background="{StaticResource CookThemeGrayLight}">
-                        <Grid>
+                    <Grid>
                         <Image Source="{x:Bind CookingVM.CurrentRecipe.TitleImage,Mode=OneWay}" Stretch="UniformToFill"/>
-                            <Border Background="Black" Opacity="0.3" />
-                        </Grid>
+                        <Border Background="Black" Opacity="0.3" />
+                    </Grid>
                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock Text="{x:Bind CookingVM.CurrentRecipe.Title,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="33.333" Margin="0,0,0,10" Foreground="White" FontWeight="Bold"/>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Grid MinWidth="120" Height="40" >
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="40"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Ellipse Width="25" Height="25" Margin="10,0,0,0">
-                                        <Ellipse.Fill>
+                            <Grid MinWidth="120" Height="40" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Ellipse Width="25" Height="25" Margin="10,0,0,0">
+                                    <Ellipse.Fill>
                                         <ImageBrush Stretch="Fill" ImageSource="{x:Bind CookingVM.CurrentRecipe.CookUser.Avatar,Mode=OneWay}"/>
-                                        </Ellipse.Fill>
-                                    </Ellipse>
-                                    <TextBlock Text="{x:Bind CookingVM.CurrentRecipe.CookUser.UserName,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="White" Grid.Column="1"/>
-                                </Grid>
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <TextBlock Text="{x:Bind CookingVM.CurrentRecipe.CookUser.UserName,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="White" Grid.Column="1"/>
+                            </Grid>
                             <TextBlock Text="{x:Bind CookingVM.CurrentRecipe.CookUser.RegionName,Mode=OneWay}" Foreground="White" VerticalAlignment="Center" Margin="20,0,0,0"/>
                         </StackPanel>
 
@@ -91,34 +222,72 @@
 
                     </GridView>
                 </StackPanel>
-              
+
             </FlipViewItem>
             <FlipViewItem>
-                <FlipView 
-                    ItemsSource="{x:Bind CookingVM.CurrentRecipe.StepsList,Mode=OneWay}">
-                    <FlipView.ItemTemplate>
-                        <DataTemplate x:DataType="model:Step">
-                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                  <Image Source="{x:Bind InsertedImage,Mode=OneWay}"/>
-                                <TextBlock Grid.Row="1" Margin="0,20,0,0" Foreground="{Binding CookingVM.ForegrdColor,Mode=OneWay}"  TextWrapping="Wrap" Text="{x:Bind StepContent,Mode=OneWay}" VerticalAlignment="Center" FontSize="26.667" HorizontalAlignment="Center" TextAlignment="Center"/>
-                            </Grid>
-                        </DataTemplate>
-                    </FlipView.ItemTemplate>
-                </FlipView>
+                <Grid>
+                    <FlipView 
+                    ItemsSource="{x:Bind CookingVM.CurrentRecipe.StepsList,Mode=OneWay}" Background="{x:Null}">
+                        <FlipView.ItemTemplate>
+                            <DataTemplate x:DataType="model:Step">
+                                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,20">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock HorizontalAlignment="Stretch" Foreground="{Binding CookingVM.ForegrdColor,Mode=OneWay,Source={StaticResource Locator}}" TextAlignment="Center" Visibility="{Binding CookingVM.ShowTimeVisibility,Mode=TwoWay,Source={StaticResource Locator}}" Text="{Binding CookingVM.Time,Mode=TwoWay,Source={StaticResource Locator}}" Margin="0" FontSize="70" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                                       
+                                        <StackPanel  Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2">
+                                            <Button Command="{Binding CookingVM.StartTimerCommand,Mode=OneWay,Source={StaticResource Locator}}" Background="{StaticResource CookThemeDark}" HorizontalAlignment="Stretch" Grid.Row="1">
+                                                <TextBlock Text="{Binding CookingVM.TimerContent,Mode=OneWay,Source={StaticResource Locator}}" FontSize="20" Foreground="White"/>
+                                            </Button>
+                                            <StackPanel Orientation="Horizontal" Visibility="{Binding CookingVM.ShowPickerVisibility,Mode=TwoWay,Source={StaticResource Locator}}">
+                                                <TextBlock Text="分" FontSize="20" Margin="15,0,0,0" VerticalAlignment="Center"/>
+                                                <ComboBox
+                                                    IsEnabled="{Binding CookingVM.EnablePicker,Mode=OneWay,Source={StaticResource Locator}}"
+                                                    SelectedIndex="{Binding CookingVM.SelectedMinute,Mode=TwoWay,Source={StaticResource Locator}}"
+                                                    ItemsSource="{Binding CookingVM.MinutesSource,Mode=OneWay,Source={StaticResource Locator}}" Margin="5,0,0,0" VerticalAlignment="Center">
+                                                </ComboBox>
+                                                <TextBlock Text="秒" FontSize="20" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                                <ComboBox
+                                                    IsEnabled="{Binding CookingVM.EnablePicker,Mode=OneWay,Source={StaticResource Locator}}"
+                                                    SelectedIndex="{Binding CookingVM.SelectedSecond,Mode=TwoWay,Source={StaticResource Locator}}"
+                                                    ItemsSource="{Binding CookingVM.SecondsSource,Mode=OneWay,Source={StaticResource Locator}}" Margin="5,0,0,0" VerticalAlignment="Center">
+                                                </ComboBox>
+                                            </StackPanel>
+                                            
+                                        </StackPanel>
+                                    </Grid>
+                                    <Image Source="{x:Bind InsertedImage,Mode=OneWay}" Grid.Row="1"/>
+                                    <TextBlock Grid.Row="2" Margin="0,20,0,0" Foreground="{Binding CookingVM.ForegrdColor,Mode=OneWay,Source={StaticResource Locator}}"  TextWrapping="Wrap" Text="{x:Bind StepContent,Mode=OneWay}" VerticalAlignment="Center" FontSize="26.667" HorizontalAlignment="Center" TextAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </FlipView.ItemTemplate>
+                    </FlipView>
+                    
+
+
+                </Grid>
             </FlipViewItem>
         </FlipView>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10">
             <Button Background="{x:Bind CookingVM.BackgrdColor,Mode=OneWay}"  Command="{x:Bind CookingVM.ToggleLightCommand}" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0" Width="60" Height="30">
-                <TextBlock Text="&#xEA80;" Foreground="{x:Bind CookingVM.ForegrdColor,Mode=OneWay}"  FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="&#xEA80;" Foreground="{Binding CookingVM.ForegrdColor,Mode=OneWay,Source={StaticResource Locator}}"  FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Button>
             <Button Background="{x:Bind CookingVM.BackgrdColor,Mode=OneWay}"  Command="{x:Bind CookingVM.ExitCommand}" Style="{StaticResource BtnStyle}" Padding="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0" Width="60" Height="30">
-                <TextBlock Text="&#xE1D8;" FontFamily="Segoe MDL2 Assets"  Foreground="{x:Bind CookingVM.ForegrdColor,Mode=OneWay}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="&#xE1D8;" FontFamily="Segoe MDL2 Assets"  Foreground="{Binding CookingVM.ForegrdColor,Mode=OneWay,Source={StaticResource Locator}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Button>
         </StackPanel>
-        
+
     </Grid>
 </common:BindablePage>

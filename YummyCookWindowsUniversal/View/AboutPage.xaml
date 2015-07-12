@@ -31,7 +31,7 @@
         <StackPanel Grid.Row="1">
             <TextBlock Text="VERSION" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" FontSize="20" FontWeight="Bold"/>
 
-            <TextBlock Text="0.6 BETA" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" FontSize="20" FontWeight="Light"/>
+            <TextBlock Text="0.9 BETA" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" FontSize="20" FontWeight="Light"/>
             <TextBlock Text="DEVELOPER" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" FontSize="20" FontWeight="Bold"/>
 
             <TextBlock Text="JuniperPhoton" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" FontSize="20" FontWeight="Light"/>
