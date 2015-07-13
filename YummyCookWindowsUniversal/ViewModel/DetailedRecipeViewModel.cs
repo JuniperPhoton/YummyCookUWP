@@ -173,7 +173,6 @@ namespace YummyCookWindowsUniversal.ViewModel
             }
         }
 
-
         private RelayCommand<Ingredient> _checkItemCommand;
         public RelayCommand<Ingredient> CheckItemCommand
         {
