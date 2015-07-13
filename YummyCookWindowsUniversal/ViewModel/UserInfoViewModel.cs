@@ -251,7 +251,6 @@ namespace YummyCookWindowsUniversal.ViewModel
                     if(isToLogin)
                     {
                         await LoginAsync();
-
                     }
                     else
                     {
@@ -319,7 +318,7 @@ namespace YummyCookWindowsUniversal.ViewModel
             RegionsList = new RegionList();
             SelectedGender = 0;
             
-            InitialProvinceAsync();
+            var initialTask=InitialProvinceAsync();
         }
 
         private async Task LoginAsync()
@@ -444,20 +443,20 @@ namespace YummyCookWindowsUniversal.ViewModel
             this.TempAvatar = user.Avatar;
         }
 
-        private async void UpdateCityList(int id)
+        public async void UpdateCityList(int id)
         {
             try
             {
                 await RegionsList.LoadCityList(id);
                 SelectedCityID = 0;
             }
-            catch(Exception e)
+            catch(Exception)
             {
 
             }
         }
 
-        private bool ValidInput()
+        public bool ValidInput()
         {
             if (string.IsNullOrEmpty(UserName))
             {

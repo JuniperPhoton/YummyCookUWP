@@ -70,7 +70,7 @@ namespace YummyCookWindowsUniversal.Helper
                         LocalSettingHelper.AddValue("sessiontoken", jsonObj["sessionToken"].GetString());
                         return new ResponseData(true, 400, null);
                     }
-                    else return new ResponseData(false, 0, null);
+                    else return new ResponseData(false, 0, content);
                 }
                 else
                 {
@@ -120,7 +120,7 @@ namespace YummyCookWindowsUniversal.Helper
 
                         return new ResponseData(true, 400, null);
                     }
-                    else return new ResponseData(false, 0, null);
+                    else return new ResponseData(false, 0, content);
                 }
                 else
                 {
@@ -360,7 +360,7 @@ namespace YummyCookWindowsUniversal.Helper
                     return null;
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return null;
             }

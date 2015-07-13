@@ -255,7 +255,7 @@ namespace YummyCookWindowsUniversal.ViewModel
             ShowLoadingVisibility = Visibility.Collapsed;
         }
 
-        private bool ValidDataFormat()
+        public bool ValidDataFormat()
         {
             if(tempTitleFile==null)
             {

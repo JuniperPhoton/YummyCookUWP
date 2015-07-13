@@ -278,7 +278,7 @@ namespace YummyCookWindowsUniversal.Model
                 }
                 else this.RegionName = provinceName + " " + cityName;
             }
-            catch(Exception e)
+            catch(Exception)
             {
 
             }

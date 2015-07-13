@@ -70,7 +70,7 @@ namespace YummyCookWindowsUniversal.Model
                     ProvinceList.Add(pro);
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
 
             }
@@ -100,7 +100,7 @@ namespace YummyCookWindowsUniversal.Model
                     
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
 
             }
