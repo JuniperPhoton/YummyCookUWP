@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:YummyCookWindowsUniversal"
-    xmlns:attach="using:YummyCookWindowsUniversal.Attached"
+    xmlns:attach="using:JP.Utils.Framework"    
     xmlns:model="using:YummyCookWindowsUniversal.Model"
     xmlns:common="using:YummyCookWindowsUniversal"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -30,7 +30,7 @@
 					HorizontalContentAlignment="Stretch" 
 					VerticalContentAlignment="Stretch"
                     IsItemClickEnabled="True"
-                    attach:ListViewCommandEx.ItemClickCommand="{x:Bind FavorVM.GotoUserDetailCommand}"
+                    attach:ListViewBaseCommandEx.ItemClickCommand="{x:Bind FavorVM.GotoUserDetailCommand}"
 					ItemContainerStyle="{StaticResource ListViewItemStyle1}" 
 					SelectionMode="None" Margin="0,0,0,50"
 					ItemsSource="{x:Bind FavorVM.FriendsList,Mode=OneWay}">
@@ -76,7 +76,7 @@
 					HorizontalContentAlignment="Stretch" 
 					VerticalContentAlignment="Stretch"
                     IsItemClickEnabled="True"
-                    attach:ListViewCommandEx.ItemClickCommand="{x:Bind FavorVM.GotoDetailCommand}"
+                    attach:ListViewBaseCommandEx.ItemClickCommand="{x:Bind FavorVM.GotoDetailCommand}"
 					SelectionMode="None" Margin="0,0,0,50"
 					ItemsSource="{x:Bind FavorVM.RecipeList,Mode=OneWay}">
                         <GridView.ItemTemplate>

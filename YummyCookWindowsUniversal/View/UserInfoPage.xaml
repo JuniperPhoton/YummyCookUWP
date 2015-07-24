@@ -5,7 +5,7 @@
     xmlns:local="using:YummyCookWindowsUniversal.View"
     xmlns:common="using:YummyCookWindowsUniversal"
     xmlns:model="using:YummyCookWindowsUniversal.Model"
-    xmlns:attach="using:YummyCookWindowsUniversal.Attached"
+    xmlns:attach="using:JP.Utils.Framework"  
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">

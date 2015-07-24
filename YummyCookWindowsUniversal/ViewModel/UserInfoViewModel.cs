@@ -22,6 +22,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using JP.Utils.Data;
 using JP.Utils.Image;
+using JP.Utils.Framework;
 
 namespace YummyCookWindowsUniversal.ViewModel
 {

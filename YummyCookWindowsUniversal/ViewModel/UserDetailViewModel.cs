@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using JP.Utils.Framework;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

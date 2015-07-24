@@ -103,12 +103,9 @@
     <Compile Include="CustomTriggers\InputTypeTrigger.cs" />
     <Compile Include="Helper\ApiInformationHelper.cs" />
     <Compile Include="Helper\ConfigHelper.cs" />
-    <Compile Include="Helper\JsonMaker.cs" />
-    <Compile Include="Helper\JsonParser.cs" />
     <Compile Include="Helper\MessengerToken.cs" />
     <Compile Include="Helper\RequestHelper.cs" />
     <Compile Include="Interface\ICanMakeJson.cs" />
-    <Compile Include="Interface\INavigable.cs" />
     <Compile Include="Model\City.cs" />
     <Compile Include="Model\GroupInfoList.cs" />
     <Compile Include="Model\NavigationData.cs" />
@@ -119,9 +116,7 @@
       <DependentUpon>ToastUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interface\INavigationServiceEx.cs" />
-    <Compile Include="Util\ListViewCommandEx.cs" />
     <Compile Include="Util\NavigationService.cs" />
-    <Compile Include="Util\UIElementTapCommand.cs" />
     <Compile Include="ViewModel\CookingModeViewModel.cs" />
     <Compile Include="ViewModel\DetailedRecipeViewModel.cs" />
     <Compile Include="ViewModel\FavorViewModel.cs" />
@@ -317,15 +312,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <SDKReference Include="WindowsMobile, Version=10.0.10166.0">
+      <Name>Windows Mobile Extensions for the UWP</Name>
+    </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\JP.Utils\JP.Utils\JP.Utils.csproj">
       <Project>{9d13cebe-a582-4729-b859-22fc78653a56}</Project>
       <Name>JP.Utils</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <SDKReference Include="WindowsMobile, Version=10.0.10166.0">
-      <Name>Windows Mobile Extensions for the UWP</Name>
-    </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

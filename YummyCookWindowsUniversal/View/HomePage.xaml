@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
      xmlns:local="using:YummyCookWindowsUniversal"
     xmlns:model="using:YummyCookWindowsUniversal.Model"
-    xmlns:attach="using:YummyCookWindowsUniversal.Attached"
+    xmlns:attach="using:JP.Utils.Framework"  
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -48,7 +48,7 @@
 					HorizontalContentAlignment="Stretch" 
 					VerticalContentAlignment="Stretch"
                     IsItemClickEnabled="True"
-                    attach:ListViewCommandEx.ItemClickCommand="{x:Bind MainVM.GotoDetailCommand}"
+                    attach:ListViewBaseCommandEx.ItemClickCommand="{x:Bind MainVM.GotoDetailCommand}"
 					ItemContainerStyle="{StaticResource ListViewItemStyle1}" 
 					SelectionMode="None" Margin="0,0,0,50"
 					ItemsSource="{x:Bind MainVM.RecipeList,Mode=OneWay}">

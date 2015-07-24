@@ -6,7 +6,7 @@
     xmlns:common="using:YummyCookWindowsUniversal"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:model="using:YummyCookWindowsUniversal.Model"
-    xmlns:attach="using:YummyCookWindowsUniversal.Attached"
+    xmlns:attach="using:JP.Utils.Framework"  
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <local:BindablePage.Transitions>
@@ -70,7 +70,7 @@
                             </Button>
                             <TextBlock Text="{x:Bind DetailVM.CurrentRecipe.CookUser.RegionName,Mode=OneWay}" Foreground="White" VerticalAlignment="Center" Margin="20,0,0,0"/>
                         </StackPanel>
-
+                        
                     </StackPanel>
                 </Grid>
                 <StackPanel Orientation="Horizontal" Margin="20,10,0,0">
@@ -85,7 +85,7 @@
                     VerticalAlignment="Center"
                     SelectionMode="None"
                     IsItemClickEnabled="True"
-                    attach:ListViewCommandEx.ItemClickCommand="{x:Bind DetailVM.CheckItemCommand}"
+                    attach:ListViewBaseCommandEx.ItemClickCommand="{x:Bind DetailVM.CheckItemCommand}"
                     ItemsSource="{x:Bind IngredientCVS.View,Mode=OneWay}">
                     <GridView.GroupStyle>
                         <GroupStyle >

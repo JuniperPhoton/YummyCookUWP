@@ -5,7 +5,7 @@
     xmlns:local="using:YummyCookWindowsUniversal.View"
     xmlns:common="using:YummyCookWindowsUniversal"
     xmlns:model="using:YummyCookWindowsUniversal.Model"
-    xmlns:attach="using:YummyCookWindowsUniversal.Attached"
+    xmlns:attach="using:JP.Utils.Framework"    
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     DataContext="{Binding CookingVM,Source={StaticResource Locator}}"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -188,7 +188,7 @@
                         VerticalAlignment="Center"
                         SelectionMode="None"
                         IsItemClickEnabled="True"
-                        attach:ListViewCommandEx.ItemClickCommand="{x:Bind CookingVM.CheckItemCommand}"
+                        attach:ListViewBaseCommandEx.ItemClickCommand="{x:Bind CookingVM.CheckItemCommand}"
                         ItemsSource="{x:Bind IngredientCVS.View,Mode=OneWay}">
                         <GridView.GroupStyle>
                             <GroupStyle >

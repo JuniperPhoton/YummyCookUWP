@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using JP.Utils.Data;
+using JP.Utils.Data.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

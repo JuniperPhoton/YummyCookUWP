@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using JP.Utils.Data;
+using JP.Utils.Framework;
 using JP.Utils.Functions;
 using System;
 using System.Collections.Generic;

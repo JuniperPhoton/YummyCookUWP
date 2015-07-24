@@ -16,6 +16,7 @@ using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Views;
 using System.Threading.Tasks;
 using JP.Utils.Network;
+using JP.Utils.Framework;
 
 namespace YummyCookWindowsUniversal.ViewModel
 {
